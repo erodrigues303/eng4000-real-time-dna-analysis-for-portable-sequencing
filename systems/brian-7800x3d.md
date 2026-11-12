@@ -1,0 +1,21 @@
+# brian-7800x3d
+
+Generated from `brian-7800x3d.json`; edit the JSON and rerun the renderer.
+
+| Field | Recorded value |
+|---|---|
+| system id | brian-7800x3d |
+| name | Brian desktop |
+| cpu | AMD Ryzen 7 7800X3D |
+| gpu | NVIDIA RTX 4070 Ti (unused for Blitz) |
+| ram | 32 GB; rated 5600 MHz |
+| os | Windows 11; Ubuntu/WSL |
+| architecture | TBD — needs verification |
+| cuda | TBD — needs verification |
+| driver | TBD — needs verification |
+| jetpack | TBD — needs verification |
+| power mode | TBD — needs verification |
+| provenance | ["B pp.4,8"] |
+| limitations | ["WSL version/kernel, actual memory clock and host inventory TBD. CPU package power excludes other computer loads."] |
+
+Source IDs refer to the [evidence register](../docs/sources.md). Unknown fields are not inferred from product names or chemistry.

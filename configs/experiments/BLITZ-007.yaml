@@ -1,0 +1,50 @@
+{
+  "experiment_id": "BLITZ-007",
+  "date": "2026-10-24",
+  "owner": "Brian",
+  "status": "historical-preliminary",
+  "tool": {
+    "name": "DeepNano-Blitz",
+    "version": "deepnano2 0.1",
+    "commit": "15bd04b94c291debac75823811a2c86820dda589"
+  },
+  "model_ids": [
+    "blitz-network64"
+  ],
+  "dataset_id": "D5",
+  "system_id": "brian-7800x3d",
+  "scenario_id": "sustained-throughput",
+  "command": null,
+  "shell": null,
+  "working_directory": null,
+  "environment": {
+    "OMP_NUM_THREADS": "1"
+  },
+  "settings": {
+    "chunk_size": null,
+    "overlap": null,
+    "batch_size": null,
+    "caller_threads": 8,
+    "beam_size": 5
+  },
+  "warmup_count": 1,
+  "measured_run_count": 3,
+  "workload_repetitions": 1,
+  "timing_scope": "Full command",
+  "telemetry": {
+    "timing_method": "GNU Time; UTC runner interval for power",
+    "memory_method": "GNU Time peak host RSS",
+    "power_method": null,
+    "power_scope": "unknown",
+    "sampling_interval_s": null
+  },
+  "output_format": "FASTQ",
+  "output_validation": "Output consistency reported; exact checksums/files missing",
+  "artifacts": [],
+  "provenance": [
+    "B pp.4,7,11–14"
+  ],
+  "limitations": [
+    "TBD — exact command, shell and original raw artifacts were not supplied; NOT runnable."
+  ]
+}

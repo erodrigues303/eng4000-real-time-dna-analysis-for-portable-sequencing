@@ -1,0 +1,45 @@
+# Local evidence and restricted material
+.local-evidence/
+private/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+# Signals, sequence outputs, model weights and archives
+*.pod5
+*.fast5
+*.slow5
+*.blow5
+*.fastq
+*.fq
+*.bam
+*.sam
+*.cram
+*.fasta
+*.fa
+*.pt
+*.pth
+*.onnx
+*.tflite
+*.safetensors
+*.ckpt
+*.h5
+*.hdf5
+*.tar
+*.gz
+*.zip
+*.7z
+# Downloaded datasets, models, and bulky local runs
+/local-data/
+/local-models/
+/local-runs/
+# Development artifacts
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

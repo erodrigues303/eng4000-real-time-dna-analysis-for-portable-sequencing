@@ -1,0 +1,26 @@
+{
+  "dataset_id": "D3",
+  "name": "Simulated E. coli",
+  "source": "Squigulator",
+  "download_reference": null,
+  "purpose": [
+    "simulated"
+  ],
+  "chemistry": null,
+  "kit_model": null,
+  "sampling_frequency_hz": null,
+  "file_format": "BLOW5",
+  "read_count": 200,
+  "signal_sample_count": null,
+  "reference_ground_truth": null,
+  "licence": null,
+  "checksum": null,
+  "training_evaluation_split": "No documented training use or verified train/evaluation separation",
+  "provenance": [
+    "B p.6"
+  ],
+  "limitations": [
+    "Generator command/version, random seed, pore model, reference and scoring method missing.",
+    "Reported 86.7%/92.6% cannot be generalized to biological samples."
+  ]
+}

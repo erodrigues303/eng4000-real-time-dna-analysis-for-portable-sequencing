@@ -1,0 +1,25 @@
+{
+  "model_id": "dorado-hac-v6-modified",
+  "basecaller": "Dorado 2.1.2",
+  "full_model_name": "dna_r10.4.1_e8.2_400bps_hac@v6.0.0_5mCG_5hmCG@v1",
+  "architecture": null,
+  "layers_blocks": null,
+  "parameter_count": null,
+  "numerical_precision": null,
+  "decoder": null,
+  "framework_runtime": "Dorado CUDA on RTX 4070",
+  "target_chemistry": "R10.4.1 / E8.2 / 400 bps",
+  "sampling_rate_hz": null,
+  "chunk_input_assumptions": null,
+  "training_data": null,
+  "weights_source": "ONT Dorado; exact artifact TBD",
+  "weights_sha256": null,
+  "status": "historical-preliminary",
+  "provenance": [
+    "B pp.7,10"
+  ],
+  "limitations": [
+    "Used alongside dorado-hac-v6, not a substitute standalone base model.",
+    "MM/ML tags reported but verification outstanding; no modified-base ground-truth accuracy."
+  ]
+}

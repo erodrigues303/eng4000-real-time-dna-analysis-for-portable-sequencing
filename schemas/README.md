@@ -1,0 +1,7 @@
+# Metadata conventions
+
+JSON Schema Draft 2020-12; unknown values are JSON/YAML `null`, rendered in Markdown as `TBD — needs verification`. Never put the string `TBD` in numeric fields. Narrative strings can describe partially known values. All required keys must be present, even if unknown; additional top-level keys are rejected. Source page references and limitations are mandatory.
+
+`models/`, `systems/` and `datasets/` JSON records are authoritative metadata; paired Markdown cards are generated. Historical experiment `.yaml` files use JSON syntax, which is valid YAML 1.2, to permit parsing with Python's standard library and avoid implicit YAML date/boolean conversions. Preserve this subset or explicitly update the validator before using broader YAML syntax. Counts are per variant except `workload_repetitions`, which describes repeated processes inside a measured interval. A single power session containing 30 processes has measured_run_count 1, not 30.
+
+Validate: `python -m pip install -r requirements-dev.txt`, then `python harness/analysis/validate_metadata.py`. The validator checks schemas, references and unique IDs; it never executes commands. Schema validation is necessary structure checking, not proof of scientific validity. `validated` also requires human review and independent reproduction under [methodology](../docs/methodology.md).

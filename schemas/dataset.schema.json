@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Dataset metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "dataset_id",
+    "name",
+    "source",
+    "download_reference",
+    "purpose",
+    "chemistry",
+    "kit_model",
+    "sampling_frequency_hz",
+    "file_format",
+    "read_count",
+    "signal_sample_count",
+    "reference_ground_truth",
+    "licence",
+    "checksum",
+    "training_evaluation_split",
+    "provenance",
+    "limitations"
+  ],
+  "properties": {
+    "dataset_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9-]*$"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "source": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "download_reference": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "purpose": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "smoke/regression",
+          "benchmark/evaluation",
+          "training",
+          "simulated"
+        ]
+      }
+    },
+    "chemistry": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "kit_model": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "sampling_frequency_hz": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "file_format": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "read_count": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "signal_sample_count": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "reference_ground_truth": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "licence": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "checksum": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "algorithm",
+            "value",
+            "scope"
+          ],
+          "properties": {
+            "algorithm": {
+              "enum": [
+                "md5",
+                "sha256"
+              ]
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{32}([a-f0-9]{32})?$"
+            },
+            "scope": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "training_evaluation_split": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

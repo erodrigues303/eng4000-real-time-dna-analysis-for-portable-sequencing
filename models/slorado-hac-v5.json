@@ -1,0 +1,26 @@
+{
+  "model_id": "slorado-hac-v5",
+  "basecaller": "Slorado; version TBD",
+  "full_model_name": null,
+  "architecture": null,
+  "layers_blocks": null,
+  "parameter_count": null,
+  "numerical_precision": null,
+  "decoder": null,
+  "framework_runtime": "Dorado-derived engine; BLOW5 input; RTX 4070 per P p.14",
+  "target_chemistry": null,
+  "sampling_rate_hz": null,
+  "chunk_input_assumptions": null,
+  "training_data": null,
+  "weights_source": "HAC v5.0.0 tier/version reported; full identifier and artifact TBD",
+  "weights_sha256": null,
+  "status": "historical-preliminary",
+  "provenance": [
+    "B p.16",
+    "P pp.14–15"
+  ],
+  "limitations": [
+    "Full model name/chemistry unverified.",
+    "Compared against Dorado HAC v6.0.0 with a different output format; cannot isolate file-format impact."
+  ]
+}

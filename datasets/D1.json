@@ -1,0 +1,28 @@
+{
+  "dataset_id": "D1",
+  "name": "DeepMod2 v0.3.0 human sample",
+  "source": "DeepMod2 v0.3.0",
+  "download_reference": null,
+  "purpose": [
+    "smoke/regression"
+  ],
+  "chemistry": "R10.4.1 / E8.2 / 400 bps detected by Dorado",
+  "kit_model": null,
+  "sampling_frequency_hz": null,
+  "file_format": "POD5",
+  "read_count": 59,
+  "signal_sample_count": null,
+  "reference_ground_truth": null,
+  "licence": null,
+  "checksum": null,
+  "training_evaluation_split": "No documented training use or verified train/evaluation separation",
+  "provenance": [
+    "B p.6"
+  ],
+  "limitations": [
+    "Small historical hardware/modified-base comparison; not an established training corpus.",
+    "~5 kHz is a model condition, not verified file metadata.",
+    "Human data conflicts with P non-human policy; provenance/licence and future policy need resolution.",
+    "B references Appendix D download links but the supplied PDF ends at p.17 without that appendix."
+  ]
+}

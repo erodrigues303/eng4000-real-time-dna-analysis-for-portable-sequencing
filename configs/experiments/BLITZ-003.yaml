@@ -1,0 +1,54 @@
+{
+  "experiment_id": "BLITZ-003",
+  "date": null,
+  "owner": "Weiqin",
+  "status": "historical-preliminary",
+  "tool": {
+    "name": "DeepNano-Blitz",
+    "version": "deepnano2 0.1",
+    "commit": null
+  },
+  "model_ids": [
+    "blitz-network64"
+  ],
+  "dataset_id": "D4",
+  "system_id": "weiqin-5700u",
+  "scenario_id": "offline-throughput",
+  "command": null,
+  "shell": null,
+  "working_directory": null,
+  "environment": {
+    "OMP_NUM_THREADS": "1"
+  },
+  "settings": {
+    "chunk_size": null,
+    "overlap": null,
+    "batch_size": null,
+    "caller_threads": [
+      1,
+      4
+    ],
+    "beam_size": 5
+  },
+  "warmup_count": null,
+  "measured_run_count": 3,
+  "workload_repetitions": 1,
+  "timing_scope": "Full command",
+  "telemetry": {
+    "timing_method": "shell time and GNU Time",
+    "memory_method": "GNU Time peak RSS for runs 2–3",
+    "power_method": null,
+    "power_scope": "unknown",
+    "sampling_interval_s": null
+  },
+  "output_format": "FASTQ",
+  "output_validation": "48 IDs, sequences and qualities match across thread settings",
+  "artifacts": [],
+  "provenance": [
+    "B p.11"
+  ],
+  "limitations": [
+    "TBD — exact command, shell and original raw artifacts were not supplied; NOT runnable.",
+    "First slower run retained; warm-up not established."
+  ]
+}

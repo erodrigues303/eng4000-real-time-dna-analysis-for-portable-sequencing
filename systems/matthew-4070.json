@@ -1,0 +1,19 @@
+{
+  "system_id": "matthew-4070",
+  "name": "Matthew desktop",
+  "cpu": null,
+  "gpu": "NVIDIA RTX 4070 12 GB",
+  "ram": "32 GB",
+  "os": "Windows",
+  "architecture": null,
+  "cuda": null,
+  "driver": null,
+  "jetpack": null,
+  "power_mode": null,
+  "provenance": [
+    "B p.8"
+  ],
+  "limitations": [
+    "DORADO-003/004; CPU and detailed inventory missing."
+  ]
+}

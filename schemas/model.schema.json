@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Model metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "model_id",
+    "basecaller",
+    "full_model_name",
+    "architecture",
+    "layers_blocks",
+    "parameter_count",
+    "numerical_precision",
+    "decoder",
+    "framework_runtime",
+    "target_chemistry",
+    "sampling_rate_hz",
+    "chunk_input_assumptions",
+    "training_data",
+    "weights_source",
+    "weights_sha256",
+    "status",
+    "provenance",
+    "limitations"
+  ],
+  "properties": {
+    "model_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9-]*$"
+    },
+    "basecaller": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "full_model_name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "architecture": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "layers_blocks": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "parameter_count": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "numerical_precision": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "decoder": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "framework_runtime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "target_chemistry": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "sampling_rate_hz": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "chunk_input_assumptions": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "training_data": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "weights_source": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "weights_sha256": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "status": {
+      "enum": [
+        "historical-preliminary",
+        "review-only",
+        "planned-private"
+      ]
+    },
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

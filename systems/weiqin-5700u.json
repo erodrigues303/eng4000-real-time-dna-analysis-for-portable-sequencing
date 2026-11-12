@@ -1,0 +1,19 @@
+{
+  "system_id": "weiqin-5700u",
+  "name": "Weiqin laptop",
+  "cpu": "AMD Ryzen 7 5700U",
+  "gpu": "Integrated Radeon (unused for Blitz)",
+  "ram": null,
+  "os": "Windows; Ubuntu 22.04 / WSL2",
+  "architecture": null,
+  "cuda": null,
+  "driver": null,
+  "jetpack": null,
+  "power_mode": null,
+  "provenance": [
+    "B p.8"
+  ],
+  "limitations": [
+    "RAM, host OS version/build and WSL kernel TBD."
+  ]
+}

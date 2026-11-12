@@ -1,0 +1,20 @@
+{
+  "system_id": "krish-3070-mobile",
+  "name": "Krish laptop",
+  "cpu": "AMD Ryzen 9 5900HX",
+  "gpu": "NVIDIA RTX 3070 Mobile",
+  "ram": "16 GB",
+  "os": "Windows 11",
+  "architecture": null,
+  "cuda": null,
+  "driver": null,
+  "jetpack": null,
+  "power_mode": null,
+  "provenance": [
+    "B p.8",
+    "P p.13"
+  ],
+  "limitations": [
+    "GPU VRAM and power limit TBD. DORADO-006 canonical ID; conflicting report aliases preserved."
+  ]
+}

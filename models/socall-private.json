@@ -1,0 +1,27 @@
+{
+  "model_id": "socall-private",
+  "basecaller": "SoCall",
+  "full_model_name": null,
+  "architecture": null,
+  "layers_blocks": null,
+  "parameter_count": null,
+  "numerical_precision": "int8 / fixed-point (public-safe project context)",
+  "decoder": null,
+  "framework_runtime": "Intended embedded NVIDIA Jetson target; verified runtime TBD",
+  "target_chemistry": null,
+  "sampling_rate_hz": null,
+  "chunk_input_assumptions": null,
+  "training_data": null,
+  "weights_source": null,
+  "weights_sha256": null,
+  "status": "planned-private",
+  "provenance": [
+    "U",
+    "P pp.4,20"
+  ],
+  "limitations": [
+    "No established correctness/performance baseline.",
+    "Publication permission unconfirmed: no code, weights or unpublished architecture exposed.",
+    "Access reported in P p.20 and U despite earlier unavailable statements."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "dataset_id": "D4",
+  "name": "DeepNano-Blitz repository test sample",
+  "source": "Blitz repository",
+  "download_reference": null,
+  "purpose": [
+    "smoke/regression"
+  ],
+  "chemistry": "R9.4-labelled acquisition metadata; exact pore/motor unverified",
+  "kit_model": "Inspected file: FLO-MIN106 / SQK-LSK108; April 2017 historical template",
+  "sampling_frequency_hz": 4000,
+  "file_format": "FAST5",
+  "read_count": 48,
+  "signal_sample_count": 9033454,
+  "reference_ground_truth": "expected.fastq regression fixture; not biological ground truth",
+  "licence": null,
+  "checksum": null,
+  "training_evaluation_split": "No documented training use or verified train/evaluation separation",
+  "provenance": [
+    "B p.6"
+  ],
+  "limitations": [
+    "4 kHz verified in inspected file, not claimed as an independently audited all-file inventory.",
+    "Repeated copies do not increase unique biological sample size.",
+    "Acquisition model and Blitz network are distinct."
+  ]
+}

@@ -1,0 +1,51 @@
+[
+  {
+    "scenario_id": "offline-throughput",
+    "status": "planned",
+    "controls": "Fixed recorded input; pin model, settings and output format.",
+    "measurements": "Full-command and separately defined stage time, samples/s, bases/s, RSS/device memory.",
+    "open_questions": "TBD — Cache policy and sufficiently large evaluation corpus."
+  },
+  {
+    "scenario_id": "sustained-throughput",
+    "status": "planned",
+    "controls": "Run a larger workload long enough to observe thermal behavior; distinguish repeated input from unique reads.",
+    "measurements": "Time series throughput, clocks, temperature, errors and memory growth.",
+    "open_questions": "TBD — Duration and thermal-stability acceptance criterion."
+  },
+  {
+    "scenario_id": "power-energy",
+    "status": "planned",
+    "controls": "Synchronize workload and sensor trace; preserve electrical scope and gross energy.",
+    "measurements": "Average/sampled-peak W, integrated J, samples/J or bases/J.",
+    "open_questions": "TBD — Calibration, missing-sample policy, independent repeated trials and wall meter."
+  },
+  {
+    "scenario_id": "reference-accuracy",
+    "status": "planned",
+    "controls": "Pin reference and aligner; same input, filtering and scoring across variants.",
+    "measurements": "Mapped fraction, coverage, identity/error distributions and biological quality.",
+    "open_questions": "TBD — Reference accessions, scoring denominator and quality thresholds."
+  },
+  {
+    "scenario_id": "real-time-streaming",
+    "status": "planned",
+    "controls": "Timestamped live or rate-controlled replay arrivals; pin chunking and queue policy.",
+    "measurements": "Latency percentiles, backlog, drops, sustained throughput and quality.",
+    "open_questions": "TBD — Arrival traces, deadlines, backpressure and queue limits."
+  },
+  {
+    "scenario_id": "chunk-size-sweep",
+    "status": "planned",
+    "controls": "Change chunk size only; record overlap, batching, precision and stitching.",
+    "measurements": "Latency, throughput, accuracy, memory and energy at each size.",
+    "open_questions": "TBD — Five candidate sizes proposed in P p.9; values depend on verified tool support."
+  },
+  {
+    "scenario_id": "file-format-comparison",
+    "status": "planned",
+    "controls": "Identical signal records and model/backend/settings/output; verify conversion identity.",
+    "measurements": "Conversion cost, file size/loading, stage/full time, memory, CPU use and output agreement.",
+    "open_questions": "TBD — Matched models and conversion commands; historical Slorado comparison is confounded."
+  }
+]

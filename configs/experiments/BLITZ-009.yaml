@@ -1,0 +1,56 @@
+{
+  "experiment_id": "BLITZ-009",
+  "date": "2026-11-05",
+  "owner": "Eric",
+  "status": "historical-preliminary",
+  "tool": {
+    "name": "DeepNano-Blitz",
+    "version": null,
+    "commit": null
+  },
+  "model_ids": [
+    "blitz-network64"
+  ],
+  "dataset_id": "D4",
+  "system_id": "jetson-tx2",
+  "scenario_id": "power-energy",
+  "command": null,
+  "shell": null,
+  "working_directory": null,
+  "environment": {},
+  "settings": {
+    "chunk_size": null,
+    "overlap": null,
+    "batch_size": null,
+    "caller_threads": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "beam_size": null
+  },
+  "warmup_count": 1,
+  "measured_run_count": 3,
+  "workload_repetitions": 1,
+  "timing_scope": "Full command",
+  "telemetry": {
+    "timing_method": null,
+    "memory_method": null,
+    "power_method": "INA3221 VDD_IN; exact integration/scaling TBD",
+    "power_scope": "jetson-module-input",
+    "sampling_interval_s": 0.5
+  },
+  "output_format": "FASTQ",
+  "output_validation": "All 12 outputs matched per P p.15; original check artifacts missing",
+  "artifacts": [],
+  "provenance": [
+    "P pp.13,15–16"
+  ],
+  "limitations": [
+    "TBD — exact command, shell and original raw artifacts were not supplied; NOT runnable.",
+    "Port/version/network/beam/OMP details require original manifest; not inherited from desktop tests.",
+    "INA3221 scaling unverified; module power not comparable to CPU-package power.",
+    "Memory, utilization, power mode and temperature not saved."
+  ]
+}

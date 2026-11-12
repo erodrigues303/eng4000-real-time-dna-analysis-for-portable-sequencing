@@ -1,0 +1,26 @@
+{
+  "model_id": "deepnano-coral-reviewed",
+  "basecaller": "DeepNano-Coral",
+  "full_model_name": null,
+  "architecture": "CNN",
+  "layers_blocks": null,
+  "parameter_count": null,
+  "numerical_precision": "int8",
+  "decoder": "CTC beam search reported",
+  "framework_runtime": "TensorFlow Lite / Google Coral Edge TPU",
+  "target_chemistry": null,
+  "sampling_rate_hz": null,
+  "chunk_input_assumptions": null,
+  "training_data": null,
+  "weights_source": null,
+  "weights_sha256": null,
+  "status": "review-only",
+  "provenance": [
+    "B p.7",
+    "P p.7"
+  ],
+  "limitations": [
+    "Source review only; exact model/weights, chemistry, parameters and version TBD.",
+    "Edge TPU not available to team; CPU fallback untested."
+  ]
+}
