@@ -1,0 +1,74 @@
+{
+  "experiment_id": "SOCALL-001",
+  "date": "2026-11-19",
+  "owner": "Ege",
+  "status": "preliminary",
+  "tool": {
+    "name": "SoCall reference pipeline (private, not published)",
+    "version": "0.1.0",
+    "commit": "ce443ed"
+  },
+  "model_ids": [
+    "socall-private"
+  ],
+  "dataset_id": "D5",
+  "system_id": "ege-m2",
+  "scenario_id": "reference-accuracy",
+  "command": ".venv/bin/python scripts/basecall.py ../data/D5/fast5 runs/d5-greedy-mps --device mps && python harness/analysis/reference_accuracy.py runs/d5-greedy-mps/reads.fastq Acinetobacter_pittii_16-377-0801_reference.fasta",
+  "shell": "zsh (macOS)",
+  "working_directory": "private SoCall pipeline checkout (not public)",
+  "environment": {
+    "python": "3.12.13",
+    "torch": "2.15.0",
+    "mappy": "2.31",
+    "fast-ctc-decode": "0.3.7",
+    "device": "mps",
+    "precision": "fp32"
+  },
+  "settings": {
+    "chunk_size": 4800,
+    "overlap": 0,
+    "batch_size": 64,
+    "caller_threads": null,
+    "beam_size": null
+  },
+  "warmup_count": 0,
+  "measured_run_count": 1,
+  "workload_repetitions": 1,
+  "timing_scope": "Per-stage wall time inside one process (read, normalize, chunk, forward, stitch, decode, write) with GPU synchronization at each stage boundary; recorded for profiling only",
+  "telemetry": {
+    "timing_method": "time.perf_counter per stage",
+    "memory_method": null,
+    "power_method": null,
+    "power_scope": null,
+    "sampling_interval_s": null
+  },
+  "output_format": "FASTQ",
+  "output_validation": "Reference alignment of every read with harness/analysis/reference_accuracy.py (minimap2 map-ont, primary alignment, identity = M/(M+S+I+D)); unmapped reads counted",
+  "artifacts": [
+    {
+      "location": "results/raw/ege-m2/socall/reference-accuracy/SOCALL-001/accuracy.json",
+      "sha256": "003c8a02b60514efa6d0e66db9fe7b38f2019776840307152b1e9c6f8c21a663",
+      "description": "Accuracy summary"
+    },
+    {
+      "location": "results/raw/ege-m2/socall/reference-accuracy/SOCALL-001/alignments.csv",
+      "sha256": "f1a748b66f6896d6d64f2afbf54aea1636e1eb3d04f3ddb5e3e57a5720840270",
+      "description": "Per-read alignment results"
+    },
+    {
+      "location": "results/raw/ege-m2/socall/reference-accuracy/SOCALL-001/run-stats.json",
+      "sha256": "3b98a53eb7e4bcecd491d516c2592498aa7e299fd0f55197a1434bf89d186597",
+      "description": "Run config, versions, weights hash and per-stage seconds (local paths redacted)"
+    }
+  ],
+  "provenance": [
+    "E"
+  ],
+  "limitations": [
+    "Single run on a laptop GPU with no warm-up: timings are for locating bottlenecks, not performance claims.",
+    "Read identity against one genome; no consensus accuracy or confidence interval yet.",
+    "FASTQ output is kept outside the repository; its SHA-256 is inside accuracy.json.",
+    "Greedy CTC decoding. Run predates the normalization option; it used the default per-read median/MAD (1.4826 scale)."
+  ]
+}

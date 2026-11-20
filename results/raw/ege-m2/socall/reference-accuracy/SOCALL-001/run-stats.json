@@ -1,0 +1,33 @@
+{
+  "config": {
+    "weights": "<workspace>/socall/weights/weights_30.pt",
+    "device": "mps",
+    "chunk_size": "4800",
+    "overlap": "0",
+    "batch_size": "64",
+    "decoder": "greedy",
+    "beam_width": "5",
+    "max_reads": "None"
+  },
+  "decoder": "greedy",
+  "reads": 4467,
+  "samples": 1290238981,
+  "bases": 108847786,
+  "wall_seconds": 1766.3162606249098,
+  "samples_per_second": 730468.8349206063,
+  "stage_seconds": {
+    "read": 22.55011902190745,
+    "normalize": 17.977728914935142,
+    "chunk": 0.9171150370966643,
+    "forward": 1693.6065891117323,
+    "stitch": 5.044096344150603,
+    "decode": 25.58441266301088,
+    "write": 0.42171532195061445
+  },
+  "torch": "2.15.0",
+  "started_utc": "2026-11-20T03:39:00+00:00",
+  "source": "<workspace>/data/D5/fast5",
+  "weights_sha256": "7e91b61ab5b89318c02c13fd65686dff067863366d6bdf0363b16cc43081e1fa",
+  "machine": "Darwin 24.6.0 arm64",
+  "python": "3.12.13"
+}

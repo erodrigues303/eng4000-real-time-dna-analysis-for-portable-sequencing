@@ -8,7 +8,7 @@ Portable MinION sequencing needs computation that can keep pace with incoming si
 
 ## Current status
 
-**Phase 1 foundation; all imported results are preliminary.** Two supplied reports were reviewed: the preliminary benchmarking report and Progress Report 1 (submitted November 6, 2026). Original commands, raw logs and port sources were not supplied. The [evidence register](docs/sources.md) records file hashes, page references and conflicts; [gaps](docs/gaps.md) records missing information. No experiment was rerun during this migration. There are no independently validated benchmark results, no SoCall baseline and no established live-streaming result.
+**Phase 1 foundation; all imported results are preliminary.** Two supplied reports were reviewed: the preliminary benchmarking report and Progress Report 1 (submitted November 6, 2026). Original commands, raw logs and port sources were not supplied. The [evidence register](docs/sources.md) records file hashes, page references and conflicts; [gaps](docs/gaps.md) records missing information. No experiment was rerun during this migration. There are no independently validated benchmark results and no established live-streaming result. SoCall has a preliminary reference-accuracy baseline on D5 from a laptop (SOCALL-001/002), but no embedded performance baseline yet.
 
 | Basecaller                     | Evidence / status                                                                                           |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------- |
@@ -17,7 +17,7 @@ Portable MinION sequencing needs computation that can keep pace with incoming si
 | DeepNano-Blitz / deepnano2 0.1 | CPU regression, thread scaling, larger-workload and package-energy tests; owned ARM64 CPU port used on TX2. |
 | DeepNano-Coral                 | Source review only; CNN/int8/Edge TPU path; no execution established.                                       |
 | Bonito v1.1.0                  | Source/configuration review only; no measured run or uniquely identified tested model.                      |
-| SoCall                         | Access to model/weights reported; baseline, profiling and optimization pending; private material excluded.  |
+| SoCall                         | Runs unchanged from supplied FP32 weights; preliminary D5 reference accuracy (SOCALL-001/002, M2). Jetson baseline, profiling and optimization pending; private material excluded. |
 
 ## Preliminary observations
 
@@ -46,7 +46,7 @@ Sources: B pp.9,11–15 and P pp.13,15–16; [all tables and provenance](results
 | [D2](datasets/D2.md) | ONT Zymo fecal; 4,000 POD5 reads                                            | Exploratory model-tier evaluation; chemistry/reference TBD. |
 | [D3](datasets/D3.md) | Squigulator E. coli; 200 BLOW5 reads                                        | Simulation; generator and scoring details TBD.              |
 | [D4](datasets/D4.md) | Blitz fixture; 48 FAST5 reads; 9,033,454 samples; inspected 4 kHz metadata  | Regression/thread scaling; old R9.4-labelled acquisition.   |
-| [D5](datasets/D5.md) | Wick A. pittii; 4,467 FAST5 reads; 1,290,238,981 samples; 4 kHz             | Larger workload/evaluation; archive MD5 recorded.           |
+| [D5](datasets/D5.md) | Wick A. pittii; 4,467 FAST5 reads; 1,290,238,981 samples; 4 kHz             | Larger workload/evaluation; archive hashes and Wick reference genome recorded. |
 
 R10.4.1 training data and separately held-out reference evaluation data still need selection and documentation. No large signal files or model weights are included.
 
@@ -89,9 +89,12 @@ ports/                       # Owned patch recovery/compatibility documentation
 Foundation checks (Python 3.10+):
 
 ```sh
-python -m pip install -r requirements-dev.txt
+python -m pip install -r requirements-dev.txt -r requirements-analysis.txt
 python harness/analysis/validate_metadata.py
 python harness/analysis/render_summaries.py --check
+python -m pytest -q
 ```
 
-Edit catalogue JSON or `results/summaries/report-observations.json`, then run the renderer without `--check` to update cards/tables. No benchmark runner is implemented in this phase. The next priorities are original-evidence recovery, TX2 sensor verification, model/data provenance, reference accuracy and a correctness-first SoCall baseline. See [proposed team issues](docs/gaps.md#recommended-github-issues).
+Reference accuracy for any basecaller's FASTQ: `python harness/analysis/reference_accuracy.py reads.fastq reference.fasta --out-dir <evidence folder>`. It writes `accuracy.json` (mapped fraction, median/mean/pooled identity, substitution/insertion/deletion rates, reference and FASTQ SHA-256) and per-read `alignments.csv`.
+
+Edit catalogue JSON or `results/summaries/report-observations.json`, then run the renderer without `--check` to update cards/tables. No benchmark runner is implemented in this phase; the reference-accuracy tool is the first analysis step. The next priorities are original-evidence recovery, TX2 sensor verification, model/data provenance, reference accuracy and a correctness-first SoCall baseline. See [proposed team issues](docs/gaps.md#recommended-github-issues).
