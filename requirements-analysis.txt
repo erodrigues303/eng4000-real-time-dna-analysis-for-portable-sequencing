@@ -1,0 +1,2 @@
+# Reference-accuracy analysis (harness/analysis/reference_accuracy.py)
+mappy>=2.28

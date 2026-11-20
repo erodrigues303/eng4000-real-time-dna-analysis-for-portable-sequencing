@@ -5,17 +5,17 @@ Generated from `ege-m2.json`; edit the JSON and rerun the renderer.
 | Field | Recorded value |
 |---|---|
 | system id | ege-m2 |
-| name | Ege MacBook |
+| name | Ege MacBook Air (M2) |
 | cpu | Apple M2 |
-| gpu | Integrated GPU / Metal |
+| gpu | Integrated Apple M2 GPU (Metal; PyTorch MPS backend for SOCALL-001/002) |
 | ram | 8 GB unified |
-| os | macOS |
-| architecture | ARM-based; exact machine identifier TBD |
+| os | macOS 15.6.1 |
+| architecture | arm64; Mac14,7 |
 | cuda | TBD — needs verification |
 | driver | TBD — needs verification |
 | jetpack | TBD — needs verification |
 | power mode | TBD — needs verification |
-| provenance | ["B pp.8,17"] |
-| limitations | ["Unified memory is not dedicated GPU VRAM. OS build and power data absent."] |
+| provenance | ["B pp.8,17", "E"] |
+| limitations | ["Unified memory is not dedicated GPU VRAM. No power data. Laptop development machine: timings are not embedded performance results."] |
 
 Source IDs refer to the [evidence register](../docs/sources.md). Unknown fields are not inferred from product names or chemistry.

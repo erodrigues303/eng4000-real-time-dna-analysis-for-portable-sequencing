@@ -20,17 +20,17 @@ These gaps are evidence limitations, not invitations to infer values. `TBD — n
 - Slorado: full HAC v5 identifier/chemistry, code version/commit, architecture/precision/runtime and converted input identity.
 - Coral: exact model/version/weights, architecture depth/parameters, chemistry/sample rate, training data and CPU feasibility. Source review is not execution.
 - Bonito: reviewed configurations are not a uniquely identified tested model; historical platform restrictions need version-pinned verification before deployment.
-- SoCall: access inventory, publication permission, safe model identity/chemistry, correctness oracle and baseline. Keep unpublished architecture and private weights outside the public repository. Profile before optimizing.
+- SoCall: publication permission; training data, normalization and chunk size are from supervisor recollection only; embedded (TX2) baseline. Reference-accuracy baseline on a laptop exists (SOCALL-001/002). Keep unpublished architecture and private weights outside the public repository. Profile before optimizing.
 
 ## Datasets and accuracy
 
 - D1: exact URL/subset/hash/licence, signal count, reference accession and ground truth, file-level sample rate and kit. Resolve human-data use versus stated non-human policy. It is not training data.
 - D2: accession/download/subset/hash/licence, chemistry/kit/rate, signal count and reference. Exact Fast/HAC models unknown.
 - D3: generator version/command/seed, reference/hash, simulation pore/speed/rate, signal count, licence/download and exact tested models. Reported accuracy definition/alignment unavailable.
-- D4: exact repository revision/download, checksum/licence, biological reference, all-file chemistry/rate audit, pore subrevision and motor. expected.fastq is only a regression fixture.
-- D5: reference genome accession/hash, licence, archive SHA-256, exact pore subrevision/motor and possible training-data overlap; recorded MD5 is secondary evidence, not independently checked here.
+- D4: biological reference (revision `15bd04b`, MIT licence and read/sample counts now recorded), all-file chemistry/rate audit, pore subrevision and motor. expected.fastq is only a regression fixture.
+- D5: exact pore subrevision/motor and possible training-data overlap. Reference genome, licences and archive SHA-256/MD5 were recorded and verified on 2026-11-19 (E).
 - All datasets: train/evaluation leakage audit and complete manifest. Find separate R10.4.1 training and held-out evaluation corpora with references and sufficient scale/diversity.
-- Accuracy: aligner/version/command, identity/error definition and weighting, filtering/unmapped/supplementary policy, reference coverage and confidence intervals. Proposed 0.5% quality tolerance in P needs agreement and precise units; not an established acceptance gate.
+- Accuracy: `harness/analysis/reference_accuracy.py` fixes aligner (minimap2 map-ont, primary only), identity = M/(M+S+I+D) and keeps unmapped reads in the denominator; reference coverage, trimming policy and confidence intervals remain open. Proposed 0.5% quality tolerance in P needs agreement and precise units; not an established acceptance gate.
 
 ## Systems and measurements
 
