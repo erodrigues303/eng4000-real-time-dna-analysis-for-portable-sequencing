@@ -1,0 +1,6 @@
+{
+  "cpu-parallelism": {"title": "How does CPU parallelism affect throughput and energy?", "experiments": ["BLITZ-003", "BLITZ-004", "BLITZ-005", "BLITZ-006", "BLITZ-007", "BLITZ-008"], "tables": ["blitz003", "blitz004", "blitz005", "blitz007", "weiqin3", "weiqin30", "blitz-power", "weiqin-power-scaling"]},
+  "hardware-throughput": {"title": "How does the execution platform affect throughput?", "experiments": ["DORADO-001", "DORADO-002", "DORADO-003", "DORADO-004", "DORADO-005", "DORADO-006"], "tables": ["dorado-d1"]},
+  "embedded-feasibility": {"title": "How close is the TX2 CPU baseline to real-time capacity?", "experiments": ["BLITZ-009"], "tables": ["tx2"]},
+  "pipeline-overhead": {"title": "Can the current measurements isolate input-format overhead?", "experiments": [], "tables": ["formats"]}
+}

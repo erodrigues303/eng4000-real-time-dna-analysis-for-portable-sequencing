@@ -1,6 +1,6 @@
 {
   "experiment_id": "BLITZ-003",
-  "date": null,
+  "date": "2026-10-16",
   "owner": "Weiqin",
   "status": "historical-preliminary",
   "tool": {
@@ -14,7 +14,7 @@
   "dataset_id": "D4",
   "system_id": "weiqin-5700u",
   "scenario_id": "offline-throughput",
-  "command": null,
+  "command": "time env OMP_NUM_THREADS=1 deepnano2_caller.py --output test_1thread_control.fastq --reads test_sample/*.fast5 --network-type 64 --beam-size 5 --threads 1 --output-format fastq\ntime env OMP_NUM_THREADS=1 deepnano2_caller.py --output test_4threads.fastq --reads test_sample/*.fast5 --network-type 64 --beam-size 5 --threads 4 --output-format fastq",
   "shell": null,
   "working_directory": null,
   "environment": {
@@ -45,10 +45,12 @@
   "output_validation": "48 IDs, sequences and qualities match across thread settings",
   "artifacts": [],
   "provenance": [
-    "B p.11"
+    "B p.11",
+    "W pp.13–15; command transcribed during 2026-11-20 website audit"
   ],
   "limitations": [
-    "TBD — exact command, shell and original raw artifacts were not supplied; NOT runnable.",
-    "First slower run retained; warm-up not established."
+    "Command recovered from weekly log W; not rerun or independently verified. Working directory, exact environment, input/model hashes and original raw artifacts remain incomplete.",
+    "First slower run retained; warm-up not established.",
+    "W p.13 records the initial shell-time invocations; exact GNU Time invocations for subsequent memory measurements remain missing."
   ]
 }

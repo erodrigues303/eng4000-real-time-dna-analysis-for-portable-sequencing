@@ -1,5 +1,13 @@
 # MLCommons alignment gap analysis
 
+## Closest categories and scenarios
+
+For this project's embedded goal, **MLPerf Inference: Edge** is the closest system-category analogy; this is a project interpretation, not an official classification of nanopore basecalling. Recorded-file throughput is conceptually closest to Offline processing. A future streaming experiment should borrow explicit arrival and latency controls, but continuous variable-length signal is not automatically equivalent to an MLPerf query stream. See [MLPerf Inference: Edge](https://mlcommons.org/benchmarks/inference-edge/) and [scenario rules](https://github.com/mlcommons/inference_policies/blob/master/inference_rules.adoc), reviewed 2026-11-20.
+
+The [power policy](https://github.com/mlcommons/inference_policies/blob/master/power_measurement.adoc) requires total system-under-test power and identifies synchronized performance/power timestamps and reproducibility. The project's CPU-package and provisional module-input readings do not meet that whole-system boundary. No LoadGen integration or official benchmark execution has been implemented. These are methodology influences and documented gaps, not adopted compliance claims. A rules commit must be pinned before a formal alignment assessment.
+
+## Principle-by-principle gaps
+
 Status: research/design gap analysis. No MLPerf compliance, submission, certification or implemented alignment is claimed. Nanopore basecalling is not established here as an official MLPerf workload.
 
 MLCommons emphasizes representative workloads, quality and reproducibility; its inference rules define scenarios and execution/quality constraints. Sources reviewed on 2026-11-11: [benchmark goals](https://mlcommons.org/benchmarks/), [inference rules](https://github.com/mlcommons/inference_policies/blob/master/inference_rules.adoc), [power rules](https://github.com/mlcommons/inference_policies/blob/master/power_measurement.adoc). These are moving references; the version/commit for a future detailed assessment is TBD. No numerical MLPerf rules are adopted by implication.

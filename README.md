@@ -2,6 +2,19 @@
 
 York University ENG 4000 capstone
 
+## Research website
+
+The MkDocs research site presents two pillars—Basecaller Benchmarking and SoCall Engineering—with four question-led studies, a generated experiment registry, model/data/system catalogues, methodology and reproduction guides. See [website development and deployment](website/README.md) for the structure, evidence decisions and publishing instructions.
+
+```sh
+python -m pip install -r requirements-site.txt
+python -m mkdocs build --strict
+python website/check_site.py
+python -m mkdocs serve
+```
+
+The 2026-11-20 website audit reviewed two additional report revisions and recovered report-transcribed commands for DORADO-001–005 and BLITZ-003. These remain unverified historical commands; BLITZ-005 and other records still lack exact invocations. The [source revision crosswalk](docs/sources.md#website-audit-2026-11-20) supersedes older blanket statements below that no commands were supplied. No scientific measurement values were changed.
+
 This repository is the technical record for two connected contributions: a reproducible modern nanopore basecalling benchmark, and evidence-led characterization and optimization of **SoCall**, the lab's int8/fixed-point implementation intended for embedded NVIDIA Jetson hardware. SoCall remains one implementation under study; its correctness and performance baseline has not yet been established. Publication permission for its code and weights is unconfirmed.
 
 Portable MinION sequencing needs computation that can keep pace with incoming signal without excessive latency, memory use or energy demand. We extend the reproducible-data-and-command philosophy of [Ryan Wick's basecalling comparison](https://github.com/rrwick/Basecalling-comparison) with model/chemistry documentation, modern hardware, power and energy, and eventual streaming tests. The course report records the capstone process; this repository records what was measured and how to reproduce it.

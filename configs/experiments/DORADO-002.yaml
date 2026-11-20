@@ -1,6 +1,6 @@
 {
   "experiment_id": "DORADO-002",
-  "date": null,
+  "date": "2026-10-08",
   "owner": "Eric",
   "status": "historical-preliminary",
   "tool": {
@@ -14,8 +14,8 @@
   "dataset_id": "D1",
   "system_id": "eric-1500x",
   "scenario_id": "offline-throughput",
-  "command": null,
-  "shell": null,
+  "command": ".\\bin\\dorado.exe basecaller hac .\\test_data\\sample.pod5 --device cpu --output-dir .\\output_cpu",
+  "shell": "PowerShell (version unrecorded)",
   "working_directory": null,
   "environment": {},
   "settings": {
@@ -36,15 +36,16 @@
     "power_scope": "unknown",
     "sampling_interval_s": null
   },
-  "output_format": null,
+  "output_format": "BAM",
   "output_validation": null,
   "artifacts": [],
   "provenance": [
     "B pp.7–10",
-    "P p.13"
+    "P p.13",
+    "W p.8; command transcribed during 2026-11-20 website audit"
   ],
   "limitations": [
-    "TBD — exact command, shell and original raw artifacts were not supplied; NOT runnable.",
+    "Command recovered from weekly log W; not rerun or independently verified. Working directory, exact environment, input/model hashes and original raw artifacts remain incomplete.",
     "59-read preliminary test; no sustained/live claim."
   ]
 }

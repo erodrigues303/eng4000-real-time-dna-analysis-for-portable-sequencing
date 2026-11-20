@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title if page else 'Page not found' }} · Project 22</title>
+  <meta name="description" content="{{ config.site_description }}">
+  {% if page and page.canonical_url %}<link rel="canonical" href="{{ page.canonical_url }}">{% endif %}
+  <link rel="stylesheet" href="{{ 'assets/site.css' | url }}">
+  <script src="{{ 'assets/site.js' | url }}" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="header"><div class="header-inner">
+  <a class="brand" href="{{ '.' | url }}"><span class="brand-mark" aria-hidden="true">P22</span>Project 22</a>
+  <button class="menu-toggle" aria-expanded="false" aria-controls="global-nav" hidden>Menu</button>
+  <nav id="global-nav" aria-label="Main navigation">
+    {% for item in nav %}{% if item.title != 'Home' %}<a href="{{ item.url | url }}" {% if item.active %}aria-current="page"{% endif %}>{{ item.title }}</a>{% endif %}{% endfor %}
+  </nav>
+</div></header>
+{% set contextual = page and (page.file.src_uri.startswith('experiments/') and page.file.src_uri != 'experiments/index.md' or page.file.src_uri.startswith(('docs/', 'models/', 'datasets/', 'systems/'))) %}
+<div class="layout {% if contextual %}with-sidebar{% endif %}">
+{% if contextual %}<aside class="sidebar" aria-label="Research resources">
+  <p class="eyebrow">Shared foundation</p>
+  <a href="{{ 'experiments/' | url }}">Experiment registry</a>
+  <a href="{{ 'models/' | url }}">Models & basecallers</a>
+  <a href="{{ 'datasets/' | url }}">Datasets</a>
+  <a href="{{ 'systems/' | url }}">Hardware & environments</a>
+  <a href="{{ 'resources/reproduce/' | url }}">Reproduction guide</a>
+  <a href="{{ 'docs/methodology/' | url }}">Metric definitions</a>
+  <a href="{{ 'docs/mlcommons-alignment/' | url }}">MLCommons alignment</a>
+  <a href="{{ 'docs/sources/' | url }}">Evidence & conflicts</a>
+  {% if page.toc %}<p class="eyebrow">On this page</p>{% for item in page.toc %}{% for child in item.children %}<a href="{{ child.url }}">{{ child.title }}</a>{% endfor %}{% endfor %}{% endif %}
+</aside>{% endif %}
+<main id="content" tabindex="-1">
+{% if page %}{{ page.content }}{% else %}<h1>Page not found</h1><p>Return to the <a href="{{ '.' | url }}">research homepage</a>.</p>{% endif %}
+</main></div>
+<footer><span>Project 22 · York University · ENG 4000</span><a href="{{ 'docs/sources/' | url }}">Evidence & provenance</a><a href="{{ config.repo_url }}">Repository</a><p>Preliminary research. Measurement scope and evidence gaps accompany each result.</p></footer>
+</body></html>

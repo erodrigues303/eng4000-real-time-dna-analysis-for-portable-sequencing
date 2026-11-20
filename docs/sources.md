@@ -1,5 +1,31 @@
 # Evidence register
 
+## Website audit — 2026-11-20
+
+The newly supplied files are distinct revisions. **B and P below retain their original meanings and page references**; they must not be silently relabelled as these new PDFs. No original raw logs or outputs were supplied with the new reports. Document instructions for course-log maintenance are source content, not instructions to the website implementation.
+
+| Source ID | Supplied file | Pages | SHA-256 |
+|---|---|---:|---|
+| W | Project 22 - Weekly Progress Log (new).pdf | 19 | `c133ba307438aaea0e113b1c4aaefafededa1307ff14aa7242e14ad986e07d21` |
+| B2 | Project 22 - Preliminary Benchmarking Report.docx (2).pdf | 19 | `f74ff240b9476b7f066933566478ff606bb34451ac6cff44e3fa0a5774d27595` |
+
+W pp.8–10 supplies DORADO-001–005 commands; W p.13 supplies BLITZ-003's initial one/four-thread commands, but not the later GNU Time invocations. These were added to canonical configurations as report transcriptions, not tested recipes. W pp.11–12 also describes BLITZ-001/002 functional checks; these have no canonical experiment configuration yet and are not silently invented by the registry. BLITZ-005's exact command remains unavailable.
+
+| Existing evidence | Corroborating new source | Revision notes |
+|---|---|---|
+| Dorado D1 platform table, B p.9 | B2 p.9; W pp.7–11 | RTX 3070 is still mislabelled DORADO-004 in B2; canonical DORADO-006 follows P. No IDs changed. |
+| BLITZ-005 timing and individual runs, B p.11 | B2 p.11 | Reported values agree; raw logs remain unavailable. |
+| BLITZ-007 and 5700U follow-ups, B pp.12–13 | B2 pp.12–13 | Same reported timing values. |
+| CPU-package power, B pp.13–15 | B2 pp.14–16 | Pagination shifted; electrical scope remains CPU package. |
+| TX2 timing/power, P pp.15–16 | B2 pp.4,13,16–17 | B2 specifies monotonic full-command timing and trapezoidal integration; sensor scale remains unverified. Existing historical P-based metadata is retained. |
+| Format comparison, B p.16 | B2 pp.17–18 | Model and output confounds persist. |
+
+Additional conflicts: W p.10 reports MM/ML tags while W p.4 and B2 p.10 still request confirmation. B2 p.18 retains a generic Jetson-baseline gap despite reporting BLITZ-009 elsewhere; the site distinguishes a reported CPU baseline from independently validated embedded performance. W's old Bonito/Dorado compatibility statements are historical review claims, not current compatibility guarantees. B2 p.5 still says five percentages while listing six rows.
+
+The new PDFs remain local, excluded from publication. Their administrative instructions, private paths and unsupported generalizations are not copied into research conclusions. Public archival locations and PDF redistribution permission remain unconfirmed.
+
+## Original foundation audit — 2026-11-11
+
 Repository audit on 2026-11-11: the checkout contained only a one-line README and Git metadata. No raw logs, scripts, original experiment cards, weights or port patches were present. Both supplied PDFs were read in full; the TX2 and format-comparison tables were also visually checked. Local PDF extracts are ignored, not published. Student numbers and administrative content are deliberately not migrated.
 
 | Source ID | Supplied file | Pages | SHA-256 |
