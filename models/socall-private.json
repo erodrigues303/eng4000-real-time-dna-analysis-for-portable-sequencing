@@ -5,23 +5,25 @@
   "architecture": null,
   "layers_blocks": null,
   "parameter_count": null,
-  "numerical_precision": "int8 / fixed-point (public-safe project context)",
+  "numerical_precision": "FP32 weights as supplied (all floating-point tensors FP32, checked E); int8/fixed-point is the project target and quantization is project work (S)",
   "decoder": null,
   "framework_runtime": "Intended embedded NVIDIA Jetson target; verified runtime TBD",
-  "target_chemistry": null,
-  "sampling_rate_hz": null,
-  "chunk_input_assumptions": null,
+  "target_chemistry": "R9.4.1 (supervisor recollection, S)",
+  "sampling_rate_hz": 4000,
+  "chunk_input_assumptions": "4800 samples, no overlap (supervisor recollection, S); training normalization undocumented, per-read median/MAD works for inference (S, E)",
   "training_data": null,
-  "weights_source": null,
-  "weights_sha256": null,
+  "weights_source": "Supplied privately by the supervisor (handoff prepared 2026-11-05); not redistributed",
+  "weights_sha256": "7e91b61ab5b89318c02c13fd65686dff067863366d6bdf0363b16cc43081e1fa",
   "status": "planned-private",
   "provenance": [
     "U",
-    "P pp.4,20"
+    "P pp.4,20",
+    "S",
+    "E"
   ],
   "limitations": [
-    "No established correctness/performance baseline.",
+    "Preliminary reference-accuracy baseline only (SOCALL-001/002 on a laptop); no embedded performance baseline.",
     "Publication permission unconfirmed: no code, weights or unpublished architecture exposed.",
-    "Access reported in P p.20 and U despite earlier unavailable statements."
+    "Chemistry, sample rate and chunk size come from the supervisor's recollection; training data and normalization are undocumented."
   ]
 }
