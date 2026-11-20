@@ -41,18 +41,21 @@ def chart(table):
     parts = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 330" role="img" aria-labelledby="title desc">',
              '<title id="title">BLITZ-005 full-command runtime by caller threads</title>',
              '<desc id="desc">Ryzen 7 7800X3D, D4, network 64. Mean and sample SD of three runs per setting. Values are also in the adjacent table.</desc>',
-             '<rect width="800" height="330" fill="white"/>',
-             '<g font-family="system-ui,sans-serif" font-size="16" fill="#1c303d">']
+             '<style>:root{color-scheme:light dark;--paper:#fff;--ink:#1c303d;--grid:#d8e2e5;--bar:#116961;--whisker:#132833}'
+             '@media(prefers-color-scheme:dark){:root{--paper:#181818;--ink:#d4d4d4;--grid:#343638;--bar:#79bdb0;--whisker:#e5edf0}}'
+             '.paper{fill:var(--paper)}.labels{fill:var(--ink)}.grid{stroke:var(--grid)}.bar{fill:var(--bar)}.whisker{stroke:var(--whisker)}</style>',
+             '<rect class="paper" width="800" height="330"/>',
+             '<g class="labels" font-family="system-ui,sans-serif" font-size="16">']
     for tick in range(0, 21, 5):
         x = 110 + tick * 27
-        parts += [f'<path d="M{x} 30V260" stroke="#d8e2e5"/>', f'<text x="{x}" y="285" text-anchor="middle">{tick}</text>']
+        parts += [f'<path class="grid" d="M{x} 30V260"/>', f'<text x="{x}" y="285" text-anchor="middle">{tick}</text>']
     for i, row in enumerate(table["rows"]):
         mean, sd = map(float, row[1].split(" ± "))
         y = 50 + i * 55
         end, left, right = 110 + mean * 27, 110 + (mean - sd) * 27, 110 + (mean + sd) * 27
         parts += [f'<text x="90" y="{y+21}" text-anchor="end">{row[0]}</text>',
-                  f'<rect x="110" y="{y}" width="{mean*27}" height="30" fill="#116961"/>',
-                  f'<path d="M{left} {y+15}H{right} M{left} {y+8}V{y+22} M{right} {y+8}V{y+22}" stroke="#132833" stroke-width="2"/>',
+                  f'<rect class="bar" x="110" y="{y}" width="{mean*27}" height="30"/>',
+                  f'<path class="whisker" d="M{left} {y+15}H{right} M{left} {y+8}V{y+22} M{right} {y+8}V{y+22}" stroke-width="2"/>',
                   f'<text x="{end+15}" y="{y+21}">{row[1]} s</text>']
     parts += ['<text x="380" y="320" text-anchor="middle">Full-command runtime (seconds; mean ± sample SD)</text>',
               '<text transform="translate(25 165) rotate(-90)" text-anchor="middle">Caller threads</text>', '</g></svg>']

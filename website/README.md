@@ -23,6 +23,8 @@ The generated staging directory is rebuilt at startup. After editing canonical m
 
 ## Source structure
 
+Appearance automatically follows the device's light/dark preference through CSS `prefers-color-scheme`, including live preference changes. Dark mode uses charcoal surfaces, muted text and blue links. The generated SVG chart has its own matching palette. No JavaScript toggle or saved preference overrides the device setting.
+
 - `website/content/`: human-authored home, research studies, SoCall overview, resources and About.
 - `website/theme/`: semantic page template; assets live in `website/content/assets/`.
 - `website/generate.py`: MkDocs configuration hook; validates metadata and builds ignored `.site-docs/`.
