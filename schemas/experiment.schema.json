@@ -51,6 +51,7 @@
     "status": {
       "enum": [
         "historical-preliminary",
+        "preliminary",
         "planned",
         "validated"
       ]

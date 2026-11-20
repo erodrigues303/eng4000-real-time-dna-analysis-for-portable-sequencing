@@ -1,8 +1,8 @@
 {
   "dataset_id": "D4",
-  "name": "DeepNano-Blitz repository test sample",
+  "name": "DeepNano-Blitz repository test sample (Klebsiella run, klebs_033 in filenames)",
   "source": "Blitz repository",
-  "download_reference": null,
+  "download_reference": "https://github.com/fmfi-compbio/deepnano-blitz/tree/15bd04b94c291debac75823811a2c86820dda589/test_sample (48 *.fast5 + expected.fastq)",
   "purpose": [
     "smoke/regression"
   ],
@@ -13,15 +13,17 @@
   "read_count": 48,
   "signal_sample_count": 9033454,
   "reference_ground_truth": "expected.fastq regression fixture; not biological ground truth",
-  "licence": null,
+  "licence": "MIT (deepnano-blitz repository licence)",
   "checksum": null,
   "training_evaluation_split": "No documented training use or verified train/evaluation separation",
   "provenance": [
-    "B p.6"
+    "B p.6",
+    "E"
   ],
   "limitations": [
     "4 kHz verified in inspected file, not claimed as an independently audited all-file inventory.",
     "Repeated copies do not increase unique biological sample size.",
-    "Acquisition model and Blitz network are distinct."
+    "Acquisition model and Blitz network are distinct.",
+    "No file checksum; pinned by repository commit 15bd04b instead. 48 reads and 9,033,454 samples re-counted 2026-11-19 (E)."
   ]
 }
