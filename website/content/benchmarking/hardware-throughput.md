@@ -1,29 +1,53 @@
-<p class="eyebrow">Benchmarking study · Exploratory</p>
+---
+title: "Dorado Cross-Platform Performance"
+---
+<p class="eyebrow">Technical investigation · Preliminary record</p>
 
-# How does the execution platform affect throughput?
+# Dorado Cross-Platform Performance
 
-The D1 Dorado measurements show substantial platform differences within the reported basecalling interval. They do not isolate GPU generation from host configuration, backend or automatic batching.
+## Objective
 
-## Experimental design
+Establish existing-basecaller reference behaviour across Windows CPU/CUDA and macOS Metal, identifying deployment and measurement differences relevant to portable sequencing.
 
-The records name Dorado 2.1.2, [HAC v6.0.0](../models/dorado-hac-v6.md) and [D1](../datasets/D1.md), a 59-read DeepMod2 POD5 sample. CPU, CUDA and Metal execute on different systems. Repetition, cache state and complete environment identity are not established consistently.
+## Work Performed
 
-## Results and interpretation
+Dorado 2.1.2 processed the same named 59-read D1 sample on CPU, NVIDIA GPUs and Apple M2 Metal. The team recorded stage runtime, throughput and partial output/memory summaries. The [GPU acceleration report](gpu-acceleration.md) separately examines CPU/CUDA speed differences.
 
-[The reported platform table](../evidence/index.md#dorado-d1) gives **53.213 s** on GTX 1060, **4,216.234 s** on Ryzen 5 1500X CPU and **1.401 s** on RTX 4070. These are tool-reported stage measurements. The RTX 4070 command took approximately **12 s**, demonstrating why setup and basecalling must be timed separately. Source: B/B2 p.9; W pp.8–9.
+### Investigation history
 
-The M2 and RTX 3070 Mobile observations add platform coverage, but do not make this a controlled accelerator ranking. Modified-base calling changes the workload; its result must remain separate from the baseline.
+| Addition | Technical contribution | Supporting record |
+|---|---|---|
+| Date not recorded | Added RTX 3070 Mobile observation; historical ID conflict retained | [DORADO-006](../experiments/DORADO-006.md) |
+| 14 Oct 2026 | Added RTX 4070, modified-base companion and M2 Metal results | [DORADO-003](../experiments/DORADO-003.md), [004](../experiments/DORADO-004.md), [005](../experiments/DORADO-005.md) |
+| 8 Oct 2026 | Established CPU reference | [DORADO-002](../experiments/DORADO-002.md) |
+| 6 Oct 2026 | Completed initial GPU basecalling workflow | [DORADO-001](../experiments/DORADO-001.md) |
+
+The undated addition is shown separately from the dated sequence.
+
+## Experimental Setup / Methodology
+
+[D1](../datasets/D1.md), Dorado 2.1.2 and the named [HAC v6.0.0 model](../models/dorado-hac-v6.md) are shared. Hosts, backends and automatic batch settings differ. Values cover tool-reported basecalling intervals; exact boundaries and repeated-run statistics are incomplete. The modified-base row is a different workload.
+
+## Results
+
+<!-- evidence:dorado-d1 -->
+
+<!-- evidence:dorado-memory -->
+
+## Findings and Interpretation
+
+All recorded platforms completed the small workload, but runtime differs substantially. Automatic tuning and differing host configurations prevent attributing every difference to accelerator hardware. The RTX 4070's approximately 12 s complete command is longer than its 1.401 s stage interval; report both boundaries when planning deployment.
 
 ## Limitations
 
-D1 is very small. Automatic batch sizes and host systems differ, biological accuracy is unverified, and power boundaries are incomplete. The RTX 3070 record has conflicting historical IDs: the repository retains DORADO-006 while B2 p.9 labels it DORADO-004. [Conflict register](../docs/sources.md).
+D1 is small; repeated Dorado trials, complete environments and biological scoring are missing. Memory scopes differ. B2 p.9 labels the RTX 3070 result DORADO-004; the repository retains DORADO-006 following P. No sustained streaming claim follows from short stage throughput.
 
-## Next investigation
+## Next Steps
 
-Pin model and input hashes, archive runtime environments, use larger compatible inputs, repeat full-command and stage measurements, and pair performance with reference-based quality.
+Pin model/input hashes and environments, repeat larger compatible workloads, and collect full-command timing, scoped memory/power and reference-based quality. Preserve platform-specific setup costs.
 
-## Supporting experiments and reproduction
+## Supporting Experiments and Evidence
 
-[DORADO-001](../experiments/DORADO-001.md) · [DORADO-002](../experiments/DORADO-002.md) · [DORADO-003](../experiments/DORADO-003.md) · [DORADO-004](../experiments/DORADO-004.md) · [DORADO-005](../experiments/DORADO-005.md) · [DORADO-006](../experiments/DORADO-006.md)
+[DORADO-001](../experiments/DORADO-001.md) · [DORADO-002](../experiments/DORADO-002.md) · [DORADO-003](../experiments/DORADO-003.md) · [DORADO-004](../experiments/DORADO-004.md) · [DORADO-005](../experiments/DORADO-005.md) · [DORADO-006](../experiments/DORADO-006.md).
 
-[Report-transcribed commands and reproduction limits](../resources/reproduce.md).
+B2 pp.7–10; W pp.7–11. [Source conflicts](../docs/sources.md) · [Reproduction](../resources/reproduce.md).

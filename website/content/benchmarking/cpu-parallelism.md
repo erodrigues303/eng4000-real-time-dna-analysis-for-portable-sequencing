@@ -1,49 +1,66 @@
-<p class="eyebrow">Benchmarking study · Preliminary</p>
+---
+title: "DeepNano-Blitz CPU Scaling and Package Energy"
+---
+<p class="eyebrow">Technical investigation · Preliminary record</p>
 
-# How does CPU parallelism affect throughput and energy?
+# DeepNano-Blitz CPU Scaling and Package Energy
 
-On the tested Ryzen 7 7800X3D configuration, increasing DeepNano-Blitz caller threads from one to eight reduced mean full-command runtime from **15.187 s to 2.917 s**, a reported **5.21× speedup**. This is evidence of scaling on a small recorded workload, not a live-sequencing or biological-accuracy result. [BLITZ-005 evidence](../evidence/index.md#blitz005).
+## Objective
 
-## Experimental design
+Establish CPU baselines and quantify caller-thread scaling, workload-size effects and package energy before selecting embedded optimization targets.
 
-[BLITZ-005](../experiments/BLITZ-005.md) holds [D4](../datasets/D4.md), [network 64](../models/blitz-network64.md), beam size 5 and `OMP_NUM_THREADS=1` fixed on the [7800X3D system](../systems/brian-7800x3d.md). Caller threads vary across 1, 2, 4 and 8. Each setting has one excluded warm-up and three measured runs. GNU Time covers the complete command, including startup, input loading and output writing.
+## Work Performed
 
-The dataset contains 48 FAST5 reads and 9,033,454 signal samples. Warm-up can leave files cached. Exact commands, original timings and output files for this experiment have not been supplied.
+The team ran Blitz on Ryzen 7 5700U and 7800X3D systems, checked output agreement, swept caller threads, processed a larger recorded dataset and collected separate CPU-package power sessions. BLITZ-005 reports a **5.21×** one-to-eight-thread speedup; biological accuracy and streaming capability remain unverified.
+
+### Investigation history
+
+| Addition | Technical contribution | Supporting record |
+|---|---|---|
+| 25 Oct 2026 | Extended 5700U timing to 30 runs per setting and added package-energy analysis | [Timing](../evidence/index.md#weiqin30), [energy](../evidence/index.md#weiqin-power-scaling); unnumbered follow-ups |
+| 24 Oct 2026 | Added D5 timing and a separate power trial | [BLITZ-007](../experiments/BLITZ-007.md), [BLITZ-008](../experiments/BLITZ-008.md) |
+| 24 Oct 2026 | Established 7800X3D baseline, thread sweep and repeated-D4 power session | [BLITZ-004](../experiments/BLITZ-004.md), [BLITZ-005](../experiments/BLITZ-005.md), [BLITZ-006](../experiments/BLITZ-006.md) |
+| 16 Oct 2026 | Measured initial 5700U one/four-thread timing and output consistency | [BLITZ-003](../experiments/BLITZ-003.md) |
+
+## Experimental Setup / Methodology
+
+Network 64, beam size 5, FASTQ output and `OMP_NUM_THREADS=1` are fixed in the controlled desktop follow-ups. [D4](../datasets/D4.md) contains 48 reads / 9,033,454 samples; [D5](../datasets/D5.md) contains 4,467 reads / 1,290,238,981 samples. GNU Time measures complete-command time and host RSS. BLITZ-005/007 use one excluded warm-up and three measured runs per setting. BLITZ-003 retains its slow first run; an excluded warm-up is not established there.
+
+HWiNFO64 CPU Package Power is sampled approximately every 2.01 s, aligned to workload UTC intervals and integrated by the trapezoidal rule. Timing repetitions and independent power trials are different quantities.
 
 ## Results
 
-![BLITZ-005 mean full-command runtime and sample standard deviation for 1, 2, 4 and 8 caller threads](../assets/blitz005-runtime.svg)
+![BLITZ-005 full-command runtime, mean and sample SD across three runs](../assets/blitz005-runtime.svg)
 
-<p class="caption">Ryzen 7 7800X3D; D4; network 64; beam 5. Bars show mean runtime, whiskers show sample SD across three runs (not confidence intervals). Generated from the canonical report transcription, B p.11; corroborated by B2 p.11.</p>
+<p class="caption">7800X3D, D4, network 64, beam 5. Whiskers show sample SD, not confidence intervals. Canonical report transcription, corroborated by B2 p.11.</p>
 
-The [full results table](../evidence/index.md#blitz005) includes per-run wall times, throughput, peak host RSS and CPU utilization. All 12 outputs reportedly matched by read ID, sequence and quality string. This validates reported consistency across settings, not correctness against a biological reference.
+<!-- evidence:blitz005 -->
 
-## Interpretation
+<!-- evidence:blitz007 -->
 
-The measured speedup is sublinear: eight caller threads do not produce an eightfold improvement. These timings alone cannot attribute the remaining cost to decoding, I/O, synchronization or another stage; profiling is required.
+<!-- evidence:blitz-power -->
 
-The larger [BLITZ-007](../experiments/BLITZ-007.md) workload reports **315.31 ± 0.65 s** over three runs at eight threads, processing 4,467 D5 reads. It extends the observation to approximately five minutes of recorded-file processing, with reported matching outputs. It does not measure queue stability under incoming signal. [Evidence](../evidence/index.md#blitz007).
+The [5700U extended timing](../evidence/index.md#weiqin30) reports a 4.17× speedup. Its [energy analysis](../evidence/index.md#weiqin-power-scaling) reports 20,749 to 77,907 samples/J from one to eight threads in one continuous power session.
 
-## Energy is a separate measurement
+## Findings and Interpretation
 
-The 5700U follow-up reports CPU-package efficiency increasing from **20,749 to 77,907 samples/J** across one to eight threads. These values come from one continuous power session with repeated D4 processes, not independent energy replicates and not BLITZ-005. [Energy-session evidence](../evidence/index.md#weiqin-power-scaling).
+Caller parallelism reduced runtime on both systems. BLITZ-005 scaling is sublinear; timings alone cannot assign remaining cost to I/O, decoding or synchronization. BLITZ-007 extends reported repeatability to approximately five minutes of recorded-file processing. Matching outputs establish consistency, not reference accuracy.
 
-[BLITZ-006](../experiments/BLITZ-006.md) and [BLITZ-008](../experiments/BLITZ-008.md) provide separate 7800X3D CPU-package measurements. Neither establishes whole-system energy consumption. Keep workload and electrical boundaries visible when comparing them.
+Energy observations suggest reduced processing time can improve samples/J without a proportional power increase. Whole-system savings and independent energy variability remain unestablished. The [TX2 investigation](embedded-feasibility.md) evaluates the embedded CPU path separately.
 
 ## Limitations
 
-- D4 is a small historical-chemistry fixture; the same reads are reused.
-- Raw artifacts and weight checksums are unavailable; the figure reproduces report values.
-- CPU-package energy includes other package activity and excludes much of the host.
-- The 5700U follow-ups have no assigned experiment IDs; they are retained under descriptive evidence-table keys.
-- Output matching, predicted quality and reference accuracy are distinct claims.
+- D4 reuses a small historical-chemistry fixture; cache and background activity can affect timing.
+- BLITZ-005 and later follow-ups lack original commands/artifacts; tables remain secondary evidence.
+- Weight hashes, biological scoring, sustained arrival rates and latency distributions are incomplete.
+- CPU-package readings exclude much of the host. Single power sessions do not provide independent energy replicates.
 
-## Next investigation
+## Next Steps
 
-Recover original commands and artifacts, interleave thread configurations on larger compatible data, record thermal state and caching, and repeat independent power sessions. Profile stage boundaries before choosing an optimization hypothesis.
+Recover invocations and artifacts, interleave thread settings on larger compatible inputs, record cache/thermal state and repeat power sessions. Profile stages and verify biological quality before transferring optimization conclusions to SoCall.
 
-## Supporting experiments and reproduction
+## Supporting Experiments and Evidence
 
-[BLITZ-003](../experiments/BLITZ-003.md) · [BLITZ-004](../experiments/BLITZ-004.md) · [BLITZ-005](../experiments/BLITZ-005.md) · [BLITZ-006](../experiments/BLITZ-006.md) · [BLITZ-007](../experiments/BLITZ-007.md) · [BLITZ-008](../experiments/BLITZ-008.md)
+[BLITZ-003](../experiments/BLITZ-003.md) · [BLITZ-004](../experiments/BLITZ-004.md) · [BLITZ-005](../experiments/BLITZ-005.md) · [BLITZ-006](../experiments/BLITZ-006.md) · [BLITZ-007](../experiments/BLITZ-007.md) · [BLITZ-008](../experiments/BLITZ-008.md).
 
-[Reproduction guide](../resources/reproduce.md) · [Source revisions](../docs/sources.md)
+B2 pp.4,7,11–16; [source register](../docs/sources.md), [reproduction guide](../resources/reproduce.md). Individual experiment records retain the available commands, settings and measurement details.

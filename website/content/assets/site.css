@@ -5,6 +5,16 @@
 @media(prefers-reduced-motion:no-preference){.pillar{transition:transform .15s,box-shadow .15s}}
 
 /* Follow device appearance, including changes while the page is open. */
+.technical-report .layout{padding-top:2rem;padding-bottom:3rem}
+.technical-report h1{font-size:clamp(1.75rem,3vw,2.25rem);margin:.4rem 0 1rem}
+.technical-report h2{font-size:1.35rem;margin:1.7rem 0 .65rem}
+.technical-report h3{font-size:1.1rem;margin:1.2rem 0 .5rem}
+.technical-report p{margin:.65rem 0}
+.technical-report .table-wrap{margin:1rem 0}
+.technical-report th,.technical-report td{padding:.5rem .7rem}
+.technical-report main>p:has(img){max-width:none}
+.technical-report .eyebrow{margin-bottom:.4rem}
+.technical-report blockquote{margin:1rem 0;padding:.7rem 1rem}
 :root{color-scheme:light dark}
 @media(prefers-color-scheme:dark){
   :root{

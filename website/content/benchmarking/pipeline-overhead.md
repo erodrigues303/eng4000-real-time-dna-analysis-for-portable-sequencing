@@ -1,21 +1,46 @@
-<p class="eyebrow">Benchmarking study · Exploratory</p>
+---
+title: "POD5 vs BLOW5: Input Pipeline and Command Overhead"
+---
+<p class="eyebrow">Technical investigation · Preliminary record</p>
 
-# Can the current measurements isolate input-format overhead?
+# POD5 vs BLOW5: Input Pipeline and Command Overhead
 
-No. The available Dorado/POD5 and Slorado/BLOW5 comparison changes the model version and output representation as well as the signal format. It is useful for motivating controls, but cannot establish a file-format performance advantage.
+## Objective
 
-## Experimental design
+Characterize input-pipeline and setup costs, separating basecalling-stage performance from complete-command cost.
 
-The report compares HAC v6.0.0 with HAC v5.0.0, and BAM with FASTQ. Signal identity after conversion, exact build and commands are not archived. This comparison has no assigned experiment ID and must not be merged with DORADO-003.
+## Work Performed
 
-## Results and interpretation
+The team compared Dorado/POD5 and Slorado/BLOW5 runs, recording stage/command timing, reported power/energy and GPU memory. The comparison changes model version and output format, so it cannot isolate a file-format effect.
 
-[The full exploratory table](../evidence/index.md#formats) preserves the reported stage and command timings, memory and provisional energy values. A reversal between stage and command timing emphasizes that different timing boundaries answer different questions. It does not identify the cause of the difference.
+### Investigation history
+
+| Addition | Technical contribution | Evidence |
+|---|---|---|
+| After the Blitz work in the team-provided sequence; exact run date missing | Added paired pipeline timing, memory and reported energy observations | B2 pp.17–18; [format table](../evidence/index.md#formats) |
+
+No experiment ID is assigned. This is separate from DORADO-003's 1.401 s observation.
+
+## Experimental Setup / Methodology
+
+The report compares Dorado HAC v6.0.0/POD5/BAM with Slorado HAC v5.0.0/BLOW5/FASTQ. P identifies RTX 4070. Exact build, conversion commands and post-conversion signal identity are incomplete. Electrical scope and energy integration details remain unverified.
+
+## Results
+
+<!-- evidence:formats -->
+
+## Findings and Interpretation
+
+Dorado reports the shorter basecalling stage, while Slorado reports the shorter complete command. The reversal makes timing boundaries important, but does not identify which pipeline component caused the difference. Different model and output choices prevent a causal format-speed claim.
 
 ## Limitations
 
-Model, pipeline and output differences prevent attribution to the input format. Power scope and integration details are incomplete. The original conversion and execution logs are unavailable.
+Signal equivalence, model matching, cache conditions and original logs are missing. Energy values have incomplete measurement scope. These exploratory observations cannot rank POD5 and BLOW5 independently of the software pipeline.
 
-## Next investigation and reproduction
+## Next Steps
 
-Use identical signal records, verify conversion identity, and match model, backend, output and cache policy. Measure conversion, loading, inference and complete-command costs separately. See the [planned scenarios](../configs/scenarios/README.md), [methodology](../docs/methodology.md) and [reproduction guide](../resources/reproduce.md).
+Match input signals, model/backend/output and cache policy; verify conversion identity. Time conversion, loading, inference and output separately and archive synchronized telemetry.
+
+## Supporting Experiments and Evidence
+
+B2 pp.17–18; [sources](../docs/sources.md), [planned format scenario](../configs/scenarios/README.md), [Slorado model record](../models/slorado-hac-v5.md), [reproduction guide](../resources/reproduce.md). No invented record is used for this unnumbered comparison.

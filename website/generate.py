@@ -96,6 +96,15 @@ def on_config(config):
             raise ValueError(f"Invalid study references: {slug}")
         if not (OUT / f"benchmarking/{slug}.md").exists():
             raise ValueError(f"Missing study: {slug}")
+        report_path = OUT / f"benchmarking/{slug}.md"
+        report = report_path.read_text(encoding="utf-8")
+        def evidence(match):
+            key = match.group(1)
+            if key not in study["tables"]:
+                raise ValueError(f"Undeclared evidence table {key} in {slug}")
+            return table_markup(tables[key]).replace('<h2 ', '<h3 ').replace('</h2>', '</h3>') + f"[Canonical evidence table](../evidence/index.md#{key})\n\n"
+        report = re.sub(r"<!-- evidence:([a-z0-9-]+) -->", evidence, report)
+        report_path.write_text(report, encoding="utf-8")
     # Table links are explicit editorial associations, never guessed from experiment numbering.
     associations = read("website/experiment-evidence.json")
     if set(associations) - ids:

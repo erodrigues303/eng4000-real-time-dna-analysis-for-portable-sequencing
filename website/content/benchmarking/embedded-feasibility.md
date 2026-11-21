@@ -1,27 +1,47 @@
-<p class="eyebrow">Benchmarking study · Preliminary</p>
+---
+title: "DeepNano-Blitz on Jetson TX2: ARM64 CPU Baseline"
+---
+<p class="eyebrow">Technical investigation · Preliminary record</p>
 
-# How close is the TX2 CPU baseline to real-time capacity?
+# DeepNano-Blitz on Jetson TX2: ARM64 CPU Baseline
 
-The tested ARM64 DeepNano-Blitz CPU port reaches **214,574 samples/s** at eight caller threads, or **10.48%** of the D4-matched theoretical full-channel target. This establishes a reported CPU reference point; it is neither a SoCall result nor a GPU benchmark. [BLITZ-009 evidence](../evidence/index.md#tx2).
+## Objective
 
-## Experimental design
+Establish an executable embedded CPU reference and assess caller scaling against a dataset-matched signal-rate target before measuring SoCall independently.
 
-[BLITZ-009](../experiments/BLITZ-009.md) uses [D4](../datasets/D4.md), network 64, beam 5, and 1/2/4/8 caller threads on [Jetson TX2](../systems/jetson-tx2.md). Each setting has one excluded warm-up and three complete-command timing runs. The installed CUDA stack was unused. B2 pp.4,13 describes monotonic timing and both OpenMP and OpenBLAS thread controls.
+## Work Performed
 
-## Results and interpretation
+The team ran the ARM64 CPU BLAS port, swept 1/2/4/8 caller threads, compared all measured FASTQ outputs and collected module-input power. Eight threads reported **214,574 samples/s**, or **10.48%** of the theoretical 4 kHz full-channel target.
 
-[Timing, throughput and provisional power table](../evidence/index.md#tx2).
+### Investigation history
 
-Four threads report **207,860 samples/s**, close to eight-thread throughput. Stage-level profiling is needed to explain the limited additional scaling. The capacity denominator is **512 × 4,000 = 2,048,000 samples/s**, based on inspected D4 acquisition metadata and continuously active channels. It is not measured instrument yield.
+| Addition | Technical contribution | Record |
+|---|---|---|
+| 5 Nov 2026 | Added repeated full-command timing, output agreement and module-input telemetry | [BLITZ-009](../experiments/BLITZ-009.md) |
+| Preliminary port checks; date unrecorded | Compared single-read debug/release output before full-dataset measurements | B2 p.13; part of BLITZ-009 context |
+
+## Experimental Setup / Methodology
+
+D4: 48 FAST5 reads, 9,033,454 samples and inspected 4,000 Hz acquisition metadata. B2 pp.4,13 specifies network 64, beam 5, Rust release extension, `OMP_NUM_THREADS=1`, `OPENBLAS_NUM_THREADS=1`, one excluded warm-up and three runs per thread setting. Monotonic timing covers launch through output writing. INA3221 VDD_IN is sampled about every 0.5 s and integrated over the workload.
+
+The original P-based configuration still has unknown settings; B2 supplies additional report descriptions, not a recovered execution manifest. CUDA was unused.
+
+## Results
+
+<!-- evidence:tx2 -->
+
+## Findings and Interpretation
+
+Four threads delivered 207,860 samples/s, close to the eight-thread result. Profiling is needed to explain the limited additional scaling. The capacity denominator is 512 × 4,000 = 2,048,000 samples/s, not measured instrument yield. Matching outputs support reported consistency; this is neither a GPU nor a SoCall benchmark.
 
 ## Limitations
 
-The workload has only 48 historical FAST5 reads. All measured outputs reportedly match; biological accuracy and equivalence to the unmodified x86 build are unverified. Module-input sensor scaling remains uncertain, so watts and joules are provisional and cannot be ranked against Ryzen CPU-package power. Memory, thermal state and power mode are incomplete.
+Sensor scaling and the low idle reading remain unverified. Module-input power cannot be ranked directly against CPU-package watts. Memory, utilization, thermal state and power mode are missing. The short historical dataset does not establish live latency or biological accuracy.
 
-## Next investigation
+## Next Steps
 
-Recover the ARM64 patches and original evidence, verify the sensor scale, and collect sustained throughput, queue length and latency on timestamped arrivals. Establish SoCall correctness and its own baseline separately before evaluating CUDA or other optimizations.
+Recover port patches and raw artifacts, verify sensor scaling, measure sustained input and queue latency, and establish SoCall correctness and its own baseline before choosing CPU/GPU optimizations.
 
-## Supporting experiment and reproduction
+## Supporting Experiments and Evidence
 
-[BLITZ-009](../experiments/BLITZ-009.md) · [Jetson compatibility notes](../docs/platforms/jetson-tx2.md) · [SoCall engineering](../socall/index.md) · [Reproduction guide](../resources/reproduce.md).
+[BLITZ-009](../experiments/BLITZ-009.md), B2 pp.4,13,16–18; [sources](../docs/sources.md), [Jetson notes](../docs/platforms/jetson-tx2.md), [SoCall engineering](../socall/index.md).

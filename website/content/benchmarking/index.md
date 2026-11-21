@@ -1,29 +1,28 @@
-<p class="eyebrow">Research pillar A</p>
+---
+title: Basecaller Benchmarking
+---
+<p class="eyebrow">Living technical record · Preliminary measurements</p>
 
 # Basecaller Benchmarking
 
-How do model, hardware and execution choices affect basecalling under portable-computing constraints? These studies connect each question to its controls, reported measurements and remaining uncertainty.
+The team has established Dorado platform baselines, compared model tiers, assessed Bonito compatibility, measured DeepNano-Blitz on desktop and embedded CPUs, and explored signal-format pipelines. Work progresses toward reproducible benchmarking and a separately verified embedded SoCall baseline.
 
-## Active studies
+## Technical Investigations
 
-### [How does CPU parallelism affect throughput and energy?](cpu-parallelism.md)
+Newest work first, following the team's supplied investigation sequence. This is the order of technical work, not publication dates; exact dates appear in report histories only where recorded.
 
-Controlled caller-thread sweeps, a larger recorded workload, and separately scoped CPU-package energy sessions. **Preliminary report evidence.**
+| Investigation | Work completed | Evidence state |
+|---|---|---|
+| [POD5 vs BLOW5: Input Pipeline and Command Overhead](pipeline-overhead.md) | Compared stage/command time, memory and reported energy | Exploratory; models and outputs differ |
+| [DeepNano-Blitz on Jetson TX2: ARM64 CPU Baseline](embedded-feasibility.md) | Ran the port, swept threads and collected module-input telemetry | Preliminary; sensor scale unverified |
+| [DeepNano-Blitz CPU Scaling and Package Energy](cpu-parallelism.md) | Established CPU baselines, thread scaling, larger-workload timing and energy sessions | Preliminary; raw artifacts incomplete |
+| [Bonito Compatibility Assessment for Jetson TX2](bonito-compatibility.md) | Reviewed dependencies and excluded the reviewed configuration from TX2 execution | Source review; no measured run |
+| [Dorado Fast vs HAC: Performance and Accuracy Tradeoffs](fast-vs-hac.md) | Compared runtime and reported quality on real/simulated input | Exploratory; empirical accuracy unresolved |
+| [Dorado GPU Acceleration: CPU and CUDA Baselines](gpu-acceleration.md) | Compared CPU/CUDA execution and modified-base overhead | Preliminary; short stage intervals |
+| [Dorado Cross-Platform Performance](hardware-throughput.md) | Established Windows CPU/CUDA and macOS Metal observations | Preliminary; systems/settings differ |
 
-### [How does the execution platform affect throughput?](hardware-throughput.md)
+## Cross-investigation reference
 
-Dorado on the same named D1 input and HAC model across CPU, CUDA and Metal. Automatic batching, setup and incomplete environments limit attribution. **Exploratory comparison.**
+[Basecaller Runtime Comparison and Measurement Coverage](runtime-overview.md) collects reported runtimes for Dorado, Blitz and Slorado by workload and timing boundary. Bonito, Coral and SoCall are explicitly marked as unmeasured. This maintained synthesis is not another dated experiment or a cross-tool leaderboard.
 
-### [How close is the TX2 CPU baseline to real-time capacity?](embedded-feasibility.md)
-
-An ARM64 DeepNano-Blitz CPU port, thread scaling and a dataset-matched theoretical signal-rate target. **Preliminary; module power unverified.**
-
-### [Can the current measurements isolate input-format overhead?](pipeline-overhead.md)
-
-The Dorado/Slorado comparison changes model version and output format as well as signal format. **Exploratory; causal attribution unsupported.**
-
-## Open questions
-
-Reference-based speed–accuracy tradeoffs need a pinned reference, scoring method and matched model identities. Streaming feasibility needs timestamped arrivals, queue and latency measurements. These are open investigations, not completed studies.
-
-[Browse every registered experiment](../experiments/index.md) · [Measurement definitions](../docs/methodology.md)
+[Experiment registry](../experiments/index.md) · [Measurement protocol](../docs/methodology.md) · [Reproduction guide](../resources/reproduce.md) · [SoCall engineering](../socall/index.md)

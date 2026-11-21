@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="{{ 'assets/site.css' | url }}">
   <script src="{{ 'assets/site.js' | url }}" defer></script>
 </head>
-<body>
+<body{% if page and page.file.src_uri.startswith('benchmarking/') %} class="technical-report"{% endif %}>
 <a class="skip" href="#content">Skip to content</a>
 <header class="header"><div class="header-inner">
   <a class="brand" href="{{ '.' | url }}"><span class="brand-mark" aria-hidden="true">P22</span>Project 22</a>
