@@ -20,7 +20,7 @@ Generated from `socall-private.json`; edit the JSON and rerun the renderer.
 | weights source | Supplied privately by the supervisor (handoff prepared 2026-11-05); not redistributed |
 | weights sha256 | 7e91b61ab5b89318c02c13fd65686dff067863366d6bdf0363b16cc43081e1fa |
 | status | planned-private |
-| provenance | ["U", "P pp.4,20", "S", "E"] |
-| limitations | ["Preliminary reference-accuracy baseline only (SOCALL-001/002 on a laptop); no embedded performance baseline.", "Publication permission unconfirmed: no code, weights or unpublished architecture exposed.", "Chemistry, sample rate and chunk size come from the supervisor's recollection; training data and normalization are undocumented."] |
+| provenance | ["U", "P pp.4,20", "S", "E", "M"] |
+| limitations | ["Preliminary reference-accuracy baseline on a laptop (SOCALL-001/002, D5) and preliminary embedded throughput/power baseline on the reflashed TX2 (SOCALL-003-005, D1, FP32); no embedded accuracy baseline on matching-chemistry data yet.", "Publication permission unconfirmed: no code, weights or unpublished architecture exposed.", "Chemistry, sample rate and chunk size come from the supervisor's recollection; training data and normalization are undocumented."] |
 
 Source IDs refer to the [evidence register](../docs/sources.md). Unknown fields are not inferred from product names or chemistry.

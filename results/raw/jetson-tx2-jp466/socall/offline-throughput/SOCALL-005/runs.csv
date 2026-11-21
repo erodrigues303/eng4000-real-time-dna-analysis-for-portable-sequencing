@@ -1,0 +1,2 @@
+variant,run_index,warmup,start_utc,end_utc,wall_time_s,exit_status,input_samples,completed_reads,output_bases,samples_per_s,peak_rss_mib
+cpu_c4800_o0_b64_greedy-python_fp32,0,1,2026-11-21T02:07:59Z,2026-11-21T02:28:36Z,1236.8914,0,2527421,5,123953,2043.4,1476.0

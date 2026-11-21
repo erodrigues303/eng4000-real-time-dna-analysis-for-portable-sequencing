@@ -19,10 +19,11 @@
     "U",
     "P pp.4,20",
     "S",
-    "E"
+    "E",
+    "M"
   ],
   "limitations": [
-    "Preliminary reference-accuracy baseline only (SOCALL-001/002 on a laptop); no embedded performance baseline.",
+    "Preliminary reference-accuracy baseline on a laptop (SOCALL-001/002, D5) and preliminary embedded throughput/power baseline on the reflashed TX2 (SOCALL-003-005, D1, FP32); no embedded accuracy baseline on matching-chemistry data yet.",
     "Publication permission unconfirmed: no code, weights or unpublished architecture exposed.",
     "Chemistry, sample rate and chunk size come from the supervisor's recollection; training data and normalization are undocumented."
   ]

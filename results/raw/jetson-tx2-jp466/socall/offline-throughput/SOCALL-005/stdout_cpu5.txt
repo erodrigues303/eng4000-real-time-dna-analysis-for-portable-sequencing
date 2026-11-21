@@ -1,0 +1,13 @@
+data=sample.npz reads=5 dataset_samples=2,527,421 device=cpu
+setup (model load + read data, untimed) = 0.43s   warmup passes = 1
+timed passes=1 samples=2,527,421 bases=123,953 wall=1236.89s
+throughput: 0.002 Msamples/s  (real-time target: 2.05 @4kHz, 2.56 @5kHz)
+  inference    1234.499s   99.8%
+  decode          2.244s    0.2%
+  normalize       0.095s    0.0%
+  stitch          0.037s    0.0%
+  chunk           0.006s    0.0%
+  write           0.001s    0.0%
+  h2d             0.001s    0.0%
+  d2h             0.001s    0.0%
+wrote /home/nvidia/socall/out/SOCALL-005/run-stats_cpu5.json
