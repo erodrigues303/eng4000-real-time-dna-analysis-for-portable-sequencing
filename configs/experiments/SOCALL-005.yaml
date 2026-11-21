@@ -1,0 +1,102 @@
+{
+  "experiment_id": "SOCALL-005",
+  "date": "2026-11-20",
+  "owner": "Matthew",
+  "status": "preliminary",
+  "tool": {
+    "name": "SoCall + Project 22 benchmark wrapper run_socall.py (private, not published)",
+    "version": null,
+    "commit": null
+  },
+  "model_ids": [
+    "socall-private"
+  ],
+  "dataset_id": "D1",
+  "system_id": "jetson-tx2-jp466",
+  "scenario_id": "offline-throughput",
+  "command": "sudo tegrastats --interval 1000 --logfile <abs>/tegrastats_cpu5.log --start; python3 run_socall.py --weights weights_30.pt --npy sample.npz --out out/SOCALL-005/cpu5.fastq --warmup 1 --min-seconds 0 --max-reads 5 --stats-json ... --runs-csv ... --timing ... --device cpu --overlap 0; sudo tegrastats --stop; python3 tegra_summary.py <log> --idle-mw 3292",
+  "shell": "bash over SSH (Ubuntu 18.04, L4T R32.7.6)",
+  "working_directory": "~/socall on the TX2 (private SoCall files, not public)",
+  "environment": {
+    "python": "3.6.9",
+    "torch": "1.10.0",
+    "numpy": "1.13.3",
+    "cuda": "10.2",
+    "cudnn": "8.2.1 (8201)",
+    "l4t": "R32.7.6 (GCID 38171779)",
+    "device": "cpu (6 ARM64 cores; PyTorch default threading)",
+    "precision": "fp32",
+    "power_mode": "MAXN + jetson_clocks",
+    "input": "D1 POD5 converted to NPZ (calibrated pA, float32) with pod5_to_npz.py; NPZ SHA-256 6e6d1576b17a76c53406c4ec37964088bce5f30917500972b92ef65ba95a59e5"
+  },
+  "settings": {
+    "chunk_size": 4800,
+    "overlap": 0,
+    "batch_size": 64,
+    "caller_threads": null,
+    "beam_size": null
+  },
+  "warmup_count": 1,
+  "measured_run_count": 1,
+  "workload_repetitions": 1,
+  "timing_scope": "Per-stage wall time inside one process; one untimed warm-up pass and one timed pass over the first 5 reads of D1 (2,527,421 samples). Model load and NPZ loading excluded.",
+  "telemetry": {
+    "timing_method": "time.perf_counter per stage; per-pass wall time",
+    "memory_method": "Process peak RSS (getrusage); system RAM from tegrastats",
+    "power_method": "tegrastats VDD_IN (INA3221), 1 s interval, arithmetic mean over the whole capture incl. ~5 s setup and the warm-up pass; gross energy = mean x samples x interval",
+    "power_scope": "jetson-module-input",
+    "sampling_interval_s": 1.0
+  },
+  "output_format": "FASTQ",
+  "output_validation": "Well-formed FASTQ for 5 reads (SHA-256 7c1892b641841325cc7d7b0f0f0b9918d62062ba3be666f2937aa8379b7162ab); no reference alignment.",
+  "artifacts": [
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-005/power-summary_cpu5.json",
+      "sha256": "ca7c2ef32b57ba2f2e767bad2c5d33806e9b3d3cf97910997714d5c5a82cc480",
+      "description": "tegra_summary.py output: average/peak VDD_IN, rail averages, GPU/CPU utilisation, peak RAM, gross energy (power-summary_cpu5.json)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-005/power_cpu5.csv.gz",
+      "sha256": "992af456af487a0870440c29510a9ed07c1a88a6b59d354d5fac5a0b09331056",
+      "description": "tegra_summary.py per-sample table (rails mW, GPU utilisation, RAM, GPU temperature) (power_cpu5.csv.gz)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-005/run-stats_cpu5.json",
+      "sha256": "5bbced1aff7ea7fdd2bd99aebe483e08ac40609cb88f2263e1d6e7ade833d15a",
+      "description": "Provenance JSON from run_socall.py: argv, versions, L4T release, weights/input/FASTQ SHA-256, settings, per-pass times, per-stage seconds, peak RSS, CUDA max allocation (run-stats_cpu5.json)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-005/runs.csv",
+      "sha256": "80b49a4e6f2d4c9c72de1a9b1994c2583ca6a62ae3054de2c3c62a80f378d3ab",
+      "description": "One row per timed pass (variant, UTC start/end, wall time, samples, bases, samples/s, peak RSS) (runs.csv)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-005/stdout_cpu5.txt",
+      "sha256": "63fecedf3b23ddd5900f9cfa81c920c99ca76c05b7e6196d0f2dbb2d7339529c",
+      "description": "Run stdout: throughput and per-stage seconds (stdout_cpu5.txt)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-005/tegrastats_cpu5.log.gz",
+      "sha256": "a35dd1e37f0300913f6aaf7930ed73ae02dc6c5d529bedfdcdb7a26ce4c3a5ad",
+      "description": "Raw tegrastats capture, 1 s interval, gzip (tegrastats_cpu5.log.gz)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-005/timing.csv",
+      "sha256": "c9cdeda9838354503583ea3a624d2548c026bfe8c0a73094f51cf0f9fea339c4",
+      "description": "Per-stage timing rows appended by run_socall.py --timing (timing.csv)"
+    }
+  ],
+  "provenance": [
+    "M",
+    "S"
+  ],
+  "limitations": [
+    "CPU-only reference on a 5-read subset (2,527,421 samples), not the full D1 workload; single run.",
+    "A full-D1 CPU attempt was abandoned after about 108 min still inside the warm-up pass (no log retained; operator-reported tegrastats summary: avg VDD_IN 5.34 W, CPU rail 2.19 W, CPU utilisation 63.7%).",
+    "PyTorch default CPU threading; average CPU utilisation 58.5%, so the 6 cores were not saturated. No thread or affinity tuning.",
+    "D1 is R10.4.1 at 5 kHz; SoCall was trained on R9.4.1 at ~4 kHz (S). Output is about 1 base per 19.5 samples versus ~12.5 expected at 400 b/s, consistent with undercalling. Throughput and power are valid; accuracy is not, and no reference exists for D1.",
+    "Wrapper (run_socall.py) and model code are private; record the wrapper by its outputs and argv. Greedy CTC runs as a per-base Python loop on the ARM CPU, a wrapper property rather than a SoCall model property.",
+    "Gross module-input power (VDD_IN) averaged over the whole capture including warm-up and setup; INA3221 scaling uncalibrated; idle 3.29 W measured separately (jetson-tx2-jp466 system record).",
+    "Results: 0.00204 M samples/s (2,043 samples/s; 1,236.89 s timed wall), about 250x slower than SOCALL-004 GPU overall and about 500x slower in inference; inference 99.8%, decode 0.2% of wall. Avg VDD_IN 5.16 W (1.87 W above idle), CPU rail 2.03 W, peak RAM 2,747 MB, peak RSS 1,476 MiB; about 2.5 mJ/sample gross."
+  ]
+}

@@ -1,0 +1,2 @@
+timestamp,device,data,reads,dataset_samples,chunk,overlap,batch,norm,decoder,warmup,passes,samples,bases,wall_s,Msamples_s,normalize,chunk,h2d,inference,d2h,stitch,decode,write
+2026-11-21 02:28:36,cpu,sample.npz,5,2527421,4800,0,64,medmad,greedy-python,1,1,2527421,123953,1236.8916,0.0020,0.0952,0.0056,0.0008,1234.4988,0.0008,0.0366,2.2444,0.0012

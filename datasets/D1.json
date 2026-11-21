@@ -8,21 +8,27 @@
   ],
   "chemistry": "R10.4.1 / E8.2 / 400 bps detected by Dorado",
   "kit_model": null,
-  "sampling_frequency_hz": null,
+  "sampling_frequency_hz": 5000,
   "file_format": "POD5",
   "read_count": 59,
-  "signal_sample_count": null,
+  "signal_sample_count": 27949927,
   "reference_ground_truth": null,
   "licence": null,
-  "checksum": null,
+  "checksum": {
+    "algorithm": "sha256",
+    "value": "be8ad37cb4e1e1510974eb7e744ee998093b3fc5bb55861f64c44ea7a083bd4d",
+    "scope": "sample.pod5 as used for SOCALL-003-005 (M, certutil 2026-11-20); NPZ conversion 6e6d1576b17a76c53406c4ec37964088bce5f30917500972b92ef65ba95a59e5"
+  },
   "training_evaluation_split": "No documented training use or verified train/evaluation separation",
   "provenance": [
-    "B p.6"
+    "B p.6",
+    "M"
   ],
   "limitations": [
     "Small historical hardware/modified-base comparison; not an established training corpus.",
-    "~5 kHz is a model condition, not verified file metadata.",
     "Human data conflicts with P non-human policy; provenance/licence and future policy need resolution.",
-    "B references Appendix D download links but the supplied PDF ends at p.17 without that appendix."
+    "B references Appendix D download links but the supplied PDF ends at p.17 without that appendix.",
+    "Sampling rate 5000 Hz and 27,949,927 calibrated signal samples verified from POD5 run_info/signal on 2026-11-20 (M).",
+    "R10.4.1 chemistry: out of distribution for SoCall (trained on R9.4.1 at ~4 kHz per S). Valid for SoCall throughput/power only, not accuracy."
   ]
 }

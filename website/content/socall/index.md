@@ -4,7 +4,7 @@
 
 SoCall is the laboratory's int8/fixed-point basecaller implementation under investigation for resource-constrained execution. It remains **one implementation to develop and optimize**, alongside the broader basecaller benchmark.
 
-> **Current state:** access to model and weights has been reported. Correctness, a reproducible performance baseline, profiling and measured optimizations are not yet established. Private source and weights are not published here.
+> **Current state:** access to model and weights has been reported. A preliminary TX2 throughput/power baseline and first stage profile now exist (SOCALL-003-005); embedded correctness on matching-chemistry data and measured optimizations are not yet established. Private source and weights are not published here.
 
 ## Architecture and implementation
 
@@ -16,11 +16,13 @@ Next: define trusted outputs and permitted test inputs; check fixed-point scalin
 
 ## Baseline characterization
 
-Next: pin code and weights privately, record the [Jetson environment](../systems/jetson-tx2.md), and measure complete-command and stage timings with explicit memory and electrical boundaries. [BLITZ-009](../experiments/BLITZ-009.md) is a DeepNano-Blitz CPU reference, not a SoCall baseline.
+**Preliminary TX2 baseline (D1, FP32, unchanged model):** [SOCALL-004](../experiments/SOCALL-004.md) ran the supplied model and weights on the reflashed [Jetson TX2 (JetPack 4.6.6)](../systems/jetson-tx2-jp466.md) GPU with the supervisor's chunking (4800 samples, no overlap, batch 64) and greedy decoding. Four repeated runs gave 0.509 M samples/s (SD 0.002), about 25% of the 2.05 M samples/s needed for 512 channels at 4 kHz and 20% of 2.56 M samples/s at 5 kHz. Rep4 averaged 8.5 W module input (5.2 W above idle). The same model on the TX2 CPU ([SOCALL-005](../experiments/SOCALL-005.md), 5-read subset) ran at 0.002 M samples/s. [SOCALL-003](../experiments/SOCALL-003.md) repeats the GPU run with 300-sample overlap (0.49 M samples/s).
+
+These are throughput and power results only. D1 is R10.4.1 at 5 kHz, while SoCall was trained on R9.4.1 at about 4 kHz, so no accuracy is claimed for these runs; [SOCALL-001/002](../experiments/SOCALL-001.md) provide the matching-chemistry accuracy reference on D5. [BLITZ-009](../experiments/BLITZ-009.md) is a DeepNano-Blitz CPU reference on the earlier TX2 image, not a SoCall baseline.
 
 ## Profiling and bottlenecks
 
-Next: measure preprocessing, chunking, batching, inference, decoding, memory movement and synchronization. No measured SoCall bottleneck has been identified in the supplied evidence.
+Stage timing in SOCALL-004 (CUDA-synchronized at each boundary) attributes 48.9% of wall time to model inference and 47.3% to greedy CTC decoding, with normalization, stitching and host-device transfers together under 4%. GPU utilisation averaged 44%. Decoding cost here belongs to the benchmark wrapper (a per-base Python loop on the ARM CPU), not to the SoCall model. Inference alone corresponds to about 1.0 M samples/s, so FP32 inference by itself is also below the real-time target. This is a first profile, not a complete bottleneck analysis: per-kernel GPU profiling, memory movement and synchronization are not yet measured.
 
 ## Optimization studies
 

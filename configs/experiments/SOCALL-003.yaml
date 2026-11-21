@@ -1,0 +1,91 @@
+{
+  "experiment_id": "SOCALL-003",
+  "date": "2026-11-20",
+  "owner": "Matthew",
+  "status": "preliminary",
+  "tool": {
+    "name": "SoCall + Project 22 benchmark wrapper run_socall.py (private, not published)",
+    "version": null,
+    "commit": null
+  },
+  "model_ids": [
+    "socall-private"
+  ],
+  "dataset_id": "D1",
+  "system_id": "jetson-tx2-jp466",
+  "scenario_id": "offline-throughput",
+  "command": "sudo jetson_clocks && sudo tegrastats --interval 1000 --logfile tegra_tx2-002.log --start && python3 run_socall.py --weights weights_30.pt --npy sample.npz --out tx2-002.fastq --device cuda --warmup 1 --min-seconds 60 --timing tx2.csv | tee tx2-002.txt; sudo tegrastats --stop",
+  "shell": "bash over SSH (Ubuntu 18.04, L4T R32.7.6)",
+  "working_directory": "~/socall on the TX2 (private SoCall files, not public)",
+  "environment": {
+    "python": "3.6.9",
+    "torch": "1.10.0",
+    "numpy": "1.13.3",
+    "cuda": "10.2",
+    "cudnn": "8.2.1 (8201)",
+    "l4t": "R32.7.6 (GCID 38171779)",
+    "device": "cuda (NVIDIA Tegra X2)",
+    "precision": "fp32",
+    "power_mode": "MAXN + jetson_clocks",
+    "input": "D1 POD5 converted to NPZ (calibrated pA, float32) with pod5_to_npz.py; NPZ SHA-256 6e6d1576b17a76c53406c4ec37964088bce5f30917500972b92ef65ba95a59e5"
+  },
+  "settings": {
+    "chunk_size": 4800,
+    "overlap": 300,
+    "batch_size": 64,
+    "caller_threads": null,
+    "beam_size": null
+  },
+  "warmup_count": 1,
+  "measured_run_count": 2,
+  "workload_repetitions": 2,
+  "timing_scope": "Per-stage wall time inside one process with CUDA synchronization at stage boundaries; each run: one untimed warm-up pass then 2 timed passes over all 59 reads (55,899,854 samples). Model load and NPZ loading excluded. Two separate process runs (23:22 and 23:30 UTC).",
+  "telemetry": {
+    "timing_method": "time.perf_counter per stage with torch.cuda.synchronize at stage boundaries; per-pass wall time",
+    "memory_method": "Process peak RSS (getrusage) and torch.cuda.max_memory_allocated; system RAM from tegrastats",
+    "power_method": "tegrastats VDD_IN (INA3221), 1 s interval; both runs appended to one capture (358 samples); arithmetic mean over the capture",
+    "power_scope": "jetson-module-input",
+    "sampling_interval_s": 1.0
+  },
+  "output_format": "FASTQ",
+  "output_validation": "Well-formed FASTQ for all 59 reads (first timed pass); no reference alignment because D1 (R10.4.1, 5 kHz) is out of distribution for SoCall and has no reference",
+  "artifacts": [
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-003/power-summary.json",
+      "sha256": "d25388b75c6e2547ee83b475e766ec6ca6c7ff91f02566858cc29b71995762e5",
+      "description": "tegra_summary.py output: average/peak VDD_IN, rail averages, GPU/CPU utilisation, peak RAM, gross energy (power-summary.json)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-003/power.csv",
+      "sha256": "d9d37df90c97cab9b5119883e5ae0140d401be84bc721a794d0affcf14cf1acc",
+      "description": "tegra_summary.py per-sample table (rails mW, GPU utilisation, RAM, GPU temperature) (power.csv)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-003/stdout_run2.txt",
+      "sha256": "02bb2a606104d8d0359ab3ff5d6289059eb3bf0b3c244c67f049fafe39935ab3",
+      "description": "Run stdout: throughput and per-stage seconds (stdout_run2.txt)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-003/tegrastats.log.gz",
+      "sha256": "b9dc1a83d5137228e57c8c887e64586cfe5d07195a74a8ef1a1485c6cf669b97",
+      "description": "Raw tegrastats capture, 1 s interval, gzip (tegrastats.log.gz)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-003/timing.csv",
+      "sha256": "80c2377fc79f60968d27b44b70f0ee2ebbfebd293bf092471147581582305b2c",
+      "description": "Per-stage timing rows appended by run_socall.py --timing (timing.csv)"
+    }
+  ],
+  "provenance": [
+    "M",
+    "S"
+  ],
+  "limitations": [
+    "Overlap 300 differs from the supervisor's recollected training setup (4800, no overlap); SOCALL-004 is the overlap-0 baseline.",
+    "stdout of run 1 was overwritten by run 2; run 1 survives as a row in timing.csv. No run-stats JSON or runs.csv (wrapper version predates them).",
+    "D1 is R10.4.1 at 5 kHz; SoCall was trained on R9.4.1 at ~4 kHz (S). Output is about 1 base per 19.5 samples versus ~12.5 expected at 400 b/s, consistent with undercalling. Throughput and power are valid; accuracy is not, and no reference exists for D1.",
+    "Wrapper (run_socall.py) and model code are private; record the wrapper by its outputs and argv. Greedy CTC runs as a per-base Python loop on the ARM CPU, a wrapper property rather than a SoCall model property.",
+    "Gross module-input power (VDD_IN) averaged over the whole capture including warm-up and setup; INA3221 scaling uncalibrated; idle 3.29 W measured separately (jetson-tx2-jp466 system record).",
+    "Results: run 1 0.4923 and run 2 0.4942 M samples/s (113.56 s and 113.10 s timed wall); inference 50.4-50.6%, greedy decode 45.7-45.8% of wall; avg VDD_IN 8.56 W (5.27 W above idle), GPU rail 4.31 W, GPU utilisation 44.4%, peak RAM 3,489 MB, peak GPU 58.5 C; 2,887,848 bases per 2 passes."
+  ]
+}
