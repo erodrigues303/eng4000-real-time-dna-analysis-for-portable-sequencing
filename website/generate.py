@@ -81,6 +81,9 @@ def on_config(config):
     paths += [ROOT / "docs" / name for name in ["methodology.md", "mlcommons-alignment.md", "sources.md", "gaps.md"]]
     paths += list((ROOT / "docs/platforms").glob("*.md"))
     paths += [ROOT / "docs/results/README.md", ROOT / "harness/README.md"]
+    # Explicitly reviewed, non-human D5 scoring artifacts; do not publish raw/ broadly.
+    paths += [ROOT / "results/raw/brian-7800x3d/blitz/reference-accuracy/BLITZ-010" / name
+              for name in ["accuracy.json", "alignments.csv"]]
     for path in paths:
         if path.name == "README.md" and path.parent.name in {"models", "datasets", "systems"}:
             continue
@@ -89,6 +92,30 @@ def on_config(config):
         shutil.copyfile(path, target)
     tables = {t["key"]: t for t in read("results/summaries/report-observations.json")["tables"]}
     studies = read("website/studies.json")
+    d5 = read("results/summaries/d5-accuracy-comparison.json")
+    scoring = d5["summaries"]
+    columns = ["Metric", "Blitz network 64 / beam 5", "SoCall greedy", "SoCall beam 5"]
+    metrics = [("reads", "Reads scored", False), ("mapped_reads", "Mapped reads", False),
+               ("mapped_fraction", "Mapped reads (%)", True), ("median_identity", "Median mapped-read identity (%)", True),
+               ("mean_identity", "Mean mapped-read identity (%)", True), ("pooled_identity", "Pooled identity (%)", True),
+               ("substitution_rate", "Substitution rate (%)", True), ("insertion_rate", "Insertion rate (%)", True),
+               ("deletion_rate", "Deletion rate (%)", True), ("aligned_base_fraction", "Aligned predicted bases (%)", True),
+               ("total_bases", "Predicted bases", False)]
+    lines = ["| " + " | ".join(columns) + " |", "|---|---:|---:|---:|"]
+    for key, label, pct in metrics:
+        values = [f"{100 * scoring[eid][key]:.2f}" if pct else f"{scoring[eid][key]:,}" for eid in ["BLITZ-010", "SOCALL-001", "SOCALL-002"]]
+        lines.append("| " + " | ".join([label] + values) + " |")
+    summary_table = "\n".join(lines)
+    lines = ["| Paired metric | Blitz vs SoCall greedy | Blitz vs SoCall beam 5 |", "|---|---:|---:|"]
+    for key, label in [("both_mapped", "Both mapped"), ("blitz_only_mapped", "Only Blitz mapped"),
+                       ("socall_only_mapped", "Only SoCall mapped"), ("neither_mapped", "Neither mapped"),
+                       ("blitz_higher", "Blitz higher identity, among both mapped"), ("socall_higher", "SoCall higher identity, among both mapped"),
+                       ("ties", "Equal identity, among both mapped"), ("median_identity_difference_pp", "Median paired identity difference (Blitz minus SoCall, pp)"),
+                       ("mean_identity_difference_pp", "Mean paired identity difference (pp)")]:
+        values = [f"{d5['paired'][eid][key]:.2f}" if key.endswith("_pp") else f"{d5['paired'][eid][key]:,}" for eid in ["SOCALL-001", "SOCALL-002"]]
+        lines.append("| " + " | ".join([label] + values) + " |")
+    report_path = OUT / "benchmarking/d5-accuracy.md"
+    report_path.write_text(report_path.read_text(encoding="utf-8").replace("<!-- d5-accuracy:summary -->", summary_table).replace("<!-- d5-accuracy:paired -->", "\n".join(lines)), encoding="utf-8")
     records = [read(p.relative_to(ROOT)) for p in sorted((ROOT / "configs/experiments").glob("*.yaml"))]
     ids = {r["experiment_id"] for r in records}
     for slug, study in studies.items():

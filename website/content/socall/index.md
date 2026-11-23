@@ -20,6 +20,10 @@ Next: define trusted outputs and permitted test inputs; check fixed-point scalin
 
 These are throughput and power results only. D1 is R10.4.1 at 5 kHz, while SoCall was trained on R9.4.1 at about 4 kHz, so no accuracy is claimed for these runs; [SOCALL-001/002](../experiments/SOCALL-001.md) provide the matching-chemistry accuracy reference on D5. [BLITZ-009](../experiments/BLITZ-009.md) is a DeepNano-Blitz CPU reference on the earlier TX2 image, not a SoCall baseline.
 
+## D5 reference-accuracy comparison
+
+[Blitz vs SoCall on D5](../benchmarking/d5-accuracy.md) compares the saved SOCALL-001/002 outputs with the retained BLITZ-007 run-1 output, scored as BLITZ-010. All three have the same 4,467 read IDs and reference/scoring method. Blitz median mapped-read identity was 88.09%, versus 79.38% (SoCall greedy) and 81.00% (SoCall beam 5). These preliminary pipeline-output results do not rank hardware performance or establish the cause of the accuracy gap.
+
 ## Profiling and bottlenecks
 
 Stage timing in SOCALL-004 (CUDA-synchronized at each boundary) attributes 48.9% of wall time to model inference and 47.3% to greedy CTC decoding, with normalization, stitching and host-device transfers together under 4%. GPU utilisation averaged 44%. Decoding cost here belongs to the benchmark wrapper (a per-base Python loop on the ARM CPU), not to the SoCall model. Inference alone corresponds to about 1.0 M samples/s, so FP32 inference by itself is also below the real-time target. This is a first profile, not a complete bottleneck analysis: per-kernel GPU profiling, memory movement and synchronization are not yet measured.
