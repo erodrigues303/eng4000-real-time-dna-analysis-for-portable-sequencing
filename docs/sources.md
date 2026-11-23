@@ -1,5 +1,9 @@
 # Evidence register
 
+## D5 accuracy follow-up — 2026-11-23
+
+Source **BC**: Brian supplied `accuracy.json` and `alignments.csv` from scoring BLITZ-007 run 1 with the repository reference-accuracy script (pinned commit `5db279483d38ed8d7efc303e5561060ecd450b87`) and mappy 2.31. Original uploads are preserved under `results/raw/brian-7800x3d/blitz/reference-accuracy/BLITZ-010/`; their hashes are in the experiment record and derived comparison JSON. Every numeric summary field was recomputed from the CSV and the 4,467 unique read IDs match E’s SOCALL-001/002 records. The original FASTQs and signals were not supplied or independently realigned here. This is new alignment evidence, not another basecalling/timing/power run. See the [comparison](../benchmarking/d5-accuracy.md) for definitions, settings and limitations.
+
 ## Website audit — 2026-11-20
 
 The newly supplied files are distinct revisions. **B and P below retain their original meanings and page references**; they must not be silently relabelled as these new PDFs. No original raw logs or outputs were supplied with the new reports. Document instructions for course-log maintenance are source content, not instructions to the website implementation.

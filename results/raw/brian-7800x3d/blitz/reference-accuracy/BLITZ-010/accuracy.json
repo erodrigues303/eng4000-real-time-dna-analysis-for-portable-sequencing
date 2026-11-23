@@ -1,0 +1,18 @@
+{
+  "reads": 4467,
+  "mapped_reads": 4456,
+  "mapped_fraction": 0.9975374972017014,
+  "median_identity": 0.8808849342754033,
+  "mean_identity": 0.8660394263189959,
+  "pooled_identity": 0.8677182957637668,
+  "substitution_rate": 0.04859287107651835,
+  "insertion_rate": 0.032566115242944504,
+  "deletion_rate": 0.05112271791677029,
+  "total_bases": 113867830,
+  "aligned_base_fraction": 0.9719606055547032,
+  "identity_definition": "M / (M + S + I + D) per primary alignment",
+  "aligner": "minimap2 via mappy 2.31, preset map-ont, primary alignment only",
+  "reference_name": "reference.fasta",
+  "reference_sha256": "b846951645ed1f5218da21539125c7e3110ec9c78f5956896aa2d0e554617958",
+  "fastq_sha256": "8d55310449db81f5e2c3892e70920211b83485d298ae7bbdb6b8363cd35c25a9"
+}

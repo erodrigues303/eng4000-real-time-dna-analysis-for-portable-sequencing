@@ -1,0 +1,69 @@
+{
+  "experiment_id": "BLITZ-010",
+  "date": "2026-11-23",
+  "owner": "Brian",
+  "status": "preliminary",
+  "tool": {
+    "name": "DeepNano-Blitz",
+    "version": "deepnano2 0.1",
+    "commit": "15bd04b94c291debac75823811a2c86820dda589"
+  },
+  "model_ids": [
+    "blitz-network64"
+  ],
+  "dataset_id": "D5",
+  "system_id": "brian-7800x3d",
+  "scenario_id": "reference-accuracy",
+  "command": "python reference_accuracy.py ~/capstone-blitz/deepnano-blitz/benchmarks/large-dataset-20261024-201712/run1.fastq reference.fasta --out-dir blitz-d5-accuracy",
+  "shell": "bash (Ubuntu WSL)",
+  "working_directory": "~/capstone-blitz/comparison-d5",
+  "environment": {
+    "python": "3.12 (patch version not recorded)",
+    "mappy": "2.31",
+    "scoring_repository_commit": "5db279483d38ed8d7efc303e5561060ecd450b87",
+    "scoring_script_sha256": "c0046e5b0621f11a77078139fa1469fc3a0d51dc664d71bbc0cd05aa176ce649"
+  },
+  "settings": {
+    "chunk_size": null,
+    "overlap": null,
+    "batch_size": null,
+    "caller_threads": 8,
+    "beam_size": 5
+  },
+  "warmup_count": 0,
+  "measured_run_count": 1,
+  "workload_repetitions": 1,
+  "timing_scope": "Accuracy analysis of BLITZ-007 run1.fastq only; no new basecalling, timing or power measurement",
+  "telemetry": {
+    "timing_method": null,
+    "memory_method": null,
+    "power_method": null,
+    "power_scope": null,
+    "sampling_interval_s": null
+  },
+  "output_format": "JSON and per-read CSV",
+  "output_validation": "All numeric summary fields recomputed from uploaded CSV; 4467 unique IDs identical to SOCALL-001/002; matching reference SHA-256, mappy 2.31, map-ont, primary alignment scoring. Original FASTQ not independently realigned.",
+  "artifacts": [
+    {
+      "location": "results/raw/brian-7800x3d/blitz/reference-accuracy/BLITZ-010/accuracy.json",
+      "sha256": "80f0e0b78980568198be0c4b1399357381b9f77602b17fe6f687713baf89d9a4",
+      "description": "Unmodified Brian upload: accuracy.json"
+    },
+    {
+      "location": "results/raw/brian-7800x3d/blitz/reference-accuracy/BLITZ-010/alignments.csv",
+      "sha256": "d0b3bc592041bc4ef03937086ae07f8e1f297b2bf96a3c6201ebc4152d7d3f66",
+      "description": "Unmodified Brian upload: alignments.csv"
+    }
+  ],
+  "provenance": [
+    "BC (Brian original scoring uploads, 2026-11-23)",
+    "BLITZ-007 (source FASTQ, reported basecalling settings)"
+  ],
+  "limitations": [
+    "Retrospective scoring of BLITZ-007 run 1; no new basecalling/timing trial. Settings refer to the source basecalling run, not alignment thread settings.",
+    "Original FASTQ remains on Brian\u2019s WSL PC. SHA-256 is recorded in accuracy.json but was not independently verified here.",
+    "One bacterial dataset; training overlap and exact pore subrevision unknown; primary local alignment excludes unaligned sequence from identity.",
+    "No confidence interval, consensus accuracy, clinical validity, controlled speed or energy ranking.",
+    "BLITZ-007 original build/model hashes and complete raw timing logs remain incomplete; this follow-up does not retroactively validate historical runtime."
+  ]
+}

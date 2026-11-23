@@ -1,4 +1,14 @@
 {
+  "d5-accuracy": {
+    "title": "Blitz vs SoCall: Reference Accuracy on D5",
+    "experiments": [
+      "BLITZ-007",
+      "BLITZ-010",
+      "SOCALL-001",
+      "SOCALL-002"
+    ],
+    "tables": []
+  },
   "pipeline-overhead": {
     "title": "POD5 vs BLOW5: Input Pipeline and Command Overhead",
     "experiments": [],

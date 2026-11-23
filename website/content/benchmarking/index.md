@@ -13,6 +13,7 @@ Newest work first, following the team's supplied investigation sequence. This is
 
 | Investigation | Work completed | Evidence state |
 |---|---|---|
+| [Blitz vs SoCall: Reference Accuracy on D5](d5-accuracy.md) | Scored 4,467 matching read IDs against one pinned reference; compared distributions and paired identities | Preliminary; saved alignment artifacts verified |
 | [POD5 vs BLOW5: Input Pipeline and Command Overhead](pipeline-overhead.md) | Compared stage/command time, memory and reported energy | Exploratory; models and outputs differ |
 | [DeepNano-Blitz on Jetson TX2: ARM64 CPU Baseline](embedded-feasibility.md) | Ran the port, swept threads and collected module-input telemetry | Preliminary; sensor scale unverified |
 | [DeepNano-Blitz CPU Scaling and Package Energy](cpu-parallelism.md) | Established CPU baselines, thread scaling, larger-workload timing and energy sessions | Preliminary; raw artifacts incomplete |

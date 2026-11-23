@@ -20,6 +20,7 @@ jobs:
           cache: pip
           cache-dependency-path: requirements-site.txt
       - run: python -m pip install -r requirements-site.txt
+      - run: python harness/analysis/compare_d5_accuracy.py --check
       - run: python -m mkdocs build --strict
       - run: python website/check_site.py
       - uses: actions/upload-pages-artifact@v3

@@ -11,7 +11,7 @@ Establish CPU baselines and quantify caller-thread scaling, workload-size effect
 
 ## Work Performed
 
-The team ran Blitz on Ryzen 7 5700U and 7800X3D systems, checked output agreement, swept caller threads, processed a larger recorded dataset and collected separate CPU-package power sessions. BLITZ-005 reports a **5.21×** one-to-eight-thread speedup; biological accuracy and streaming capability remain unverified.
+The team ran Blitz on Ryzen 7 5700U and 7800X3D systems, checked output agreement, swept caller threads, processed a larger recorded dataset and collected separate CPU-package power sessions. BLITZ-005 reports a **5.21×** one-to-eight-thread speedup; streaming capability remains unverified. A later [D5 reference-alignment study](d5-accuracy.md) scores the retained BLITZ-007 output as BLITZ-010.
 
 ### Investigation history
 

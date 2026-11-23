@@ -11,6 +11,7 @@ python -m venv .venv
 # Windows: .venv\Scripts\activate
 # macOS/Linux: source .venv/bin/activate
 python -m pip install -r requirements-site.txt
+python harness/analysis/compare_d5_accuracy.py --check
 python -m mkdocs build --strict
 python website/check_site.py
 python -m mkdocs serve
@@ -22,6 +23,8 @@ Open the URL printed by MkDocs. The project path is included in preview:
 The generated staging directory is rebuilt at startup. After editing canonical metadata or authored content during preview, restart `mkdocs serve` to regenerate it; the default watcher observes the staging directory rather than all upstream sources.
 
 ## Source structure
+
+The D5 accuracy follow-up is generated from saved alignment evidence, separate from historical timing transcriptions. Run `python harness/analysis/compare_d5_accuracy.py` after a reviewed evidence change; `--check` validates CSV/JSON consistency, reference/scoring metadata, identical read sets and the derived comparison JSON. The build embeds its values in `benchmarking/d5-accuracy.md`. Optional plot regeneration uses `--plot` with matplotlib (created with 3.10.8); charts are not recomputed during site builds. The public allowlist includes only the two reviewed bacterial BLITZ-010 scoring artifacts, not the rest of `results/raw/`.
 
 Appearance automatically follows the device's light/dark preference through CSS `prefers-color-scheme`, including live preference changes. Dark mode uses charcoal surfaces, muted text and blue links. The generated SVG chart has its own matching palette. No JavaScript toggle or saved preference overrides the device setting.
 

@@ -1,0 +1,109 @@
+{
+  "dataset": "D5",
+  "analysis_date": "2026-11-23",
+  "reference_sha256": "b846951645ed1f5218da21539125c7e3110ec9c78f5956896aa2d0e554617958",
+  "aligner": "minimap2 via mappy 2.31, preset map-ont, primary alignment only",
+  "identity_definition": "M / (M + S + I + D) per primary alignment",
+  "summaries": {
+    "BLITZ-010": {
+      "reads": 4467,
+      "mapped_reads": 4456,
+      "mapped_fraction": 0.9975374972017014,
+      "median_identity": 0.8808849342754033,
+      "mean_identity": 0.8660394263189959,
+      "pooled_identity": 0.8677182957637668,
+      "substitution_rate": 0.04859287107651835,
+      "insertion_rate": 0.032566115242944504,
+      "deletion_rate": 0.05112271791677029,
+      "total_bases": 113867830,
+      "aligned_base_fraction": 0.9719606055547032,
+      "identity_definition": "M / (M + S + I + D) per primary alignment",
+      "aligner": "minimap2 via mappy 2.31, preset map-ont, primary alignment only",
+      "reference_name": "reference.fasta",
+      "reference_sha256": "b846951645ed1f5218da21539125c7e3110ec9c78f5956896aa2d0e554617958",
+      "fastq_sha256": "8d55310449db81f5e2c3892e70920211b83485d298ae7bbdb6b8363cd35c25a9"
+    },
+    "SOCALL-001": {
+      "reads": 4467,
+      "mapped_reads": 4347,
+      "mapped_fraction": 0.9731363331094695,
+      "median_identity": 0.7938308939155679,
+      "mean_identity": 0.785206801973028,
+      "pooled_identity": 0.7865344193752716,
+      "substitution_rate": 0.08101667970814173,
+      "insertion_rate": 0.03654781258220517,
+      "deletion_rate": 0.09590108833438155,
+      "total_bases": 108847786,
+      "aligned_base_fraction": 0.9398698288635838,
+      "identity_definition": "M / (M + S + I + D) per primary alignment",
+      "aligner": "minimap2 via mappy 2.31, preset map-ont, primary alignment only",
+      "reference_name": "Acinetobacter_pittii_16-377-0801_reference.fasta",
+      "reference_sha256": "b846951645ed1f5218da21539125c7e3110ec9c78f5956896aa2d0e554617958",
+      "fastq_sha256": "43edad39b078184576858b91ab992db565f8474a4f81829171650a287efd75c8"
+    },
+    "SOCALL-002": {
+      "reads": 4467,
+      "mapped_reads": 4382,
+      "mapped_fraction": 0.9809715692858741,
+      "median_identity": 0.809970712689734,
+      "mean_identity": 0.8005983640708003,
+      "pooled_identity": 0.8019757305195334,
+      "substitution_rate": 0.0813147776000306,
+      "insertion_rate": 0.04313413889677897,
+      "deletion_rate": 0.07357535298365699,
+      "total_bases": 112532633,
+      "aligned_base_fraction": 0.9470288765037604,
+      "identity_definition": "M / (M + S + I + D) per primary alignment",
+      "aligner": "minimap2 via mappy 2.31, preset map-ont, primary alignment only",
+      "reference_name": "Acinetobacter_pittii_16-377-0801_reference.fasta",
+      "reference_sha256": "b846951645ed1f5218da21539125c7e3110ec9c78f5956896aa2d0e554617958",
+      "fastq_sha256": "cb7fa9438b3eb3018446cdf5ef7943dbb904c7c42079559397bc5d959ea1fae7"
+    }
+  },
+  "paired": {
+    "SOCALL-001": {
+      "same_read_ids": true,
+      "both_mapped": 4347,
+      "blitz_only_mapped": 109,
+      "socall_only_mapped": 0,
+      "neither_mapped": 11,
+      "blitz_higher": 4345,
+      "socall_higher": 2,
+      "ties": 0,
+      "median_identity_difference_pp": 8.553840412118841,
+      "mean_identity_difference_pp": 8.497453520563218
+    },
+    "SOCALL-002": {
+      "same_read_ids": true,
+      "both_mapped": 4382,
+      "blitz_only_mapped": 74,
+      "socall_only_mapped": 0,
+      "neither_mapped": 11,
+      "blitz_higher": 4367,
+      "socall_higher": 15,
+      "ties": 0,
+      "median_identity_difference_pp": 6.926027348141778,
+      "mean_identity_difference_pp": 6.82786698497764
+    }
+  },
+  "artifacts": {
+    "BLITZ-010": {
+      "accuracy.json": "80f0e0b78980568198be0c4b1399357381b9f77602b17fe6f687713baf89d9a4",
+      "alignments.csv": "d0b3bc592041bc4ef03937086ae07f8e1f297b2bf96a3c6201ebc4152d7d3f66"
+    },
+    "SOCALL-001": {
+      "accuracy.json": "003c8a02b60514efa6d0e66db9fe7b38f2019776840307152b1e9c6f8c21a663",
+      "alignments.csv": "f1a748b66f6896d6d64f2afbf54aea1636e1eb3d04f3ddb5e3e57a5720840270"
+    },
+    "SOCALL-002": {
+      "accuracy.json": "c20022516483c7af5bd67ac4f5a2167bc9ee37da08fa28078072ebf55cc822e1",
+      "alignments.csv": "c8342d32bfe513c5cad38aaa404a4a17c59118bbb71f5fd1b8d3abfa1f45c7cb"
+    }
+  },
+  "limitations": [
+    "Saved alignment evidence checked; FASTQs not independently realigned.",
+    "Identity and error rates exclude unmapped reads and unaligned sequence; report mapping and aligned-base fractions alongside them.",
+    "One organism/dataset; pretrained-model training overlap and exact D5 pore subrevision unknown.",
+    "Not a controlled speed/energy comparison, consensus accuracy, or clinical validation."
+  ]
+}
