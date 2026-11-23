@@ -5,8 +5,6 @@ title: "Blitz vs SoCall: Reference Accuracy on D5"
 
 # Blitz vs SoCall: Reference Accuracy on D5
 
-**Brian Changkit · 23 November 2026.** Analysis of an existing BLITZ-007 output, not a new basecalling or timing run. The new scoring record is [BLITZ-010](../experiments/BLITZ-010.md).
-
 ## Research question
 
 How do DeepNano-Blitz network 64 / beam 5 and the supplied FP32 SoCall pipeline agree with the same reference genome on the same D5 reads?
@@ -19,13 +17,15 @@ How do DeepNano-Blitz network 64 / beam 5 and the supplied FP32 SoCall pipeline 
 
 | Output | Recorded configuration | Execution and source |
 |---|---|---|
-| Blitz | Network 64, beam 5, 8 caller threads, `OMP_NUM_THREADS=1` | Brian's 7800X3D / Ubuntu WSL, BLITZ-007 run 1, basecalled 24 Oct; scored 23 Nov ([BLITZ-010](../experiments/BLITZ-010.md)) |
-| SoCall greedy | Supplied FP32 weights, 4,800-sample chunks, no overlap, batch 64; per-read median/MAD normalization | Ege's Apple M2 / MPS, 19 Nov ([SOCALL-001](../experiments/SOCALL-001.md)) |
-| SoCall beam 5 | Same recorded SoCall setup, beam width 5 | Ege's Apple M2 / MPS, 19 Nov ([SOCALL-002](../experiments/SOCALL-002.md)) |
+| Blitz | Network 64, beam 5, 8 caller threads, `OMP_NUM_THREADS=1` | Ryzen 7 7800X3D / Ubuntu WSL, BLITZ-007 run 1, basecalled 24 Oct; scored 23 Nov ([BLITZ-010](../experiments/BLITZ-010.md)) |
+| SoCall greedy | Supplied FP32 weights, 4,800-sample chunks, no overlap, batch 64; per-read median/MAD normalization | Apple M2 / MPS, 19 Nov ([SOCALL-001](../experiments/SOCALL-001.md)) |
+| SoCall beam 5 | Same recorded SoCall setup, beam width 5 | Apple M2 / MPS, 19 Nov ([SOCALL-002](../experiments/SOCALL-002.md)) |
 
 The two beam-5 settings are included for context; beam width alone does not make decoding, preprocessing, architecture or training identical. The M2 SoCall outputs, not the D1/TX2 throughput runs SOCALL-003–005, are the comparison inputs.
 
 ### Scoring and verification
+
+The scoring follow-up [BLITZ-010](../experiments/BLITZ-010.md) evaluates the retained BLITZ-007 run-1 FASTQ; no new basecalling, timing or power run was performed.
 
 All three use `minimap2 via mappy 2.31`, preset `map-ont`, primary alignment only, against the identical uncompressed reference SHA-256:
 
@@ -33,7 +33,7 @@ All three use `minimap2 via mappy 2.31`, preset `map-ont`, primary alignment onl
 b846951645ed1f5218da21539125c7e3110ec9c78f5956896aa2d0e554617958
 ```
 
-Brian downloaded the scoring script from repository commit `5db279483d38ed8d7efc303e5561060ecd450b87` (script SHA-256 `c0046e5b0621f11a77078139fa1469fc3a0d51dc664d71bbc0cd05aa176ce649`). His uploaded JSON and per-read CSV are preserved without alteration. The comparison script recomputes every numeric summary field from each CSV, checks the scoring/reference metadata and verifies **4,467 unique, identical read IDs** in all three files. This checks the saved alignment evidence; it is not independent realignment of the FASTQs.
+The scoring script was pinned to repository commit `5db279483d38ed8d7efc303e5561060ecd450b87` (script SHA-256 `c0046e5b0621f11a77078139fa1469fc3a0d51dc664d71bbc0cd05aa176ce649`). The original accuracy summary and per-read alignment CSV are preserved without alteration. The comparison script recomputes every numeric summary field from each CSV, checks the scoring/reference metadata and verifies **4,467 unique, identical read IDs** in all three files. This checks the saved alignment evidence; it is not independent realignment of the FASTQs.
 
 Identity is `M/(M+S+I+D)`, where M is matches, S substitutions, I inserted bases and D deleted bases. Median identity weights mapped reads equally; pooled identity weights alignment columns. Error rates use the pooled alignment-column denominator. Unmapped reads remain in the mapping-rate denominator, but are excluded from identity/error statistics. Aligned-base fraction reports aligned query bases divided by all predicted query bases, including unmapped reads; it is not reference-genome coverage.
 
@@ -68,7 +68,7 @@ Next: inspect poor alignments and unaligned sequence, evaluate permitted SoCall 
 
 ## Reproduction and downloadable evidence
 
-Use Python 3.12 with `mappy==2.31` to repeat the alignment step. Install the Ubuntu `zlib1g-dev` build dependency if mappy must be compiled. Obtain BLITZ-007 `run1.fastq` from Brian and the D5 reference from the [dataset card](../datasets/D5.md), verify hashes, and run from `~/capstone-blitz/comparison-d5`:
+Use Python 3.12 with `mappy==2.31` to repeat the alignment step. Install the Ubuntu `zlib1g-dev` build dependency if mappy must be compiled. Use the retained BLITZ-007 `run1.fastq` and the D5 reference from the [dataset card](../datasets/D5.md), verify hashes, and run from `~/capstone-blitz/comparison-d5`:
 
 ```bash
 python reference_accuracy.py \

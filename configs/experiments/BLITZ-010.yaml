@@ -47,21 +47,21 @@
     {
       "location": "results/raw/brian-7800x3d/blitz/reference-accuracy/BLITZ-010/accuracy.json",
       "sha256": "80f0e0b78980568198be0c4b1399357381b9f77602b17fe6f687713baf89d9a4",
-      "description": "Unmodified Brian upload: accuracy.json"
+      "description": "Original scoring artifact: accuracy.json"
     },
     {
       "location": "results/raw/brian-7800x3d/blitz/reference-accuracy/BLITZ-010/alignments.csv",
       "sha256": "d0b3bc592041bc4ef03937086ae07f8e1f297b2bf96a3c6201ebc4152d7d3f66",
-      "description": "Unmodified Brian upload: alignments.csv"
+      "description": "Original scoring artifact: alignments.csv"
     }
   ],
   "provenance": [
-    "BC (Brian original scoring uploads, 2026-11-23)",
+    "BC (original scoring artifacts, 2026-11-23)",
     "BLITZ-007 (source FASTQ, reported basecalling settings)"
   ],
   "limitations": [
     "Retrospective scoring of BLITZ-007 run 1; no new basecalling/timing trial. Settings refer to the source basecalling run, not alignment thread settings.",
-    "Original FASTQ remains on Brian\u2019s WSL PC. SHA-256 is recorded in accuracy.json but was not independently verified here.",
+    "Original FASTQ remains on the source WSL system. SHA-256 is recorded in accuracy.json but was not independently verified here.",
     "One bacterial dataset; training overlap and exact pore subrevision unknown; primary local alignment excludes unaligned sequence from identity.",
     "No confidence interval, consensus accuracy, clinical validity, controlled speed or energy ranking.",
     "BLITZ-007 original build/model hashes and complete raw timing logs remain incomplete; this follow-up does not retroactively validate historical runtime."
