@@ -1,0 +1,152 @@
+{
+  "DORADO-001": {
+    "title": "Initial GPU Basecalling",
+    "objective": "Test whether Dorado can basecall D1 on the GTX 1060 and record an initial CUDA performance baseline.",
+    "backend": "CUDA · NVIDIA GTX 1060 3 GB",
+    "observation": "All 59 reads were processed. The recorded interval covers basecalling.",
+    "limitations": "The 59-read input and single measurement limit conclusions about sustained throughput. The original timing logs and complete environment are unavailable."
+  },
+  "DORADO-002": {
+    "title": "Ryzen 5 CPU Basecalling Baseline",
+    "objective": "Run the same D1 input and HAC model on the Ryzen 5 1500X CPU to establish a baseline for the GTX 1060 comparison.",
+    "backend": "CPU · AMD Ryzen 5 1500X",
+    "observation": "The CPU processed all 59 reads. Its reported basecalling interval was about 79 times as long as the GTX 1060 interval.",
+    "limitations": "This was one run on a 59-read input. The original timing logs and complete environment are unavailable."
+  },
+  "DORADO-003": {
+    "title": "RTX 4070 CUDA Baseline",
+    "objective": "Measure HAC basecalling on the RTX 4070 without modified-base inference.",
+    "backend": "CUDA · NVIDIA RTX 4070 12 GB",
+    "observation": "The full command took approximately 12 s. The shorter basecalling interval excludes part of that runtime. Dorado selected the batch and chunk sizes automatically.",
+    "limitations": "One 59-read run with automatic tuning gives no sustained rate. The original timing boundaries and environment are incomplete."
+  },
+  "DORADO-004": {
+    "title": "RTX 4070 Modified-Base Calling",
+    "objective": "Measure the stage overhead of adding the 5mCG/5hmCG companion model to the RTX 4070 HAC configuration.",
+    "backend": "CUDA · NVIDIA RTX 4070 12 GB",
+    "observation": "The reported basecalling stage took 0.115 s longer than DORADO-003. Peak memory was not measured.",
+    "limitations": "The result is from one 59-read run. Effective tuning settings and BAM tag verification are incomplete. Modified-base accuracy was not measured.",
+    "output_check": "BAM MM/ML tags were reported. Tag presence and correctness remain unverified."
+  },
+  "DORADO-005": {
+    "title": "Apple M2 Metal Basecalling",
+    "objective": "Measure D1 basecalling on Apple M2 Metal and inspect the resulting BAM.",
+    "backend": "Metal · Apple M2 GPU",
+    "observation": "The output statistics include predicted Q-scores and read lengths. Predicted Q-scores do not measure reference-aligned accuracy.",
+    "limitations": "The 59-read single run cannot establish sustained throughput. The scope of the reported 4.1 GB memory peak is unverified."
+  },
+  "DORADO-006": {
+    "title": "RTX 3070 Mobile CUDA Baseline",
+    "objective": "Record a preliminary D1 basecalling rate for the RTX 3070 Mobile.",
+    "backend": "CUDA · NVIDIA RTX 3070 Mobile",
+    "observation": "The short reported basecalling interval exceeded the theoretical 5 kHz input rate.",
+    "limitations": "The original command and run date are unavailable. Earlier reports use conflicting experiment IDs for this measurement. The 59-read run does not establish sustained throughput."
+  },
+  "BLITZ-003": {
+    "title": "Initial Ryzen 7 5700U Thread Scaling",
+    "objective": "Compare full-command runtime and output consistency at one and four caller threads.",
+    "backend": "CPU · AMD Ryzen 7 5700U",
+    "observation": "Four threads reduced the mean runtime.",
+    "limitations": "The first, slower run was retained. Warm-up conditions and the later exact memory-measurement commands are unknown.",
+    "output_check": "Read IDs, sequences, and qualities matched across thread settings."
+  },
+  "BLITZ-004": {
+    "title": "Ryzen 7 7800X3D Single-Thread Baseline",
+    "objective": "Measure full-command runtime and FASTQ repeatability for one caller thread on D4.",
+    "backend": "CPU · AMD Ryzen 7 7800X3D",
+    "observation": "Full-command runtime averaged 15.01 s across three runs.",
+    "limitations": "Warm-up conditions, exact invocation, and original run artifacts are unavailable.",
+    "output_check": "The three FASTQ outputs reportedly matched byte for byte."
+  },
+  "BLITZ-005": {
+    "title": "Ryzen 7 7800X3D CPU Thread Sweep",
+    "objective": "Measure D4 throughput, runtime variability, and peak host memory as caller threads increase.",
+    "backend": "CPU · AMD Ryzen 7 7800X3D",
+    "observation": "Eight caller threads gave a 5.21× speedup over one thread.",
+    "limitations": "D4 is a small recorded fixture. Cache state and the exact invocation are unverified. The rates do not measure live streaming.",
+    "output_check": "All 12 runs matched by read ID, sequence, and quality."
+  },
+  "BLITZ-006": {
+    "title": "CPU-Package Energy on Repeated D4",
+    "objective": "Measure CPU-package energy for 30 invocations of the D4 workload at eight caller threads.",
+    "backend": "CPU · AMD Ryzen 7 7800X3D",
+    "observation": "The session processed 271,003,620 samples by repeating the same 48 reads. Recorded energy covers the CPU package.",
+    "limitations": "The 30 invocations belong to one power capture. Independent session variability and total system energy were not measured.",
+    "output_check": "Output consistency was reported. Original files and checksums are unavailable."
+  },
+  "BLITZ-007": {
+    "title": "Eight-Thread Performance on D5",
+    "objective": "Measure full-command runtime and memory on a larger recorded workload at eight caller threads.",
+    "backend": "CPU · AMD Ryzen 7 7800X3D",
+    "observation": "The reported 4,092,013 samples/s corresponds to 199.81% of the 4 kHz full-channel reference and 159.84% of the 5 kHz reference.",
+    "limitations": "The run used recorded files. Live latency and queue behavior were not measured. The exact basecalling command and original timing logs are incomplete.",
+    "output_check": "All three runs reportedly produced matching FASTQ output."
+  },
+  "BLITZ-008": {
+    "title": "CPU-Package Energy on D5",
+    "objective": "Measure CPU-package energy for one full D5 pass at eight caller threads.",
+    "backend": "CPU · AMD Ryzen 7 7800X3D",
+    "observation": "The power session processed the 4,467-read D5 workload. Its duration and throughput come from that session.",
+    "limitations": "One power session does not establish energy variability. The electrical boundary excludes other system loads.",
+    "output_check": "Output consistency was reported. Original files and checksums are unavailable."
+  },
+  "BLITZ-009": {
+    "title": "Jetson TX2 ARM64 CPU Baseline",
+    "objective": "Measure full-command throughput and module-input energy across four caller-thread settings on the ARM64 port.",
+    "backend": "ARM64 CPU · NVIDIA Jetson TX2",
+    "observation": "The eight-thread rate of 214,574 samples/s reached 10.48% of the theoretical 2,048,000 samples/s full-channel reference at 4 kHz. The four-thread rate was close at 207,860 samples/s.",
+    "limitations": "The INA3221 scale remains unverified, so watt and joule values are provisional. Memory, clock and thermal state were not recorded. The exact port build and output check artifacts are unavailable.",
+    "output_check": "All 12 FASTQ outputs reportedly matched."
+  },
+  "BLITZ-010": {
+    "title": "Reference Accuracy of Saved D5 Output",
+    "objective": "Score the retained BLITZ-007 run-1 FASTQ against the pinned D5 reference.",
+    "backend": "CPU · AMD Ryzen 7 7800X3D",
+    "observation": "The saved alignment fields were verified from the per-read CSV. All 4,467 read IDs match the two saved SoCall outputs.",
+    "limitations": "This was retrospective scoring of BLITZ-007 run 1. The original FASTQ was not independently re-hashed or realigned. Primary local identity excludes unaligned sequence and covers one isolate.",
+    "timing": "Reference alignment of the saved BLITZ-007 run-1 FASTQ."
+  },
+  "SOCALL-001": {
+    "title": "Apple M2 D5 Accuracy with Greedy Decoding",
+    "objective": "Measure reference-aligned read identity and profile the SoCall greedy-decoder configuration on D5.",
+    "backend": "MPS · Apple M2 GPU",
+    "observation": "The single profiled run used greedy CTC and per-read median/MAD normalization. The alignment summary includes unmapped reads in the mapping denominator.",
+    "limitations": "The run had no warm-up. Timing is for profiling. Accuracy covers one isolate and primary read alignments.",
+    "timing": "In-process stage profiling with GPU synchronization at stage boundaries."
+  },
+  "SOCALL-002": {
+    "title": "Apple M2 D5 Accuracy with Beam Search",
+    "objective": "Measure reference-aligned read identity and profile the SoCall beam-width-5 configuration on D5.",
+    "backend": "MPS · Apple M2 GPU",
+    "observation": "This run used beam search with width 5 and per-read median/MAD normalization. The alignment summary includes unmapped reads in the mapping denominator.",
+    "limitations": "The run had no warm-up. Timing is for profiling. Accuracy covers one isolate and primary read alignments.",
+    "timing": "In-process stage profiling with GPU synchronization at stage boundaries."
+  },
+  "SOCALL-003": {
+    "title": "Jetson TX2 CUDA with 300-Sample Overlap",
+    "objective": "Profile SoCall FP32 throughput with 300-sample overlap and measure TX2 module-input power.",
+    "backend": "CUDA · NVIDIA Tegra X2",
+    "observation": "Inference and greedy decoding accounted for most of the timed interval. The power capture spans both process runs, including setup and warm-up.",
+    "limitations": "The INA3221 scale was uncalibrated. D1 chemistry and sampling differ from SoCall training conditions and D1 lacks a reference. The power window differs from timed processing.",
+    "output_check": "A well-formed FASTQ was verified for all 59 reads on the first timed pass.",
+    "timing": "Timed processing passes with CUDA synchronization at stage boundaries. Model and NPZ loading were excluded."
+  },
+  "SOCALL-004": {
+    "title": "Jetson TX2 CUDA Baseline without Overlap",
+    "objective": "Measure SoCall FP32 throughput across four repeated process runs and record module-input power for the final run.",
+    "backend": "CUDA · NVIDIA Tegra X2",
+    "observation": "The reported rate was 24.8% of the 4 kHz full-channel reference and 19.9% of the 5 kHz reference.",
+    "limitations": "Power was captured only for repetition 4, including setup and warm-up. The INA3221 scale was uncalibrated. D1 lacks compatible reference-scored accuracy and the runs used one board with no thermal-stability criterion.",
+    "output_check": "All 59 reads produced well-formed FASTQ, byte-identical across four repetitions.",
+    "timing": "Timed processing passes with CUDA synchronization at stage boundaries. Model and NPZ loading were excluded."
+  },
+  "SOCALL-005": {
+    "title": "Jetson TX2 CPU Five-Read Baseline",
+    "objective": "Measure the SoCall FP32 CPU pipeline on the first five D1 reads and record module-input power.",
+    "backend": "ARM64 CPU · NVIDIA Jetson TX2",
+    "observation": "Inference accounted for 99.8% of the timed interval. The CPU used PyTorch default threading. A full-D1 attempt was abandoned in warm-up.",
+    "limitations": "The single measured pass uses a five-read subset. The INA3221 scale was uncalibrated and the power capture includes setup and warm-up. No reference-based accuracy was measured.",
+    "output_check": "Well-formed FASTQ was verified for five reads.",
+    "timing": "Timed processing pass over the first five D1 reads. Model and NPZ loading were excluded."
+  }
+}

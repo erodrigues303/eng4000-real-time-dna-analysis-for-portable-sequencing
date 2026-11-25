@@ -32,7 +32,8 @@ Appearance automatically follows the device's light/dark preference through CSS 
 - `website/theme/`: semantic page template; assets live in `website/content/assets/`.
 - `website/generate.py`: MkDocs configuration hook; validates metadata and builds ignored `.site-docs/`.
 - `website/studies.json`: editorial study relationships only; no copied measurements.
-- `website/experiment-evidence.json`: explicit links from stable experiment IDs to canonical evidence table keys.
+- `website/experiment-evidence.json`: evidence table keys per experiment. Use an exact first-column label when the table contains measurements from multiple experiments, or `null` when the entire table belongs to one experiment.
+- `website/experiment-reports.json`: report titles, objectives, backend descriptions, observations, and limitations. The generator reads measurements from the canonical evidence tables and recorded artifacts.
 - Existing `configs/`, `datasets/`, `models/`, `systems/`, `results/` and selected `docs/` remain canonical.
 - `site-build/`: ignored production output, the only directory uploaded by Pages.
 

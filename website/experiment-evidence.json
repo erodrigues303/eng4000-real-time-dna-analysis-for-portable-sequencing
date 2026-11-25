@@ -1,15 +1,49 @@
 {
-  "DORADO-001": ["dorado-d1", "dorado-memory", "dorado-power"],
-  "DORADO-002": ["dorado-d1", "dorado-power"],
-  "DORADO-003": ["dorado-d1", "dorado-memory", "dorado-power"],
-  "DORADO-004": ["dorado-d1", "dorado-memory", "dorado-power"],
-  "DORADO-005": ["dorado-d1", "dorado-memory"],
-  "DORADO-006": ["dorado-d1"],
-  "BLITZ-003": ["blitz003"],
-  "BLITZ-004": ["blitz004"],
-  "BLITZ-005": ["blitz005"],
-  "BLITZ-006": ["blitz-power"],
-  "BLITZ-007": ["blitz007"],
-  "BLITZ-008": ["blitz-power"],
-  "BLITZ-009": ["tx2"]
+  "DORADO-001": {
+    "dorado-d1": "DORADO-001",
+    "dorado-memory": "DORADO-001",
+    "dorado-power": "GTX 1060"
+  },
+  "DORADO-002": {
+    "dorado-d1": "DORADO-002",
+    "dorado-power": "Ryzen 5 1500X CPU"
+  },
+  "DORADO-003": {
+    "dorado-d1": "DORADO-003",
+    "dorado-memory": "DORADO-003",
+    "dorado-power": "RTX 4070"
+  },
+  "DORADO-004": {
+    "dorado-d1": "DORADO-004",
+    "dorado-memory": "DORADO-004",
+    "dorado-power": "RTX 4070 modified"
+  },
+  "DORADO-005": {
+    "dorado-d1": "DORADO-005",
+    "dorado-memory": "DORADO-005"
+  },
+  "DORADO-006": {
+    "dorado-d1": "DORADO-006"
+  },
+  "BLITZ-003": {
+    "blitz003": null
+  },
+  "BLITZ-004": {
+    "blitz004": null
+  },
+  "BLITZ-005": {
+    "blitz005": null
+  },
+  "BLITZ-006": {
+    "blitz-power": "BLITZ-006 / 7800X3D"
+  },
+  "BLITZ-007": {
+    "blitz007": null
+  },
+  "BLITZ-008": {
+    "blitz-power": "BLITZ-008 / 7800X3D"
+  },
+  "BLITZ-009": {
+    "tx2": null
+  }
 }

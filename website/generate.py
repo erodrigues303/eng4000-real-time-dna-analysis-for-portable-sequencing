@@ -9,8 +9,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / ".site-docs"
 sys.path.insert(0, str(ROOT / "harness/analysis"))
+sys.path.insert(0, str(ROOT / "website"))
+from experiment_reports import experiment_page
 from validate_metadata import main as validate_metadata
-from render_summaries import cell, evidence_table_body, outputs
+from render_summaries import evidence_table_body, outputs
 
 
 def read(path):
@@ -21,11 +23,6 @@ def write(path, content):
     target = OUT / path
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(content, encoding="utf-8")
-
-
-def fields(record):
-    return "| Field | Recorded value |\n|---|---|\n" + "\n".join(
-        f"| {key.replace('_', ' ')} | {cell(value)} |" for key, value in record.items()) + "\n"
 
 
 def table_markup(table, heading_level=2):
@@ -131,36 +128,26 @@ def on_config(config):
             return table_markup(tables[key], heading_level=3)
         report = re.sub(r"<!-- evidence:([a-z0-9-]+) -->", evidence, report)
         report_path.write_text(report, encoding="utf-8")
-    # Table links are explicit editorial associations, never guessed from experiment numbering.
+    # Shared evidence tables specify the exact first-column label for each experiment.
     associations = read("website/experiment-evidence.json")
-    if set(associations) - ids:
-        raise ValueError("Evidence links reference an unknown experiment")
+    reports = read("website/experiment-reports.json")
+    if set(associations) - ids or set(reports) != ids:
+        raise ValueError("Experiment report metadata does not match the registry")
     registry = []
     for record in records:
         eid = record["experiment_id"]
-        related = [(s, v) for s, v in studies.items() if eid in v["experiments"]]
-        links = "\n".join(f"- [{v['title']}](../benchmarking/{s}.md)" for s, v in related) or "No linked research study yet."
-        command = "```text\n" + record["command"] + "\n```\n\nReport-transcribed command; not rerun or independently verified. Paths and environment must be recovered before use." if record["command"] else "**Exact command not supplied.** This record is not an executable reproduction recipe."
-        content = f"# {eid}\n\n{record['tool']['name']} · {record['date'] or 'Date not recorded'} · {record['owner'] or 'Owner not recorded'}\n\n"
-        content += f"> **{record['status']}** · Workflow completion: reported in secondary evidence. Raw artifacts: {'listed; verify access' if record['artifacts'] else 'not supplied'}. Independent reproduction: not established.\n\n"
-        content += "## Research context\n\n" + links + "\n\n"
-        content += f"## Inputs and environment\n\n[Dataset {record['dataset_id']}](../datasets/{record['dataset_id']}.md) · [System {record['system_id']}](../systems/{record['system_id']}.md)\n\n"
-        content += " · ".join(f"[Model: {mid}](../models/{mid}.md)" for mid in record["model_ids"])
-        content += "\n\n## Execution and measurement\n\n" + command + "\n\n"
-        content += fields({k: record[k] for k in ["tool", "shell", "working_directory", "environment", "settings", "warmup_count", "measured_run_count", "workload_repetitions", "timing_scope", "telemetry", "output_format", "output_validation"]})
-        content += "\n## Reported results\n\n"
-        for key in associations.get(eid, []):
-            if key not in tables:
-                raise ValueError(f"Unknown evidence table {key}")
-            content += f"- [{tables[key]['title']}](../evidence/index.md#{key})\n"
-        if not associations.get(eid):
-            content += "No numerical result table is linked. See the recorded output validation above.\n\n"
-        content += "## Limitations\n\n" + "\n".join("- " + x for x in record["limitations"])
-        content += f"\n\n## Configuration and evidence\n\n- [Canonical configuration](../configs/experiments/{eid}.yaml)\n- [Evidence register and revision conflicts](../docs/sources.md)\n- [Reproduction guide](../resources/reproduce.md)\n\nProvenance: {'; '.join(record['provenance'])}.\n\n"
-        content += "Original raw logs, output files and checksums are unavailable in this checkout. Report citations are secondary evidence.\n" if not record["artifacts"] else fields({"artifacts": record["artifacts"]})
+        related = [(slug, study) for slug, study in studies.items() if eid in study["experiments"]]
+        selectors = associations.get(eid, {})
+        if selectors.keys() - tables.keys():
+            raise ValueError(f"Unknown evidence table for {eid}")
+        system_id, dataset_id = record["system_id"], record["dataset_id"]
+        system = read(f"systems/{system_id}.json") if system_id else None
+        dataset = read(f"datasets/{dataset_id}.json") if dataset_id else None
+        models = {model_id: read(f"models/{model_id}.json") for model_id in record["model_ids"]}
+        content = experiment_page(record, reports[eid], system, dataset, models,
+                                  selectors, tables, scoring, related, ROOT)
         write(f"experiments/{eid}.md", content)
-        system = read(f"systems/{record['system_id']}.json")
-        searchable = json.dumps([record, system, [s['title'] for _, s in related]], ensure_ascii=False).lower()
+        searchable = json.dumps([record, system, reports[eid]["title"], [s['title'] for _, s in related]], ensure_ascii=False).lower()
         registry.append({"id": eid, "tool": record["tool"]["name"], "system": record["system_id"], "dataset": record["dataset_id"], "search": searchable, "command": bool(record["command"])})
     controls = '<div id="registry-controls" hidden><div class="filters"><label>Search experiments<input id="query" type="search" placeholder="ID, hardware, model, research question"></label>'
     controls += ''.join(f'<label>{label}<select id="filter-{key}"><option value="">All {label.lower()}</option></select></label>' for key, label in [("tool", "Basecallers"), ("system", "Systems"), ("dataset", "Datasets")])
@@ -169,7 +156,7 @@ def on_config(config):
     for r in registry:
         attrs = ' '.join(f'data-{key}="{html.escape(r[key], quote=True)}"' for key in ["tool", "system", "dataset", "search"])
         rows.append(f'<tr {attrs}><td><a href="{r["id"]}/">{r["id"]}</a></td><td>{r["tool"]}</td><td>{r["system"]}</td><td>{r["dataset"]}</td><td>{"Report command available" if r["command"] else "Command missing"}; raw artifacts missing</td></tr>')
-    write("experiments/index.md", "# Experiment registry\n\nHistorical records, searchable by scientific question, model, hardware and ID. All current records are preliminary; schema validation does not establish scientific validity.\n\n" + controls + '<noscript><p>Search requires JavaScript. All records remain available below.</p></noscript><table id="registry"><thead><tr><th>Experiment</th><th>Basecaller</th><th>System</th><th>Dataset</th><th>Evidence completeness</th></tr></thead><tbody>' + ''.join(rows) + '</tbody></table><p id="empty-state" hidden>No experiments match. Clear a filter or try another term.</p>\n\nUnnumbered follow-ups remain in the [evidence tables](../evidence/index.md); they have not been assigned invented experiment IDs.\n')
+    write("experiments/index.md", "# Experiment registry\n Browse and search our benchmarking experiments by basecaller, hardware, or experiment ID.\n\n" + controls + '<noscript><p>Search requires JavaScript. All records remain available below.</p></noscript><table id="registry"><thead><tr><th>Experiment</th><th>Basecaller</th><th>System</th><th>Dataset</th><th>Evidence completeness</th></tr></thead><tbody>' + ''.join(rows) + '</tbody></table><p id="empty-state" hidden>No experiments match. Clear a filter or try another term.</p>\n')
     write("assets/experiments.json", json.dumps(registry, indent=2, ensure_ascii=False))
     write("evidence/index.md", "# Reported evidence tables\n\nThese are secondary report transcriptions, not recovered raw measurements. [Source hashes, page references and conflicts](../docs/sources.md). [Download canonical observations](../results/summaries/report-observations.json).\n\n" + ''.join(table_markup(t) for t in tables.values()))
     for folder, kind in [("models", "model"), ("datasets", "dataset"), ("systems", "system")]:

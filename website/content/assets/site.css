@@ -553,6 +553,11 @@ button {
   margin: .65rem 0;
 }
 
+.experiment-meta {
+  color: var(--muted);
+  font-size: .85rem;
+}
+
 .technical-report .table-wrap {
   margin: 1rem 0;
 }

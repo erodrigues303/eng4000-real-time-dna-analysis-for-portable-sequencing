@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="{{ 'assets/site.css' | url }}">
   <script src="{{ 'assets/site.js' | url }}" defer></script>
 </head>
-<body{% if page and page.file.src_uri.startswith('benchmarking/') %} class="technical-report"{% endif %}>
+{% set experiment = page and page.file.src_uri.startswith('experiments/') and page.file.src_uri != 'experiments/index.md' %}
+<body{% if page and (experiment or page.file.src_uri.startswith('benchmarking/')) %} class="technical-report"{% endif %}>
 <a class="skip" href="#content">Skip to content</a>
 <header class="header"><div class="header-inner">
   <a class="brand" href="{{ '.' | url }}"><span class="brand-mark" aria-hidden="true">P22</span>Project 22</a>
@@ -19,7 +20,7 @@
     {% for item in nav %}{% if item.title != 'Home' %}<a href="{{ item.url | url }}" {% if item.active %}aria-current="page"{% endif %}>{{ item.title }}</a>{% endif %}{% endfor %}
   </nav>
 </div></header>
-{% set contextual = page and (page.file.src_uri.startswith('experiments/') and page.file.src_uri != 'experiments/index.md' or page.file.src_uri.startswith(('docs/', 'models/', 'datasets/', 'systems/'))) %}
+{% set contextual = page and page.file.src_uri.startswith(('docs/', 'models/', 'datasets/', 'systems/')) %}
 <div class="layout {% if contextual %}with-sidebar{% endif %}">
 {% if contextual %}<aside class="sidebar" aria-label="Research resources">
   <p class="eyebrow">Shared foundation</p>
