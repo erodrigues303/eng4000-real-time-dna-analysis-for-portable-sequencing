@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / ".site-docs"
 sys.path.insert(0, str(ROOT / "harness/analysis"))
 from validate_metadata import main as validate_metadata
-from render_summaries import outputs, cell
+from render_summaries import cell, evidence_table_body, outputs
 
 
 def read(path):
@@ -28,12 +28,11 @@ def fields(record):
         f"| {key.replace('_', ' ')} | {cell(value)} |" for key, value in record.items()) + "\n"
 
 
-def table_markup(table):
-    return (f"<h2 id=\"{table['key']}\">{html.escape(table['title'])}</h2>\n\n"
-            f"Source: {table['source']}. {table['status']}.\n\n{table['notes']}\n\n"
-            + "| " + " | ".join(map(cell, table["columns"])) + " |\n"
-            + "|" + "|".join("---" for _ in table["columns"]) + "|\n"
-            + "\n".join("| " + " | ".join(map(cell, row)) + " |" for row in table["rows"]) + "\n\n")
+def table_markup(table, heading_level=2):
+    tag = f"h{heading_level}"
+    key = html.escape(table["key"], quote=True)
+    title = html.escape(table["title"])
+    return f'<{tag} id="{key}">{title}</{tag}>\n\n{evidence_table_body(table)}\n\n'
 
 
 def chart(table):
@@ -129,7 +128,7 @@ def on_config(config):
             key = match.group(1)
             if key not in study["tables"]:
                 raise ValueError(f"Undeclared evidence table {key} in {slug}")
-            return table_markup(tables[key]).replace('<h2 ', '<h3 ').replace('</h2>', '</h3>') + f"[Canonical evidence table](../evidence/index.md#{key})\n\n"
+            return table_markup(tables[key], heading_level=3)
         report = re.sub(r"<!-- evidence:([a-z0-9-]+) -->", evidence, report)
         report_path.write_text(report, encoding="utf-8")
     # Table links are explicit editorial associations, never guessed from experiment numbering.
@@ -153,7 +152,7 @@ def on_config(config):
         for key in associations.get(eid, []):
             if key not in tables:
                 raise ValueError(f"Unknown evidence table {key}")
-            content += f"[{tables[key]['title']}](../evidence/index.md#{key}) — {tables[key]['source']}. Shared tables may contain other configurations; use the labelled experiment row.\n\n"
+            content += f"- [{tables[key]['title']}](../evidence/index.md#{key})\n"
         if not associations.get(eid):
             content += "No numerical result table is linked. See the recorded output validation above.\n\n"
         content += "## Limitations\n\n" + "\n".join("- " + x for x in record["limitations"])

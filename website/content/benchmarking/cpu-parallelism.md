@@ -1,66 +1,76 @@
 ---
-title: "DeepNano-Blitz CPU Scaling and Package Energy"
+title: "DeepNano-Blitz CPU Scaling and Energy Efficiency"
 ---
-<p class="eyebrow">Technical investigation · Preliminary record</p>
 
-# DeepNano-Blitz CPU Scaling and Package Energy
+<p class="eyebrow">Technical investigation · Phase 1</p>
+
+# DeepNano-Blitz CPU Scaling and Energy Efficiency
 
 ## Objective
 
-Establish CPU baselines and quantify caller-thread scaling, workload-size effects and package energy before selecting embedded optimization targets.
-
-## Work Performed
-
-The team ran Blitz on Ryzen 7 5700U and 7800X3D systems, checked output agreement, swept caller threads, processed a larger recorded dataset and collected separate CPU-package power sessions. BLITZ-005 reports a **5.21×** one-to-eight-thread speedup; streaming capability remains unverified. A later [D5 reference-alignment study](d5-accuracy.md) scores the retained BLITZ-007 output as BLITZ-010.
-
-### Investigation history
-
-| Addition | Technical contribution | Supporting record |
-|---|---|---|
-| 25 Oct 2026 | Extended 5700U timing to 30 runs per setting and added package-energy analysis | [Timing](../evidence/index.md#weiqin30), [energy](../evidence/index.md#weiqin-power-scaling); unnumbered follow-ups |
-| 24 Oct 2026 | Added D5 timing and a separate power trial | [BLITZ-007](../experiments/BLITZ-007.md), [BLITZ-008](../experiments/BLITZ-008.md) |
-| 24 Oct 2026 | Established 7800X3D baseline, thread sweep and repeated-D4 power session | [BLITZ-004](../experiments/BLITZ-004.md), [BLITZ-005](../experiments/BLITZ-005.md), [BLITZ-006](../experiments/BLITZ-006.md) |
-| 16 Oct 2026 | Measured initial 5700U one/four-thread timing and output consistency | [BLITZ-003](../experiments/BLITZ-003.md) |
+Measure how caller threads and workload size affect full-command runtime, peak host memory, output repeatability and CPU-package energy.
 
 ## Experimental Setup / Methodology
 
-Network 64, beam size 5, FASTQ output and `OMP_NUM_THREADS=1` are fixed in the controlled desktop follow-ups. [D4](../datasets/D4.md) contains 48 reads / 9,033,454 samples; [D5](../datasets/D5.md) contains 4,467 reads / 1,290,238,981 samples. GNU Time measures complete-command time and host RSS. BLITZ-005/007 use one excluded warm-up and three measured runs per setting. BLITZ-003 retains its slow first run; an excluded warm-up is not established there.
+The [Ryzen 7 7800X3D desktop](../systems/brian-7800x3d.md) and [Ryzen 7 5700U laptop](../systems/weiqin-5700u.md) used Ubuntu/WSL and CPU execution. The desktop follow-up build pinned `deepnano2` 0.1 at commit `15bd04b94c291debac75823811a2c86820dda589`. The recorded desktop and laptop follow-ups used [network 64](../models/blitz-network64.md), beam 5, FASTQ output and `OMP_NUM_THREADS=1`. Caller threads were varied independently. The model's weight hash, parameter count and exact compute precision remain unverified.
 
-HWiNFO64 CPU Package Power is sampled approximately every 2.01 s, aligned to workload UTC intervals and integrated by the trapezoidal rule. Timing repetitions and independent power trials are different quantities.
+| Input | Recorded workload | Use |
+|---|---|---|
+| [D4](../datasets/D4.md) | 48 reads, 9,033,454 FAST5 samples at 4 kHz | Baselines, thread sweeps and repeated-input power sessions |
+| [D5](../datasets/D5.md) | 4,467 reads, 1,290,238,981 FAST5 samples at 4 kHz | Larger recorded-file timing and separate power session |
+
+Shell time and GNU Time cover the full command. GNU Time also records peak host RSS where available. Timing tables report sample standard deviation where recorded. Power sessions sampled HWiNFO64 CPU Package Power about every 2.01 s, aligned samples to workload UTC boundaries with interpolation, and integrated energy by the trapezoidal rule. Samples/J uses the signal sample count and integrated package energy.
 
 ## Results
 
-![BLITZ-005 full-command runtime, mean and sample SD across three runs](../assets/blitz005-runtime.svg)
+The [initial functional checks](initial-basecaller-setup.md#deepnano-blitz) processed D4 twice on the 7800X3D with byte-identical FASTQ output. The historical [5700U comparison](../experiments/BLITZ-003.md) then measured one and four threads, including a slow first run. The [7800X3D baseline](../experiments/BLITZ-004.md) measured three one-thread runs with warm-up status unresolved.
 
-<p class="caption">7800X3D, D4, network 64, beam 5. Whiskers show sample SD, not confidence intervals. Canonical report transcription, corroborated by B2 p.11.</p>
+<!-- evidence:blitz003 -->
+
+<!-- evidence:blitz004 -->
+
+[BLITZ-005](../experiments/BLITZ-005.md) used one excluded warm-up and three measured runs at each of four thread settings. All 12 outputs reportedly agreed by read ID, sequence and quality.
+
+![Mean BLITZ-005 full-command runtime and sample standard deviation by caller-thread count](../assets/blitz005-runtime.svg)
+
+<p class="caption">Ryzen 7 7800X3D, D4, network 64 and beam 5. Whiskers show sample standard deviation across three measured runs per setting.</p>
 
 <!-- evidence:blitz005 -->
 
+The 5700U follow-ups measured three and then 30 runs per thread setting. The extended sweep reported matching outputs across all 120 measured runs. Its eight-thread rate was 1,681,417 samples/s with a 110.04 MiB peak RSS.
+
+<!-- evidence:weiqin3 -->
+
+<!-- evidence:weiqin30 -->
+
+[BLITZ-007](../experiments/BLITZ-007.md) moved the 7800X3D eight-thread configuration from D4 to D5. Three runs averaged 315.31 ± 0.65 s, with matching outputs, a reported 4,092,013 samples/s and a maximum RSS of 169.66 MiB.
+
 <!-- evidence:blitz007 -->
+
+[BLITZ-006](../experiments/BLITZ-006.md), [BLITZ-008](../experiments/BLITZ-008.md) and the 5700U power follow-ups were separate sessions from the timing-only runs. Each D4 ×30 session processed 271,003,620 samples across 1,440 read instances from the same 48-read fixture.
 
 <!-- evidence:blitz-power -->
 
-The [5700U extended timing](../evidence/index.md#weiqin30) reports a 4.17× speedup. Its [energy analysis](../evidence/index.md#weiqin-power-scaling) reports 20,749 to 77,907 samples/J from one to eight threads in one continuous power session.
+<!-- evidence:weiqin-power-scaling -->
 
-## Findings and Interpretation
+## Findings
 
-Caller parallelism reduced runtime on both systems. BLITZ-005 scaling is sublinear; timings alone cannot assign remaining cost to I/O, decoding or synchronization. BLITZ-007 extends reported repeatability to approximately five minutes of recorded-file processing. Matching outputs establish consistency, not reference accuracy.
+One-to-eight-thread speedup on D4 reached 5.21× on the 7800X3D and 4.17× in the 5700U extended sweep. The 7800X3D eight-thread rate increased from 3.10 million samples/s on D4 to 4.09 million on D5. Startup is a smaller fraction of a longer run, but the two datasets also differ in read composition. The measurements cannot isolate the cause of the rate increase.
 
-Energy observations suggest reduced processing time can improve samples/J without a proportional power increase. Whole-system savings and independent energy variability remain unestablished. The [TX2 investigation](embedded-feasibility.md) evaluates the embedded CPU path separately.
+In the continuous 5700U power sweep, package energy for the same workload fell from 13,061 J to 3,479 J as runtime fell. Efficiency rose from 20,749 to 77,907 samples/J even as average package power rose from 19.47 to 21.58 W. The 7800X3D's separate eight-thread sessions reported 54,358 samples/J on repeated D4 and 57,524 samples/J on D5. These values describe CPU-package energy for the recorded workloads.
 
 ## Limitations
 
-- D4 reuses a small historical-chemistry fixture; cache and background activity can affect timing.
-- BLITZ-005 and later follow-ups lack original commands/artifacts; tables remain secondary evidence.
-- Weight hashes, biological scoring, sustained arrival rates and latency distributions are incomplete.
-- CPU-package readings exclude much of the host. Single power sessions do not provide independent energy replicates.
+- D4 is a small historical-chemistry fixture. Repeated processing can be affected by cache state and background activity. D5 is larger but still recorded input. Live queueing, latency and sustained arrival were not evaluated.
+- The original timing logs, telemetry and many exact commands are missing. One independent power session per configuration does not establish energy variability. Package power excludes other host loads.
+- Output agreement establishes repeatability. The later D5 alignment comparison scores one saved BLITZ-007 output. These timing and power runs do not establish accuracy across workloads or configurations.
 
 ## Next Steps
 
-Recover invocations and artifacts, interleave thread settings on larger compatible inputs, record cache/thermal state and repeat power sessions. Profile stages and verify biological quality before transferring optimization conclusions to SoCall.
+Recover commands, weight hashes and raw telemetry. Repeat power measurements in independent, interleaved runs with recorded thermal and cache state. Profile input, inference, decoding and output separately, and measure whole-system energy when comparing deployment platforms.
 
-## Supporting Experiments and Evidence
+## Related Investigations and Evidence
 
-[BLITZ-003](../experiments/BLITZ-003.md) · [BLITZ-004](../experiments/BLITZ-004.md) · [BLITZ-005](../experiments/BLITZ-005.md) · [BLITZ-006](../experiments/BLITZ-006.md) · [BLITZ-007](../experiments/BLITZ-007.md) · [BLITZ-008](../experiments/BLITZ-008.md).
-
-B2 pp.4,7,11–16; [source register](../docs/sources.md), [reproduction guide](../resources/reproduce.md). Individual experiment records retain the available commands, settings and measurement details.
+- [BLITZ-005 configuration and available artifacts](../experiments/BLITZ-005.md)
+- [Jetson TX2: ARM64 Port and Embedded CPU Baseline](embedded-feasibility.md)
+- [DeepNano-Blitz vs SoCall: Reference Accuracy on D5](d5-accuracy.md)

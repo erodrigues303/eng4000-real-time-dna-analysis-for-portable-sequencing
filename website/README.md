@@ -38,11 +38,11 @@ Appearance automatically follows the device's light/dark preference through CSS 
 
 Every build generates the registry, individual `/experiments/ID/` records, catalogue indexes, report tables and the BLITZ-005 plot. Records come from the existing JSON-subset YAML files. The chart uses the existing observation JSON. Unknown fields are displayed rather than inferred. Copying source Markdown and metadata uses an explicit public allowlist; private weights, raw data, PDFs and `.local-evidence/` never enter the site.
 
-To edit an investigation, edit its Markdown. Each report uses Objective, Work Performed (including a compact technical history), Experimental Setup / Methodology, Results, Findings and Interpretation, Limitations, Next Steps, and Supporting Experiments and Evidence. Histories link real IDs and explicitly identify unnumbered work. Reports explain findings; individual experiment records retain configuration and provenance.
+Edit the investigation Markdown for objectives, methods, results, findings and limitations. Add next steps and directly relevant evidence links where applicable. Individual experiment records retain run configuration and provenance.
 
 Use `<!-- evidence:TABLE_KEY -->` in a report to embed a canonical result table. Declare the key in that report's `tables` list in `website/studies.json`; the build rejects undeclared or missing table references. Values are rendered directly from the observation JSON. To change measurements or model properties, edit canonical JSON with provenance, then run `python harness/analysis/render_summaries.py`. To add an experiment, create its schema-valid configuration and add explicit investigation/evidence associations where applicable. Unnumbered follow-ups remain evidence tables until the team assigns IDs.
 
-The Benchmarking directory uses the team's supplied newest-to-oldest work sequence (formats, TX2, desktop Blitz, Bonito review, model tiers, GPU/platform baselines). Unknown dates are not manufactured. The runtime overview is a separate maintained synthesis, with workloads and timing scopes kept separate rather than ranked together.
+The Benchmarking directory lists seven investigations by phase and category. Each report identifies the workload and timing boundary of its results. Unnumbered runs remain in the canonical evidence tables.
 
 ## Deployment
 
@@ -54,7 +54,7 @@ No changes are pushed or published by local build commands. Review the scientifi
 
 The starting checkout was clean on `feat/research-site`, with 13 experiment configurations, six model records, five datasets and seven systems. No original raw artifacts or runnable benchmark harness were present. Two additional report revisions were supplied for this task; their hashes and crosswalk are in `docs/sources.md`. W supplies several previously missing commands, but does not establish independent reproduction. BLITZ-005 still lacks its original invocation.
 
-The two research pillars share catalogues and methods. SoCall's lifecycle is grouped on one substantive page because no measured baseline/profiling/optimization exists. Benchmarking now has seven technical investigations plus a runtime synthesis. Fast/HAC is documented as exploratory, Bonito as a historical compatibility review, and training-data selection remains open. All numerical statements link to evidence; the site does not turn output agreement into biological accuracy or short throughput into streaming capability.
+The two research pillars share catalogues and methods. Benchmarking covers setup and source review, cross-platform performance, CPU scaling, embedded feasibility, model configuration, input-pipeline performance, and reference-aligned accuracy. Training-data selection remains open.
 
 The principal publication gaps remain original artifact recovery, exact model/weight identities and parameter counts, R10.4.1 training-data selection, biological scoring, TX2 power calibration, conflicting RTX 3070 IDs and confidential SoCall publication permission. Source PDFs are not redistributed.
 

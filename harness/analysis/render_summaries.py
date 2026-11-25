@@ -13,6 +13,17 @@ def cell(value):
         value = json.dumps(value, ensure_ascii=False)
     return str(value).replace("|", r"\|").replace("\n", "<br>")
 
+def evidence_table_body(table):
+    note = (table.get("notes") or "").strip()
+    columns = table["columns"]
+    lines = [note, ""] if note else []
+    lines += ["| " + " | ".join(map(cell, columns)) + " |", "|" + "|".join("---" for _ in columns) + "|"]
+    for row in table["rows"]:
+        if len(row) != len(columns):
+            raise ValueError(f"Wrong row width: {table['key']}")
+        lines.append("| " + " | ".join(map(cell, row)) + " |")
+    return "\n".join(lines)
+
 def outputs():
     for folder, kind in [("models", "model"), ("systems", "system"), ("datasets", "dataset")]:
         for path in sorted((ROOT / folder).glob("*.json")):
@@ -24,12 +35,7 @@ def outputs():
     records = json.loads((ROOT / "results/summaries/report-observations.json").read_text(encoding="utf-8"))
     lines = ["# Historical results — preliminary report transcriptions", "", "Generated from `report-observations.json`; no new benchmark runs or raw telemetry are represented. All numerical precision is retained as reported. [Evidence register](../../docs/sources.md).", ""]
     for table in records["tables"]:
-        lines += [f"## {table['title']}", "", f"Source: {table['source']}. Status: {table['status']}.", "", table["notes"], "", "| " + " | ".join(map(cell, table["columns"])) + " |", "|" + "|".join("---" for _ in table["columns"]) + "|"]
-        for row in table["rows"]:
-            if len(row) != len(table["columns"]):
-                raise ValueError(f"Wrong row width: {table['key']}")
-            lines.append("| " + " | ".join(map(cell, row)) + " |")
-        lines.append("")
+        lines += [f"## {table['title']}", "", evidence_table_body(table), ""]
     yield ROOT / "results/summaries/historical-summary.md", "\n".join(lines)
 
 def main():

@@ -19,7 +19,7 @@ Dorado records cover Windows CUDA, Windows CPU and macOS Metal. BLITZ-003 record
 
 ## BLITZ-005 evidence path
 
-The [CPU parallelism study](../benchmarking/cpu-parallelism.md) links to [BLITZ-005](../experiments/BLITZ-005.md), its [configuration](../configs/experiments/BLITZ-005.yaml), the dataset/model/system cards, and [transcribed per-run timings](../evidence/index.md#blitz005). Its exact invocation and raw artifacts are still missing. The site does not reconstruct a command and present it as historical evidence.
+The [DeepNano-Blitz CPU Scaling and Energy Efficiency investigation](../benchmarking/cpu-parallelism.md) links to [BLITZ-005](../experiments/BLITZ-005.md), its [configuration](../configs/experiments/BLITZ-005.yaml), the dataset/model/system cards, and [transcribed per-run timings](../evidence/index.md#blitz005). Its exact invocation and raw artifacts are still missing.
 
 ## Other tools and private materials
 

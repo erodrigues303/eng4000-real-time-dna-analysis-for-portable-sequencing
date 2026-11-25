@@ -52,12 +52,12 @@ Both pillars use the same:
 Proposed logical sitemap; avoid publishing empty or misleading placeholders:
 Home
 ├── Benchmarking
-│ ├── Research studies (curated, question-first directory)
-│ ├── Hardware and execution-backend throughput
-│ ├── CPU parallelism and energy efficiency
-│ ├── Embedded performance / real-time feasibility
-│ ├── Speed versus accuracy (when evidence supports a study)
-│ └── Input formats and pipeline overhead (when evidence supports a study)
+│ ├── Phase 1 — Basecaller Exploration & Initial Benchmarking
+│ │ ├── Basecaller Exploration & Feasibility
+│ │ ├── Hardware Performance & Energy Efficiency
+│ │ └── Model Configuration & Pipeline Evaluation
+│ └── Phase 2 — Expanded Benchmarking & Validation
+│   └── Basecaller Accuracy & Validation
 ├── SoCall
 │ ├── Overview / current engineering state
 │ ├── Architecture and implementation
@@ -96,7 +96,7 @@ The sitemap is a content model, not a command to generate every page at launch. 
   3.2 Benchmarking landing page
 - A curated directory of research questions and active studies, not a catalog grouped by Dorado/Blitz/Bonito or a KPI dashboard.
 - Prioritize evidence-backed studies; show short descriptions and the current evidence maturity.
-- Organize by scientific relevance rather than date. A small selected-findings section can appear below or alongside the study index, but must not overpower it.
+- Group investigations by phase, then by research category. Include a short description and evidence status for each investigation.
 - Studies under investigation without enough evidence can appear as Open questions / In progress entries rather than empty paper-like pages.
 - Readers must reach a study in one click and the supporting experiment from that study in another.
   3.3 SoCall landing page
@@ -263,7 +263,7 @@ Important:
     Phase 2 — One complete evidence path (critical checkpoint)
     Implement a genuinely working path:
 
-Home → Benchmarking → CPU parallelism study → BLITZ-005 experiment → available configuration/evidence/reproduction instructions.
+Home → Benchmarking → DeepNano-Blitz CPU Scaling and Energy Efficiency → BLITZ-005 experiment → available configuration, evidence and reproduction instructions.
 
 Use actual archived data for a figure/table; link to canonical YAML/model/dataset/system files; present missing evidence openly. Check all links and mobile layouts before scaling up.
 Phase 3 — Catalogue and registry

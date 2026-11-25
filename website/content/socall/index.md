@@ -22,7 +22,7 @@ These are throughput and power results only. D1 is R10.4.1 at 5 kHz, while SoCal
 
 ## D5 reference-accuracy comparison
 
-[Blitz vs SoCall on D5](../benchmarking/d5-accuracy.md) compares the saved SOCALL-001/002 outputs with the retained BLITZ-007 run-1 output, scored as BLITZ-010. All three have the same 4,467 read IDs and reference/scoring method. Blitz median mapped-read identity was 88.09%, versus 79.38% (SoCall greedy) and 81.00% (SoCall beam 5). These preliminary pipeline-output results do not rank hardware performance or establish the cause of the accuracy gap.
+[DeepNano-Blitz vs SoCall: Reference Accuracy on D5](../benchmarking/d5-accuracy.md) compares the saved SOCALL-001/002 outputs with the retained BLITZ-007 run-1 output, scored as BLITZ-010. All three have the same 4,467 read IDs and reference/scoring method. Blitz median mapped-read identity was 88.09%, versus 79.38% (SoCall greedy) and 81.00% (SoCall beam 5). These preliminary pipeline-output results do not rank hardware performance or establish the cause of the accuracy gap.
 
 ## Profiling and bottlenecks
 

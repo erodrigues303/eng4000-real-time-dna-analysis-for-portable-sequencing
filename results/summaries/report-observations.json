@@ -1,19 +1,15 @@
 {
-  "description": "Secondary transcriptions, not original raw data. No values reconstructed from means.",
-  "source_register": "docs/sources.md",
   "tables": [
     {
       "key": "dorado-d1",
-      "title": "Dorado 2.1.2 HAC v6 on D1 (59 reads)",
-      "source": "B p.9; P p.13",
-      "status": "preliminary-report-transcription",
-      "notes": "Single-run tool-reported basecalling stage. Exact timing boundaries unverified; RTX 4070 total command ~12 s. DORADO-006 ID follows P; B aliases conflict. Capacity uses fixed 2,560,000 samples/s, not measured live performance.",
+      "title": "Dorado 2.1.2, HAC v6.0.0 — D1 (59 reads)",
+      "notes": "Times represent reported basecalling intervals, not full-command execution. The RTX 4070 command took approximately 12 s. Capacity is relative to a theoretical 2,560,000 samples/s input rate; it is not a live-streaming measurement.",
       "columns": [
         "Experiment",
         "Hardware",
-        "Time (s)",
+        "Basecalling time (s)",
         "Samples/s",
-        "Reported capacity (%)"
+        "5 kHz reference (%)"
       ],
       "rows": [
         [
@@ -39,14 +35,14 @@
         ],
         [
           "DORADO-004",
-          "RTX 4070 + modifications",
+          "RTX 4070 + modified-base calling",
           "1.516",
           "18,436,240",
           "720.17"
         ],
         [
           "DORADO-005",
-          "M2 Metal",
+          "Apple M2 (Metal)",
           "246.9",
           "~113,217",
           "4.42"
@@ -62,22 +58,20 @@
     },
     {
       "key": "dorado-memory",
-      "title": "Dorado memory and output summaries",
-      "source": "B p.9",
-      "status": "preliminary-report-transcription",
-      "notes": "These scopes are not interchangeable. MB/GB units and the report’s approximate conversions are preserved; do not interpret model tuning allocation as standardized peak RSS. Predicted Q is not reference accuracy.",
+      "title": "Dorado memory and output observations",
+      "notes": "Memory values use different measurement methods and are not directly comparable. The RTX 4070 figure is a tuning allocation, not a measured peak. Predicted Q-scores are not reference-based accuracy.",
       "columns": [
         "Experiment",
-        "Reported observation"
+        "Observation"
       ],
       "rows": [
         [
           "DORADO-001",
-          "2,896 MB (approximately 2.83 GB in report; unit convention unverified)"
+          "2,896 MB reported (approximately 2.83 GB; unit convention unverified)"
         ],
         [
           "DORADO-003",
-          "~7.5 GB model memory during tuning; batch 896, chunk 12288"
+          "Approximately 7.5 GB allocated during model tuning; batch size 896, chunk size 12,288"
         ],
         [
           "DORADO-004",
@@ -85,21 +79,19 @@
         ],
         [
           "DORADO-005",
-          "4.1 GB reported peak; scope/method TBD; median Q 20.4 (10.3–23.5), median length 30,983 bases, total output 2.0 Mb"
+          "4.1 GB reported peak (measurement scope unverified); median Q-score 20.4 (range 10.3–23.5), median read length 30,983 bases, 2.0 Mb output"
         ]
       ]
     },
     {
       "key": "ege-tiers",
-      "title": "Exploratory Fast/HAC comparisons on Apple M2",
-      "source": "B p.10",
-      "status": "preliminary-report-transcription",
-      "notes": "Exact tool builds, models, commands and timing boundaries unverified. D3 reference/scoring undefined; D2 predicted Q is not empirical accuracy. No total signal counts.",
+      "title": "Dorado Fast and HAC on Apple M2",
+      "notes": "These exploratory runs lack complete model and timing records. D2 values are predicted Q-scores; the accuracy method for simulated D3 reads was not documented.",
       "columns": [
         "Dataset",
-        "Tier",
+        "Model tier",
         "Time (s)",
-        "Quality / accuracy"
+        "Reported quality / accuracy"
       ],
       "rows": [
         [
@@ -130,15 +122,13 @@
     },
     {
       "key": "blitz003",
-      "title": "BLITZ-003: initial 5700U D4 thread comparison",
-      "source": "B p.11",
-      "status": "preliminary-report-transcription",
-      "notes": "Three paired measurements; first slow run retained, no established excluded warm-up. All 48 IDs/sequences/qualities match. Mean speedup 2.60×. Original samples/s not reported; do not retroactively label later sample counts as original observations.",
+      "title": "DeepNano-Blitz on Ryzen 7 5700U — initial thread comparison",
+      "notes": "Three runs per configuration, including a slower first run. Outputs matched for all 48 reads. The initial results reported reads/s, not signal samples/s.",
       "columns": [
         "Run",
         "1 thread (s)",
         "4 threads (s)",
-        "Peak MiB 1 / 4"
+        "Peak memory, 1 / 4 threads (MiB)"
       ],
       "rows": [
         [
@@ -163,7 +153,7 @@
           "Mean",
           "35.191",
           "13.550",
-          "No pooled peak"
+          "Not summarized"
         ],
         [
           "Diagnostic single-thread",
@@ -175,10 +165,8 @@
     },
     {
       "key": "blitz004",
-      "title": "BLITZ-004: 7800X3D D4 baseline",
-      "source": "B p.11",
-      "status": "preliminary-report-transcription",
-      "notes": "48 reads each; byte-identical repeated FASTQ reported. Warm-up for this specific baseline needs confirmation.",
+      "title": "DeepNano-Blitz on Ryzen 7 7800X3D — initial D4 baseline",
+      "notes": "Three runs processed the same 48 reads and produced identical FASTQ output. Warm-up conditions for this baseline were not documented.",
       "columns": [
         "Run",
         "Wall time (s)"
@@ -204,18 +192,16 @@
     },
     {
       "key": "blitz005",
-      "title": "BLITZ-005: 7800X3D D4 scaling",
-      "source": "B p.11",
-      "status": "preliminary-report-transcription",
-      "notes": "One excluded warm-up and three measured runs per setting; all 12 outputs match by ID/sequence/quality. Full-command GNU Time; highest peak RSS among runs.",
+      "title": "DeepNano-Blitz on Ryzen 7 7800X3D — CPU thread scaling",
+      "notes": "Each thread setting had one warm-up followed by three complete-command measurements. All 12 FASTQ outputs matched. Peak RSS is the highest value among measured runs.",
       "columns": [
         "Threads",
         "Mean ± SD (s)",
         "Samples/s",
         "Speedup",
         "Peak RSS (MiB)",
-        "Per-run wall times (s)",
-        "CPU utilization"
+        "Run times (s)",
+        "CPU use"
       ],
       "rows": [
         [
@@ -258,10 +244,8 @@
     },
     {
       "key": "blitz007",
-      "title": "BLITZ-007: 7800X3D D5 larger workload, eight threads",
-      "source": "B p.12",
-      "status": "preliminary-report-transcription",
-      "notes": "One excluded warm-up; 4,467 reads / 1,290,238,981 samples each run; all outputs match. Reported mean rate 4,092,013 samples/s, 199.81% of 4 kHz target and 159.84% of fixed 5 kHz target. Recorded input, not live streaming.",
+      "title": "DeepNano-Blitz on D5 — larger-workload performance",
+      "notes": "Each run processed 4,467 reads (1,290,238,981 signal samples) after warm-up, with matching output. Mean throughput was 4,092,013 samples/s: 199.81% of a 4 kHz full-channel signal-rate reference (159.84% at 5 kHz). This was offline processing, not live streaming.",
       "columns": [
         "Run",
         "Wall time (s)",
@@ -297,10 +281,8 @@
     },
     {
       "key": "weiqin3",
-      "title": "5700U follow-up D4 scaling, 2026-10-25",
-      "source": "B p.12",
-      "status": "preliminary-report-transcription",
-      "notes": "Unnumbered follow-up, separate from BLITZ-003. One excluded warm-up plus three measured runs per setting. All outputs match.",
+      "title": "DeepNano-Blitz on Ryzen 7 5700U — four-setting thread sweep",
+      "notes": "One warm-up and three measured runs per setting. All outputs matched by read ID, sequence, and quality string.",
       "columns": [
         "Threads",
         "Mean ± SD (s)",
@@ -341,10 +323,8 @@
     },
     {
       "key": "weiqin30",
-      "title": "5700U extended D4 scaling",
-      "source": "B pp.12–13",
-      "status": "preliminary-report-transcription",
-      "notes": "Unnumbered follow-up. One excluded warm-up plus 30 measured runs per setting; 120 outputs match and exit 0. Reported rates retained as printed; rounded means alone do not reconstruct all rates.",
+      "title": "DeepNano-Blitz on Ryzen 7 5700U — 30-run thread sweep",
+      "notes": "Thirty measured runs per setting followed an excluded warm-up. All 120 FASTQ outputs matched. Reported throughput values are retained as recorded.",
       "columns": [
         "Threads",
         "Mean ± SD (s)",
@@ -385,14 +365,12 @@
     },
     {
       "key": "dorado-power",
-      "title": "Historical Dorado power",
-      "source": "B p.13; P p.14",
-      "status": "preliminary-report-transcription",
-      "notes": "Instrument, electrical scope and timing-window alignment remain TBD. Do not derive energy by multiplying these averages by stage time.",
+      "title": "Dorado power observations",
+      "notes": "The original records do not identify a verified instrument, electrical boundary, or matching timing window. These power readings cannot be used to calculate reliable energy consumption.",
       "columns": [
         "Configuration",
-        "Average W",
-        "Peak W"
+        "Average power (W)",
+        "Peak power (W)"
       ],
       "rows": [
         [
@@ -419,19 +397,17 @@
     },
     {
       "key": "blitz-power",
-      "title": "Blitz CPU package energy sessions",
-      "source": "B pp.13–15",
-      "status": "preliminary-report-transcription",
-      "notes": "HWiNFO64 ~2.01 s sampling; UTC alignment, interpolation and trapezoidal integration. Single independent power session per configuration; no whole-system energy. D4 ×30 = 271,003,620 samples / 1,440 read instances, not distinct reads. Separate from timing-only experiments.",
+      "title": "DeepNano-Blitz CPU-package power and energy",
+      "notes": "Power was sampled at approximately 2 s intervals and integrated over each workload. Measurements cover CPU-package power, not the complete system. Each configuration has one power session; D4 ×30 repeats the same 48 reads (271,003,620 signal samples).",
       "columns": [
-        "Record / system",
+        "Experiment / CPU",
         "Threads",
-        "Workload",
+        "Dataset",
         "Duration (s)",
-        "Avg / sampled peak W",
+        "Avg / peak power (W)",
         "Energy (J)",
         "Samples/J",
-        "Reported samples/s"
+        "Samples/s"
       ],
       "rows": [
         [
@@ -468,14 +444,12 @@
     },
     {
       "key": "weiqin-power-scaling",
-      "title": "5700U thread-scaling CPU package energy",
-      "source": "B p.15",
-      "status": "preliminary-report-transcription",
-      "notes": "One continuous power session; 30 processes per thread setting after an excluded warm-up. Every setting processes 271,003,620 signal samples. Not independent energy replicates.",
+      "title": "DeepNano-Blitz on Ryzen 7 5700U — thread scaling and energy",
+      "notes": "Each setting repeated D4 thirty times after warm-up, processing 271,003,620 signal samples. CPU-package power was recorded during one continuous measurement session, not independent energy trials.",
       "columns": [
         "Threads",
         "Duration (s)",
-        "Avg / sampled peak W",
+        "Avg / peak power (W)",
         "Energy (J)",
         "Samples/J"
       ],
@@ -512,17 +486,15 @@
     },
     {
       "key": "tx2",
-      "title": "BLITZ-009: TX2 CPU D4 baseline",
-      "source": "P pp.13,15–16, Table 14",
-      "status": "preliminary-report-transcription",
-      "notes": "2026-11-05; one warm-up, three measured runs per setting. All 12 outputs reportedly match. Full-command timing; INA3221 VDD_IN module-input power ~0.5 s sampling. SENSOR SCALING UNVERIFIED; watts/joules/efficiency provisional. Capacity uses 2,048,000 samples/s. Memory/utilization/power mode/thermal state missing.",
+      "title": "DeepNano-Blitz on Jetson TX2 — CPU performance and power",
+      "notes": "Three complete-command runs per thread setting followed warm-up; all 12 outputs matched. Power was sampled from the VDD_IN rail at roughly 0.5 s intervals. Sensor scaling remains unverified, so power and energy figures are provisional. The 4 kHz reference is 2,048,000 samples/s; memory and power mode were not recorded.",
       "columns": [
         "Threads",
         "Mean ± SD (s)",
         "Samples/s",
         "Speedup",
-        "4 kHz capacity (%)",
-        "Avg / peak W",
+        "4 kHz reference (%)",
+        "Avg / peak power (W)",
         "Energy/run (J)",
         "Samples/J"
       ],
@@ -571,14 +543,12 @@
     },
     {
       "key": "formats",
-      "title": "Exploratory Dorado POD5 versus Slorado BLOW5",
-      "source": "B p.16; P pp.14–15",
-      "status": "preliminary-report-transcription",
-      "notes": "RTX 4070 per P. Model versions and outputs differ; no isolated format-effect conclusion. Exact signal identity/conversion commands, tool build and electrical power scope TBD. Distinct from DORADO-003. Values transcribed unchanged; energy integration details missing.",
+      "title": "Dorado/POD5 and Slorado/BLOW5 — initial comparison",
+      "notes": "The pipelines used different HAC model versions and output formats, so these measurements cannot isolate file-format overhead. Signal identity, conversion steps, and power-measurement boundaries still need verification.",
       "columns": [
         "Metric",
-        "Dorado POD5 HAC v6.0.0",
-        "Slorado BLOW5 HAC v5.0.0"
+        "Dorado / POD5 / HAC v6.0.0",
+        "Slorado / BLOW5 / HAC v5.0.0"
       ],
       "rows": [
         [
@@ -587,7 +557,7 @@
           "4.886"
         ],
         [
-          "Full command time (s)",
+          "Complete command time (s)",
           "8.86",
           "6.27"
         ],
@@ -597,47 +567,47 @@
           "5,720,411"
         ],
         [
-          "Idle power W",
+          "Idle power (W)",
           "19.30",
           "27.27"
         ],
         [
-          "Average basecalling power W",
+          "Average basecalling power (W)",
           "110.3",
           "115.6"
         ],
         [
-          "Peak power whole run W",
+          "Peak power, full run (W)",
           "172.19",
           "125.51"
         ],
         [
-          "Basecalling energy J",
+          "Basecalling energy (J)",
           "142.7",
           "565.1"
         ],
         [
-          "Whole command energy J",
+          "Complete command energy (J)",
           "1,039.3",
           "611.3"
         ],
         [
-          "Basecalling energy/read J",
+          "Basecalling energy per read (J)",
           "2.42",
           "9.58"
         ],
         [
-          "Energy/million samples J",
+          "Energy per million samples (J)",
           "5.10",
           "20.22"
         ],
         [
-          "Peak GPU memory MiB",
+          "Peak GPU memory (MiB)",
           "11,942",
           "3,286"
         ],
         [
-          "Peak GPU temperature °C",
+          "Peak GPU temperature (°C)",
           "58",
           "47"
         ],

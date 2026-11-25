@@ -1,0 +1,3 @@
+# Saved alignment artifacts are verified by SHA-256. Preserve their original bytes.
+results/raw/**/reference-accuracy/*/accuracy.json -text
+results/raw/**/reference-accuracy/*/alignments.csv -text

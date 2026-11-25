@@ -40,7 +40,7 @@ B pp.14–15: HWiNFO64 CPU Package Power is sampled approximately every 2.01 s, 
 
 ## Real-time capacity and streaming
 
-The fixed comparison target is 512 × 5,000 = 2,560,000 signal samples/s. D4/D5's dataset-matched target is 512 × 4,000 = 2,048,000 samples/s. Capacity (%) = 100 × throughput / explicitly labeled target. These assume continuously active channels. D1's 5 kHz model condition still needs file-metadata verification. Measure actual incoming rate and active-channel occupancy for practical capacity.
+The fixed comparison target is 512 × 5,000 = 2,560,000 signal samples/s. D4/D5's dataset-matched target is 512 × 4,000 = 2,048,000 samples/s. Capacity (%) = 100 × throughput / explicitly labeled target. These assume continuously active channels. Later [D1 file inspection](../datasets/D1.md) verified a 5 kHz sampling rate for the named POD5 sample. Historical Dorado runs lack per-run input hashes. Measure actual incoming rate and active-channel occupancy for practical capacity.
 
 A short stage rate above 100% does not demonstrate live operation. Future streaming tests need timestamped arrivals or a documented replay schedule, bounded queues, backpressure/drop accounting, chunk overlap/stitching semantics, output deadlines, latency distributions, sustained thermal behavior and quality checks. Separate file replay, accelerated replay and actual instrument acquisition. Queue and latency acceptance limits are TBD.
 

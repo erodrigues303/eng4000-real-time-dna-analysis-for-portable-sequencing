@@ -1,74 +1,11 @@
 {
-  "d5-accuracy": {
-    "title": "Blitz vs SoCall: Reference Accuracy on D5",
-    "experiments": [
-      "BLITZ-007",
-      "BLITZ-010",
-      "SOCALL-001",
-      "SOCALL-002"
-    ],
-    "tables": []
-  },
-  "pipeline-overhead": {
-    "title": "POD5 vs BLOW5: Input Pipeline and Command Overhead",
-    "experiments": [],
-    "tables": [
-      "formats"
-    ]
-  },
-  "embedded-feasibility": {
-    "title": "DeepNano-Blitz on Jetson TX2: ARM64 CPU Baseline",
-    "experiments": [
-      "BLITZ-009"
-    ],
-    "tables": [
-      "tx2"
-    ]
-  },
-  "cpu-parallelism": {
-    "title": "DeepNano-Blitz CPU Scaling and Package Energy",
-    "experiments": [
-      "BLITZ-003",
-      "BLITZ-004",
-      "BLITZ-005",
-      "BLITZ-006",
-      "BLITZ-007",
-      "BLITZ-008"
-    ],
-    "tables": [
-      "blitz003",
-      "blitz004",
-      "blitz005",
-      "blitz007",
-      "weiqin3",
-      "weiqin30",
-      "blitz-power",
-      "weiqin-power-scaling"
-    ]
-  },
-  "bonito-compatibility": {
-    "title": "Bonito Compatibility Assessment for Jetson TX2",
-    "experiments": [],
-    "tables": []
-  },
-  "fast-vs-hac": {
-    "title": "Dorado Fast vs HAC: Performance and Accuracy Tradeoffs",
-    "experiments": [],
-    "tables": [
-      "ege-tiers"
-    ]
-  },
-  "gpu-acceleration": {
-    "title": "Dorado GPU Acceleration: CPU and CUDA Baselines",
+  "initial-basecaller-setup": {
+    "title": "Initial Basecaller Setup and Evaluation",
     "experiments": [
       "DORADO-001",
-      "DORADO-002",
-      "DORADO-003",
-      "DORADO-004"
+      "DORADO-002"
     ],
-    "tables": [
-      "dorado-d1"
-    ]
+    "tables": []
   },
   "hardware-throughput": {
     "title": "Dorado Cross-Platform Performance",
@@ -82,39 +19,65 @@
     ],
     "tables": [
       "dorado-d1",
-      "dorado-memory"
+      "dorado-memory",
+      "dorado-power"
     ]
   },
-  "runtime-overview": {
-    "title": "Basecaller Runtime Comparison and Measurement Coverage",
+  "cpu-parallelism": {
+    "title": "DeepNano-Blitz CPU Scaling and Energy Efficiency",
     "experiments": [
-      "DORADO-001",
-      "DORADO-002",
-      "DORADO-003",
-      "DORADO-004",
-      "DORADO-005",
-      "DORADO-006",
       "BLITZ-003",
       "BLITZ-004",
       "BLITZ-005",
       "BLITZ-006",
       "BLITZ-007",
-      "BLITZ-008",
-      "BLITZ-009"
+      "BLITZ-008"
     ],
     "tables": [
-      "dorado-d1",
-      "ege-tiers",
       "blitz003",
       "blitz004",
       "blitz005",
-      "blitz007",
       "weiqin3",
       "weiqin30",
+      "blitz007",
       "blitz-power",
-      "weiqin-power-scaling",
-      "tx2",
+      "weiqin-power-scaling"
+    ]
+  },
+  "embedded-feasibility": {
+    "title": "Jetson TX2: ARM64 Port and Embedded CPU Baseline",
+    "experiments": [
+      "BLITZ-009"
+    ],
+    "tables": [
+      "tx2"
+    ]
+  },
+  "dorado-model-configuration": {
+    "title": "Dorado Model Configuration and Performance Tradeoffs",
+    "experiments": [
+      "DORADO-003",
+      "DORADO-004"
+    ],
+    "tables": [
+      "ege-tiers"
+    ]
+  },
+  "pipeline-overhead": {
+    "title": "POD5 vs BLOW5: Input Pipeline Performance",
+    "experiments": [],
+    "tables": [
       "formats"
     ]
+  },
+  "d5-accuracy": {
+    "title": "DeepNano-Blitz vs SoCall: Reference Accuracy on D5",
+    "experiments": [
+      "BLITZ-007",
+      "BLITZ-010",
+      "SOCALL-001",
+      "SOCALL-002"
+    ],
+    "tables": []
   }
 }
