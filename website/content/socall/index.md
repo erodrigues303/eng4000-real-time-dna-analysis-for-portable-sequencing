@@ -2,7 +2,7 @@
 
 # SoCall Engineering
 
-SoCall is the laboratory's basecaller, supplied to the project as FP32 weights, under investigation for resource-constrained execution. Int8/fixed-point execution is the project's target, and quantization is project work. SoCall remains **one implementation to develop and optimize**, alongside the broader basecaller benchmark.
+SoCall is the laboratory's convolutional CTC basecaller, supplied to the project as FP32 weights, under investigation for resource-constrained execution. Int8/fixed-point execution is the project's target, and quantization is project work. SoCall remains **one implementation to develop and optimize**, alongside the broader basecaller benchmark.
 
 > **Current state:** SoCall runs on the Jetson TX2 GPU (FP32) with reference-scored accuracy on matching-chemistry data: [SOCALL-011](../experiments/SOCALL-011.md) reproduced the laptop pipeline's D5 accuracy at 44% of the 4 kHz full-channel throughput reference. A first measured optimization (greedy-decode vectorisation, SOCALL-006 to 010) almost doubled TX2 throughput with byte-identical output. Inference now dominates, and real time is not yet reached. Private source and weights are not published here.
 
@@ -50,7 +50,7 @@ The float32 variants computed the quality score's log10 in single precision, whi
 
 ### Next candidates
 
-With inference dominant, the next studies target the network: exact graph simplifications first, then FP16 and a TensorRT engine (accuracy budget 0.1 points of median identity on D5), then int8. Batching across reads, chunk size and overlap, and CPU/GPU overlap remain candidates. Each is revalidated against the exact or reference-accuracy check above before its speed is reported.
+With inference dominant, the next studies target the network: folding BatchNorm into the convolutions (exact), then FP16 and a TensorRT engine (accuracy budget 0.1 points of median identity on D5), then int8. Batching across reads, chunk size and overlap, and CPU/GPU overlap remain candidates. Each is revalidated against the exact or reference-accuracy check above before its speed is reported.
 
 ## Shared scientific foundation
 
