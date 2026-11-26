@@ -1,0 +1,14 @@
+data=sample.npz reads=59 dataset_samples=27,949,927 device=cuda
+setup (model load + read data, untimed) = 5.29s   warmup passes = 1
+timed passes=3 samples=83,849,781 bases=4,304,076 wall=86.95s
+throughput: 0.964 Msamples/s  (real-time target: 2.05 @4kHz, 2.56 @5kHz)
+  inference      80.493s   92.6%
+  normalize       3.484s    4.0%
+  decode          1.229s    1.4%
+  stitch          0.588s    0.7%
+  h2d             0.307s    0.4%
+  d2h             0.246s    0.3%
+  chunk           0.209s    0.2%
+  write           0.018s    0.0%
+  read_io         0.008s    0.0%
+wrote out/fold-d1/run-stats_ctl_rep1.json

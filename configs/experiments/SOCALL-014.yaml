@@ -1,0 +1,148 @@
+{
+  "experiment_id": "SOCALL-014",
+  "date": "2026-11-26",
+  "owner": "Ege",
+  "status": "preliminary",
+  "tool": {
+    "name": "SoCall + Project 22 benchmark wrapper run_socall_v2.py with the fold_socall.py launcher (private, not published)",
+    "version": null,
+    "commit": null
+  },
+  "model_ids": [
+    "socall-private"
+  ],
+  "dataset_id": "D1",
+  "system_id": "jetson-tx2-jp466",
+  "scenario_id": "offline-throughput",
+  "command": "sudo jetson_clocks; per process run: sudo tegrastats --interval 1000 --logfile <abs>/tegrastats_<tag>.log --start; python3 fold_socall.py --precision fp16 --weights weights_30.pt --device cuda --chunk 4800 --overlap 0 --batch 64 --decoder greedy --decode-mode gpu --npy data/D1/sample.npz --warmup 1 --min-seconds 60 --out <tag>.fastq --stats-json run-stats_<tag>.json --runs-csv runs.csv --timing timing.csv; sudo tegrastats --stop; python3 tegra_summary.py <log> --idle-mw 3292 (30 s pause between runs, D1 variants run round-robin)",
+  "shell": "bash over SSH via Tailscale (Ubuntu 18.04, L4T R32.7.6)",
+  "working_directory": "~/socall on the TX2 (private SoCall files, not public)",
+  "environment": {
+    "python": "3.6.9",
+    "torch": "1.10.0",
+    "numpy": "1.13.3",
+    "cuda": "10.2",
+    "cudnn": "8.2.1 (8201)",
+    "l4t": "R32.7.6 (GCID 38171779)",
+    "device": "cuda (NVIDIA Tegra X2)",
+    "power_mode": "MAXN + jetson_clocks",
+    "precision": "fp16",
+    "model_variant": "socall-v1-fp16",
+    "input": "D1 POD5 converted to NPZ (calibrated pA, float32) with pod5_to_npz.py; NPZ SHA-256 6e6d1576b17a76c53406c4ec37964088bce5f30917500972b92ef65ba95a59e5"
+  },
+  "settings": {
+    "chunk_size": 4800,
+    "overlap": 0,
+    "batch_size": 64,
+    "caller_threads": null,
+    "beam_size": null
+  },
+  "warmup_count": 1,
+  "measured_run_count": 3,
+  "workload_repetitions": 2,
+  "timing_scope": "Per-stage wall time inside one process with CUDA synchronization at stage boundaries. Each of 3 process runs: one untimed warm-up pass, then timed passes over all 59 reads until at least 60 s elapsed. Model load, folding and NPZ loading excluded.",
+  "telemetry": {
+    "timing_method": "time.perf_counter per stage with torch.cuda.synchronize at stage boundaries; per-pass wall time",
+    "memory_method": "Process peak RSS (getrusage) and torch.cuda.max_memory_allocated; system RAM from tegrastats",
+    "power_method": "tegrastats VDD_IN (INA3221), 1 s interval, one capture per process run incl. setup and warm-up; tegra_summary.py averages",
+    "power_scope": "jetson-module-input",
+    "sampling_interval_s": 1.0
+  },
+  "output_format": "FASTQ",
+  "output_validation": "FASTQ SHA-256 79f12546e3ddb9e7384d117c744c74a579efd39e11af027de3b14b50cab61bb2 in all 3 process runs. Against the SOCALL-012 control: 0 of 59 sequences identical, 0 also with identical quality strings; 1,433,901 bases vs 1,434,692.",
+  "artifacts": [
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-014/inputs.sha256",
+      "sha256": "32884a858c35018ee79a90539b6845c02314682a267d2004b2f5e0b0adfdb9b6",
+      "description": "SHA-256 of the wrapper, launcher, model definition, weights (and D1 NPZ) on the board (inputs.sha256)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-014/power-summary_fp16_rep1.json",
+      "sha256": "0b162e2efb3e360e43fd77a20f2b7475f98f32bfb266ef330146777c375afdaf",
+      "description": "tegra_summary.py output: average/peak VDD_IN, rail averages, GPU/CPU utilisation, peak RAM, gross energy (power-summary_fp16_rep1.json)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-014/power-summary_fp16_rep2.json",
+      "sha256": "2cd21ca26ce2a398a758e8689118df0076a8229b612d070728389327173fed4f",
+      "description": "tegra_summary.py output: average/peak VDD_IN, rail averages, GPU/CPU utilisation, peak RAM, gross energy (power-summary_fp16_rep2.json)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-014/power-summary_fp16_rep3.json",
+      "sha256": "1f73ba7aef0bcf91c0908685b996a0b9c0129ffa47a56d9da8acef7ca531d2ec",
+      "description": "tegra_summary.py output: average/peak VDD_IN, rail averages, GPU/CPU utilisation, peak RAM, gross energy (power-summary_fp16_rep3.json)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-014/power_fp16_rep1.csv",
+      "sha256": "9919ba1da8b4993ebfaff8aa1538c18b7b834fbfbc83be3eee34560f8fd3928e",
+      "description": "tegra_summary.py per-sample table (rails mW, utilisation, RAM, GPU temperature) (power_fp16_rep1.csv)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-014/power_fp16_rep2.csv",
+      "sha256": "881527374bd86a07403a518f11979cb0244c81d37cae476c4b684d6a61601a9a",
+      "description": "tegra_summary.py per-sample table (rails mW, utilisation, RAM, GPU temperature) (power_fp16_rep2.csv)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-014/power_fp16_rep3.csv",
+      "sha256": "ee599b79c601f42d246a60847291fbf43236fdbf6f83c7f93b9c3f5522c7b6a8",
+      "description": "tegra_summary.py per-sample table (rails mW, utilisation, RAM, GPU temperature) (power_fp16_rep3.csv)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-014/run-stats_fp16_rep1.json",
+      "sha256": "0a7c3cd8d7f1cf8c9f892b517e38459bda656003e0719e581cad8c38905a30b9",
+      "description": "Provenance JSON from run_socall_v2.py: argv, versions, weights/FASTQ SHA-256, settings, per-pass times, per-stage seconds, peak RSS, CUDA max allocation (run-stats_fp16_rep1.json)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-014/run-stats_fp16_rep2.json",
+      "sha256": "085a422df2b649a71ef706f5419104409a76767c18947003f1b76819a0a1b033",
+      "description": "Provenance JSON from run_socall_v2.py: argv, versions, weights/FASTQ SHA-256, settings, per-pass times, per-stage seconds, peak RSS, CUDA max allocation (run-stats_fp16_rep2.json)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-014/run-stats_fp16_rep3.json",
+      "sha256": "59e46c26788401c93071d94cde35aa491c2594f3c3e46860316036148871d437",
+      "description": "Provenance JSON from run_socall_v2.py: argv, versions, weights/FASTQ SHA-256, settings, per-pass times, per-stage seconds, peak RSS, CUDA max allocation (run-stats_fp16_rep3.json)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-014/stdout_fp16_rep1.txt",
+      "sha256": "88f11e6d23dc1798c187b2f485329b04439fa171985dd3422ceb5cd314b86b4b",
+      "description": "Run stdout: throughput and per-stage seconds (stdout_fp16_rep1.txt)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-014/stdout_fp16_rep2.txt",
+      "sha256": "b913935e1f0819ec0eb170e1804732ea1f324448e11952687497ce24ca87c98e",
+      "description": "Run stdout: throughput and per-stage seconds (stdout_fp16_rep2.txt)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-014/stdout_fp16_rep3.txt",
+      "sha256": "a7a2b4962acfa26adbd0a6c9eb2be5fbec4a23463b5444652d83bc6df207035e",
+      "description": "Run stdout: throughput and per-stage seconds (stdout_fp16_rep3.txt)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-014/tegrastats_fp16_rep1.log.gz",
+      "sha256": "77ad7f522c44d36787a828421ca534374222f2d2af81ee702f233e8fa450e2b8",
+      "description": "Raw tegrastats capture, 1 s interval, gzip -n (tegrastats_fp16_rep1.log.gz)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-014/tegrastats_fp16_rep2.log.gz",
+      "sha256": "3de7bb48f06e9982e9759593298469be97367f6bc3ac441deae012951969d8b3",
+      "description": "Raw tegrastats capture, 1 s interval, gzip -n (tegrastats_fp16_rep2.log.gz)"
+    },
+    {
+      "location": "results/raw/jetson-tx2-jp466/socall/offline-throughput/SOCALL-014/tegrastats_fp16_rep3.log.gz",
+      "sha256": "2d2c03d647f866aa9faf12297f97023d43114364c8cac59ababb40a0cd05e2e4",
+      "description": "Raw tegrastats capture, 1 s interval, gzip -n (tegrastats_fp16_rep3.log.gz)"
+    }
+  ],
+  "provenance": [
+    "T",
+    "M",
+    "S"
+  ],
+  "limitations": [
+    "Folded model in FP16 through PyTorch/cuDNN (weights and activations half, log-softmax FP32). Wrapper: fold_socall.py launcher (folds BatchNorm into the convs on load and checks the fold against the unfolded model on the CPU, max abs log-prob diff < 1e-4) around run_socall_v2.py; wrapper, launcher and model code are private.",
+    "D1 is R10.4.1 at 5 kHz, out of distribution for SoCall; throughput and power are valid, accuracy is not (see the D5 records).",
+    "PyTorch 1.10 runs these FP16 convolutions through cuDNN; an inference-only check in the same session put FP16 at 0.85x of folded FP32. The likely cause (FP32 accumulation without the Pascal half2 rate) is not verified. TensorRT FP16 is a separate study.",
+    "Single board and session; no thermal-stability criterion. INA3221 scaling uncalibrated; idle 3.29 W from the jetson-tx2-jp466 system record.",
+    "Paths under the run user's home directory were stripped from the published run-stats, stdout and hash files; no other bytes were changed (tegrastats logs gzipped).",
+    "Results: mean 0.8416 M samples/s, SD 0.0013, over 6 timed passes in 3 process runs (41.1% of the 2.048 M samples/s 4 kHz target). Stage shares: inference 93.5%, normalize 3.5%, decode 1.2%. CUDA max allocation: 59.7 MiB, 59.7 MiB, 59.7 MiB. run 1: 11.96 W avg VDD_IN (8.67 W above idle), GPU util 80.8%; run 2: 12.01 W avg VDD_IN (8.72 W above idle), GPU util 83.3%; run 3: 12.04 W avg VDD_IN (8.75 W above idle), GPU util 80.8%;"
+  ]
+}
