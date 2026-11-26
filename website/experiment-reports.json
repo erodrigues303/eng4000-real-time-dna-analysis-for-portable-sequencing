@@ -208,5 +208,55 @@
     "limitations": "One timed pass on one board. Beam search was not run on the TX2. Power is gross module input over the whole capture with an uncalibrated INA3221 scale. 64 reads differ from SOCALL-001 mid-read by a few bases for an unverified reason.",
     "output_check": "4,467 reads; scored on the Mac with reference_accuracy.py against the D5 reference.",
     "timing": "One timed pass over all reads after a 50-read warm-up, including FAST5 reading and pA conversion. Model load and read indexing were excluded."
+  },
+  "SOCALL-012": {
+    "title": "Jetson TX2 Same-Session Control for BatchNorm Folding and FP16",
+    "objective": "Rerun the unchanged FP32 model with the SOCALL-010 decoder as the control for the folding and FP16 variants measured in the same session.",
+    "backend": "CUDA · NVIDIA Tegra X2",
+    "decode": "argmax on the GPU, vectorised collapse, float64 quality math",
+    "observation": "Throughput matched SOCALL-010 (964,273 samples/s) to within 0.01%, and the FASTQ was byte-identical to SOCALL-004 and SOCALL-010, so the board behaved the same as in the previous session.",
+    "limitations": "D1 is out of distribution for SoCall, so no accuracy is claimed here. Power is gross module input over each process run, including setup and warm-up, with an uncalibrated INA3221 scale.",
+    "output_check": "Byte-identical FASTQ to SOCALL-004 and SOCALL-010 in all three process runs.",
+    "timing": "Timed processing passes with CUDA synchronization at stage boundaries; each process run had one untimed warm-up pass and then timed passes for at least 60 s. Model loading, BatchNorm folding and NPZ loading were excluded."
+  },
+  "SOCALL-013": {
+    "title": "Jetson TX2 BatchNorm Folded into the Convolutions (FP32)",
+    "objective": "Measure SoCall with each BatchNorm folded into the convolution before it, which removes five normalization layers without changing the math.",
+    "backend": "CUDA · NVIDIA Tegra X2",
+    "decode": "argmax on the GPU, vectorised collapse, float64 quality math",
+    "observation": "Folding gave 1.034× the same-session control. All 59 D1 sequences were identical to the control; 7 reads had quality strings that moved by one Phred step, because folding changes the FP32 rounding of the probabilities slightly. It is a small exact gain, and the folded model is the base for the FP16 and TensorRT variants.",
+    "limitations": "D1 is out of distribution for SoCall, so no accuracy is claimed here. Power is gross module input over each process run, including setup and warm-up, with an uncalibrated INA3221 scale. The fold is checked against the unfolded model on the CPU at load time (max abs log-prob difference under 1e-4).",
+    "output_check": "Same sequences as SOCALL-012 on all 59 reads; quality strings identical on 52.",
+    "timing": "Timed processing passes with CUDA synchronization at stage boundaries; each process run had one untimed warm-up pass and then timed passes for at least 60 s. Model loading, BatchNorm folding and NPZ loading were excluded."
+  },
+  "SOCALL-014": {
+    "title": "Jetson TX2 FP16 Through PyTorch (Folded Model)",
+    "objective": "Measure the folded model in half precision through PyTorch and cuDNN, the quickest way to get an FP16 number on the TX2.",
+    "backend": "CUDA · NVIDIA Tegra X2",
+    "decode": "argmax on the GPU, vectorised collapse, float64 quality math",
+    "observation": "FP16 was slower: 0.873× the control and 0.844× the folded FP32 model, even though GPU memory use halved (60 vs 112 MiB). The same model is 2.6× faster in FP16 on an Apple M2, so the slowdown is specific to how PyTorch 1.10 runs FP16 convolutions on this GPU. The likely cause, FP32 accumulation without the Pascal half2 rate, is not verified. TensorRT FP16 is measured separately.",
+    "limitations": "D1 is out of distribution for SoCall, so no accuracy is claimed here. Power is gross module input over each process run, including setup and warm-up, with an uncalibrated INA3221 scale. Sequences differ from the control because FP16 rounding moves near-tied labels; accuracy is judged on D5 in SOCALL-016.",
+    "output_check": "0 of 59 sequences identical to SOCALL-012 (expected for FP16 on long reads); see SOCALL-016 for reference-scored accuracy.",
+    "timing": "Timed processing passes with CUDA synchronization at stage boundaries; each process run had one untimed warm-up pass and then timed passes for at least 60 s. Model loading, BatchNorm folding and NPZ loading were excluded."
+  },
+  "SOCALL-015": {
+    "title": "Jetson TX2 D5 with BatchNorm Folded (FP32)",
+    "objective": "Run all 4,467 D5 reads with the folded FP32 model and check its accuracy against SOCALL-011.",
+    "backend": "CUDA · NVIDIA Tegra X2",
+    "decode": "argmax on the GPU, vectorised collapse, float64 quality math",
+    "observation": "Throughput was 1.043× SOCALL-011, including FAST5 reading. Median identity (79.39%) and mapped fraction (97.31%) were the same as SOCALL-011 to two decimals, and 4,392 of 4,467 reads were byte-identical. The other 75 reads differ where two labels were tied at FP32 resolution.",
+    "limitations": "One timed pass on one board, greedy decoding only. Power is gross module input over the whole capture with an uncalibrated INA3221 scale. The run was in a later session than SOCALL-011, without a same-session D5 control.",
+    "output_check": "4,467 reads; scored on the Mac with reference_accuracy.py against the D5 reference and compared read by read with SOCALL-011.",
+    "timing": "One timed pass over all reads after a 50-read warm-up, including FAST5 reading and pA conversion. Model loading, BatchNorm folding and read indexing were excluded."
+  },
+  "SOCALL-016": {
+    "title": "Jetson TX2 D5 in FP16 Through PyTorch",
+    "objective": "Check FP16 accuracy on the TX2's own GPU on all 4,467 D5 reads, against the project's FP16 budget of 0.1 points of median identity.",
+    "backend": "CUDA · NVIDIA Tegra X2",
+    "decode": "argmax on the GPU, vectorised collapse, float64 quality math",
+    "observation": "Median identity was 79.38% (0.010 points below SOCALL-011) and 97.38% of reads mapped (0.07 points above), so FP16 is within the accuracy budget on the TX2. Only 5 reads were byte-identical: FP16 moves many near-tied labels, but the changes cancel out in accuracy. Throughput was 0.854× the folded FP32 run, matching the D1 result.",
+    "limitations": "One timed pass on one board, greedy decoding only. Power is gross module input over the whole capture with an uncalibrated INA3221 scale. FP16 through PyTorch is slower than FP32 here, so this run records accuracy rather than a speed option.",
+    "output_check": "4,467 reads; scored on the Mac with reference_accuracy.py against the D5 reference and compared read by read with SOCALL-011.",
+    "timing": "One timed pass over all reads after a 50-read warm-up, including FAST5 reading and pA conversion. Model loading, BatchNorm folding and read indexing were excluded."
   }
 }

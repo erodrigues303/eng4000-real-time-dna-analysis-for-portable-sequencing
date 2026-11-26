@@ -100,7 +100,14 @@ def jetson_power_results(power, capture):
     return "### Module-input power and energy\n\n" + compact_table(["Measurement", "Recorded value"], rows)
 
 
-TX2_SESSION_IDS = {"SOCALL-006", "SOCALL-007", "SOCALL-008", "SOCALL-009", "SOCALL-010", "SOCALL-011"}
+# Records that ran a derived model name it in environment.model_variant; the unchanged model is socall-v1.
+MODEL_VARIANTS = {
+    "socall-v1-bnfold": "BatchNorm folded into the convolutions, FP32, 446,205 parameters",
+    "socall-v1-fp16": "BatchNorm folded, FP16 weights and activations, log-softmax in FP32",
+}
+
+TX2_SESSION_IDS = {"SOCALL-006", "SOCALL-007", "SOCALL-008", "SOCALL-009", "SOCALL-010", "SOCALL-011",
+                   "SOCALL-012", "SOCALL-013", "SOCALL-014", "SOCALL-015", "SOCALL-016"}
 
 
 def repeated_tx2_results(record, root):
@@ -203,6 +210,9 @@ def experiment_page(record, report, system, dataset, models, selectors, tables, 
         model_links.append(f"[{name}](../models/{model_id}.md)" + "".join(
             f" · {label_value(value)}" for value in details if value is not None
         ))
+    variant = (record.get("environment") or {}).get("model_variant")
+    if variant in MODEL_VARIANTS:
+        model_links.append(f"Variant {variant}: {MODEL_VARIANTS[variant]}")
     summary = [
         ("Basecaller", software),
         ("Model", "<br>".join(model_links)),

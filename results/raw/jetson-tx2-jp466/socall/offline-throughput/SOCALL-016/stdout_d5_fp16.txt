@@ -1,0 +1,15 @@
+FAST5: 4467 reads indexed from data/D5; sample rate(s) in first 50 reads: [4000.0] Hz
+data=D5 reads=4467 dataset_samples=1,290,238,981 device=cuda
+setup (model load + read data, untimed) = 14.85s   warmup passes = 1
+timed passes=1 samples=1,290,238,981 bases=108,833,745 wall=1598.25s
+throughput: 0.807 Msamples/s  (real-time target: 2.05 @4kHz, 2.56 @5kHz)
+  inference    1432.859s   89.7%
+  normalize      56.907s    3.6%
+  read_io        49.076s    3.1%
+  decode         27.269s    1.7%
+  stitch          9.057s    0.6%
+  h2d             5.668s    0.4%
+  d2h             4.129s    0.3%
+  chunk           3.567s    0.2%
+  write           1.585s    0.1%
+wrote out/fold-d5/run-stats_d5_fp16.json
