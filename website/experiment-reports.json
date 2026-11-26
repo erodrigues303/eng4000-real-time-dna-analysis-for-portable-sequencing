@@ -148,5 +148,65 @@
     "limitations": "The single measured pass uses a five-read subset. The INA3221 scale was uncalibrated and the power capture includes setup and warm-up. No reference-based accuracy was measured.",
     "output_check": "Well-formed FASTQ was verified for five reads.",
     "timing": "Timed processing pass over the first five D1 reads. Model and NPZ loading were excluded."
+  },
+  "SOCALL-006": {
+    "title": "Jetson TX2 Same-Session Baseline Control",
+    "objective": "Repeat the SOCALL-004 configuration in the same session as the decoder variants, so their speed-ups are measured against an unchanged baseline.",
+    "backend": "CUDA · NVIDIA Tegra X2",
+    "decode": "per-base Python loop (original wrapper)",
+    "observation": "Throughput matched SOCALL-004 within 0.4% and greedy decoding again took about as long as inference (48% of wall time each). The FASTQ was byte-identical to SOCALL-004.",
+    "limitations": "D1 is out of distribution for SoCall, so no accuracy is claimed. Power is gross module input over each process run, including setup and warm-up, with an uncalibrated INA3221 scale.",
+    "output_check": "Byte-identical FASTQ to SOCALL-004 in all three process runs.",
+    "timing": "Timed processing passes with CUDA synchronization at stage boundaries. Model and NPZ loading were excluded."
+  },
+  "SOCALL-007": {
+    "title": "Jetson TX2 Vectorised CPU Greedy Decode",
+    "objective": "Measure throughput when greedy CTC decoding is vectorised with numpy on the ARM CPU instead of looping per base in Python.",
+    "backend": "CUDA · NVIDIA Tegra X2",
+    "decode": "vectorised numpy on the CPU, float32 quality math",
+    "observation": "Throughput rose 1.85× over the same-session baseline. Decoding fell to under 3% of wall time, leaving inference as about 90%. Sequences matched the baseline exactly, but float32 quality arithmetic moved 2 of 1,434,692 quality characters by one Phred step.",
+    "limitations": "D1 is out of distribution for SoCall, so no accuracy is claimed. Power is gross module input over each process run, including setup and warm-up, with an uncalibrated INA3221 scale.",
+    "output_check": "Same sequences as SOCALL-004; quality strings differ at 2 positions (float32 log10).",
+    "timing": "Timed processing passes with CUDA synchronization at stage boundaries. Model and NPZ loading were excluded."
+  },
+  "SOCALL-008": {
+    "title": "Jetson TX2 GPU-Side Greedy Decode (float32 Quality)",
+    "objective": "Measure throughput when argmax and maximum log-probability are computed on the GPU and only labels and maxima are copied back.",
+    "backend": "CUDA · NVIDIA Tegra X2",
+    "decode": "argmax on the GPU, vectorised collapse, float32 quality math",
+    "observation": "Throughput rose 1.91× over the same-session baseline, the fastest of the first three variants, with the same 2-character quality difference as SOCALL-007.",
+    "limitations": "D1 is out of distribution for SoCall, so no accuracy is claimed. Power is gross module input over each process run, including setup and warm-up, with an uncalibrated INA3221 scale.",
+    "output_check": "Same sequences as SOCALL-004; quality strings differ at 2 positions (float32 log10).",
+    "timing": "Timed processing passes with CUDA synchronization at stage boundaries; the GPU argmax is counted as decode time. Model and NPZ loading were excluded."
+  },
+  "SOCALL-009": {
+    "title": "Jetson TX2 Exact Vectorised Greedy Decode",
+    "objective": "Measure an exact vectorised replacement for the Python greedy decoder that keeps the original float64 quality arithmetic.",
+    "backend": "CUDA · NVIDIA Tegra X2",
+    "decode": "vectorised numpy on the CPU, float64 quality math (launcher)",
+    "observation": "Throughput rose 1.86× over the same-session baseline with byte-identical output, so the speed-up costs nothing in sequence or quality.",
+    "limitations": "D1 is out of distribution for SoCall, so no accuracy is claimed. Power is gross module input over each process run, including setup and warm-up, with an uncalibrated INA3221 scale.",
+    "output_check": "Byte-identical FASTQ to SOCALL-004 in all three process runs.",
+    "timing": "Timed processing passes with CUDA synchronization at stage boundaries. Model and NPZ loading were excluded."
+  },
+  "SOCALL-010": {
+    "title": "Jetson TX2 Exact GPU-Side Greedy Decode",
+    "objective": "Measure the GPU-side greedy decoder after its quality arithmetic was moved to float64.",
+    "backend": "CUDA · NVIDIA Tegra X2",
+    "decode": "argmax on the GPU, vectorised collapse, float64 quality math",
+    "observation": "Throughput was 1.90× the same-session baseline with byte-identical output: the fastest exact decoder measured, adopted as the default for later TX2 runs. Inference is now about 92% of wall time.",
+    "limitations": "D1 is out of distribution for SoCall, so no accuracy is claimed. Power is gross module input over each process run, including setup and warm-up, with an uncalibrated INA3221 scale. One earlier attempt is excluded because its power log was not written.",
+    "output_check": "Byte-identical FASTQ to SOCALL-004 in all three process runs (and in the excluded attempt).",
+    "timing": "Timed processing passes with CUDA synchronization at stage boundaries; the GPU argmax is counted as decode time. Model and NPZ loading were excluded."
+  },
+  "SOCALL-011": {
+    "title": "Jetson TX2 D5 Baseline with Reference Accuracy",
+    "objective": "Run all 4,467 D5 reads (R9.4.1, 4 kHz, matching SoCall's training chemistry) on the TX2 GPU and score the output against the reference genome.",
+    "backend": "CUDA · NVIDIA Tegra X2",
+    "decode": "argmax on the GPU, vectorised collapse, float64 quality math",
+    "observation": "The TX2 processed D5 at 44% of the 4 kHz full-channel reference, including FAST5 reading. Accuracy matched the Apple M2 run (SOCALL-001) to 0.01 points of median identity with the same mapped fraction, so the embedded deployment reproduces the reference pipeline's accuracy. GPU utilisation was 86%, against 44% on the short D1 reads.",
+    "limitations": "One timed pass on one board. Beam search was not run on the TX2. Power is gross module input over the whole capture with an uncalibrated INA3221 scale. 64 reads differ from SOCALL-001 mid-read by a few bases for an unverified reason.",
+    "output_check": "4,467 reads; scored on the Mac with reference_accuracy.py against the D5 reference.",
+    "timing": "One timed pass over all reads after a 50-read warm-up, including FAST5 reading and pA conversion. Model load and read indexing were excluded."
   }
 }
