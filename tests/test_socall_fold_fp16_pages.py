@@ -46,3 +46,13 @@ def test_socall_overview_reports_the_fold_and_fp16_study(site):
     assert "BatchNorm folding and FP16" in page
     for eid in IDS:
         assert eid in page
+
+
+@pytest.mark.parametrize("eid,variant", [("SOCALL-012", None), ("SOCALL-013", "socall-v1-bnfold"),
+                                         ("SOCALL-014", "socall-v1-fp16"), ("SOCALL-016", "socall-v1-fp16")])
+def test_model_row_names_the_variant_that_ran(site, eid, variant):
+    row = _page(site, eid).split("<td>Model</td>", 1)[1].split("</tr>", 1)[0]
+    if variant:
+        assert variant in row
+    else:
+        assert "socall-v1-" not in row
