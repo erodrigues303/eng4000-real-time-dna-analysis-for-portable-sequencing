@@ -61,8 +61,8 @@ def _registry_status(site, eid):
 
 def test_registry_reports_raw_artifact_completeness(site):
     assert "raw artifacts in repository" in _registry_status(site, "SOCALL-011")
-    # SOCALL-004's tegrastats .gz was never committed; BLITZ-003 has no raw artifacts at all.
-    assert "some raw artifacts missing" in _registry_status(site, "SOCALL-004")
+    # SOCALL-004's tegrastats .gz arrived in 5fdf3aa; BLITZ-003 has no raw artifacts at all.
+    assert "raw artifacts in repository" in _registry_status(site, "SOCALL-004")
     assert _registry_status(site, "BLITZ-003").endswith("; raw artifacts missing</td>")
 
 
