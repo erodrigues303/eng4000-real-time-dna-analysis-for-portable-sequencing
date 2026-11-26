@@ -28,6 +28,8 @@ private/
 *.hdf5
 *.tar
 *.gz
+# Small reviewed telemetry captures are evidence; keep them.
+!results/raw/**/*.gz
 *.zip
 *.7z
 # Downloaded datasets, models, and bulky local runs

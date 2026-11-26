@@ -1,0 +1,17 @@
+{
+  "samples": 173,
+  "interval_s": 1.0,
+  "duration_s": 173.0,
+  "scope": "jetson-module-input (VDD_IN, INA3221 via tegrastats)",
+  "avg_VDD_IN_W": 8.397,
+  "peak_VDD_IN_W": 12.538,
+  "energy_J_gross": 1452.7,
+  "avg_VDD_SYS_GPU_W": 4.162,
+  "avg_VDD_SYS_CPU_W": 0.768,
+  "avg_gpu_util_pct": 46.2,
+  "avg_cpu_util_pct": 9.4,
+  "peak_ram_used_MB": 3408,
+  "peak_gpu_temp_C": 59.0,
+  "idle_VDD_IN_W": 3.292,
+  "avg_above_idle_W": 5.105
+}

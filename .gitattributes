@@ -1,3 +1,5 @@
 # Saved alignment artifacts are verified by SHA-256. Preserve their original bytes.
 results/raw/**/reference-accuracy/*/accuracy.json -text
 results/raw/**/reference-accuracy/*/alignments.csv -text
+# Raw run evidence is verified by SHA-256 (tests/test_experiment_artifacts.py); TX2 CSVs are CRLF.
+results/raw/** -text

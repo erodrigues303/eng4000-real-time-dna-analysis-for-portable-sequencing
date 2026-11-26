@@ -38,7 +38,7 @@ def csv_artifact(record, root, name):
 
 
 def stage_table(stages, title="Stage timing"):
-    names = {"h2d": "Host to device", "d2h": "Device to host", "forward": "Inference"}
+    names = {"h2d": "Host to device", "d2h": "Device to host", "forward": "Inference", "read_io": "Read input"}
     rows = [(names.get(key, key.capitalize()), f"{seconds:,.3f}") for key, seconds in stages.items()]
     return f"### {title}\n\n" + compact_table(["Stage", "Seconds"], rows)
 
@@ -100,8 +100,42 @@ def jetson_power_results(power, capture):
     return "### Module-input power and energy\n\n" + compact_table(["Measurement", "Recorded value"], rows)
 
 
+TX2_SESSION_IDS = {"SOCALL-006", "SOCALL-007", "SOCALL-008", "SOCALL-009", "SOCALL-010", "SOCALL-011"}
+
+
+def repeated_tx2_results(record, root):
+    """Records whose process runs each wrote run-stats_<tag>.json and power-summary_<tag>.json."""
+    def kept(prefix):
+        # Excluded attempts reuse the same file names under excluded/, so select by full location.
+        return [json.loads((root / location).read_text(encoding="utf-8")) for location in sorted(
+            item["location"] for item in record["artifacts"]
+            if item["location"].rsplit("/", 1)[-1].startswith(prefix) and "/excluded/" not in item["location"])]
+
+    stats = kept("run-stats_")
+    powers = kept("power-summary_")
+    rates = [p["input_samples"] / p["wall_time_s"] for s in stats for p in s["per_pass"]]
+    spread = f" ± {stdev(rates):,.0f}" if len(rates) > 1 else ""
+    summary = [
+        ("Mean ± sample SD over timed passes (samples/s)" if len(rates) > 1 else "Signal throughput (samples/s)",
+         f"{mean(rates):,.0f}{spread}"),
+        ("Share of the 2.048 M samples/s 4 kHz target", f"{mean(rates) / 2.048e6:.1%}"),
+        ("Peak CUDA allocation", f"{max(s['cuda_max_memory_allocated_mib'] for s in stats):g} MiB"),
+    ]
+    run_rows = [(i, s["started_utc"], len(s["per_pass"]), f"{s['wall_seconds']:,.2f}", f"{s['samples_per_second']:,.0f}",
+                 f"{p['avg_VDD_IN_W']:g}", f"{p['avg_gpu_util_pct']:g}%")
+                for i, (s, p) in enumerate(zip(stats, powers, strict=True), 1)]
+    runs = "### Process runs\n\n" + compact_table(
+        ["Run", "Start (UTC)", "Timed passes", "Timed wall (s)", "Samples/s", "Avg VDD_IN (W)", "GPU util"], run_rows)
+    stages = {name: sum(s["stage_seconds"][name] for s in stats) for name in stats[0]["stage_seconds"]}
+    power = jetson_power_results(powers[-1], f"Process run {len(powers)}, including setup and warm-up")
+    stage_title = "Stage timing summed over all timed passes"
+    return summary, [runs, power, stage_table(stages, stage_title)]
+
+
 def socall_results(record, root):
     eid = record["experiment_id"]
+    if eid in TX2_SESSION_IDS:
+        return repeated_tx2_results(record, root)
     if eid in {"SOCALL-001", "SOCALL-002"}:
         stats = json_artifact(record, root, "run-stats.json")
         return [
@@ -185,8 +219,10 @@ def experiment_page(record, report, system, dataset, models, selectors, tables, 
             source_url = "https://github.com/WGLab/DeepMod2/releases/tag/v0.3.0"
         reads, samples = dataset["read_count"], dataset["signal_sample_count"]
         input_format = dataset["file_format"]
-        if eid in {"SOCALL-003", "SOCALL-004", "SOCALL-005"}:
+        if eid in {"SOCALL-003", "SOCALL-004", "SOCALL-005"} or (eid in TX2_SESSION_IDS and dataset_id == "D1"):
             input_format += " → calibrated float32 NPZ"
+        elif eid in TX2_SESSION_IDS:
+            input_format += ", streamed one read at a time"
         if eid == "SOCALL-005":
             stats = json_artifact(record, root, "run-stats_cpu5.json")
             reads, samples = stats["reads"], stats["dataset_samples"]
@@ -200,7 +236,7 @@ def experiment_page(record, report, system, dataset, models, selectors, tables, 
             ("Acquisition kit", dataset["kit_model"].removeprefix("Inspected file: ") if dataset["kit_model"] else None),
             ("Sampling rate", f"{dataset['sampling_frequency_hz']:,} Hz" if dataset["sampling_frequency_hz"] else None),
         ])
-        if dataset_id == "D5" and eid in scoring:
+        if dataset_id == "D5" and (eid in scoring or eid in TX2_SESSION_IDS):
             summary.append(("Reference", "[A. pittii 16-377-0801 circular chromosome](https://doi.org/10.26180/5c5a5fcf72e40) · 3,814,719 bp"))
 
     settings = record["settings"]
@@ -212,6 +248,8 @@ def experiment_page(record, report, system, dataset, models, selectors, tables, 
         summary.append(("Settings", " · ".join(setup)))
     if is_socall:
         decoder = "CTC beam search" if settings["beam_size"] else "Greedy CTC"
+        if report.get("decode"):
+            decoder += f" · {report['decode']}"
         summary.extend([("Decoder", decoder), ("Precision", "FP32"), ("Normalization", "Per-read median / MAD")])
     runtime = [f"{label} {environment[key]}" for key, label in [
         ("python", "Python"), ("torch", "PyTorch"), ("cuda", "CUDA"), ("cudnn", "cuDNN"),
@@ -244,6 +282,8 @@ def experiment_page(record, report, system, dataset, models, selectors, tables, 
                         + (f", sampled every {interval:g} s" if interval else "")))
 
     results, details = historical_results(selectors, tables)
+    if eid in TX2_SESSION_IDS and record["dataset_id"] == "D5":
+        scoring = dict(scoring, **{eid: json_artifact(record, root, "accuracy.json")})
     if eid in scoring:
         results.extend(accuracy_results(scoring[eid]))
         results.append(("Scoring method", "minimap2 map-ont via mappy 2.31, primary alignments"))

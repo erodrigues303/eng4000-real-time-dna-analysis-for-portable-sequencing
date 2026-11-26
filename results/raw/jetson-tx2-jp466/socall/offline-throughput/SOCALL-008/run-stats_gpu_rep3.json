@@ -1,0 +1,92 @@
+{
+  "config": {
+    "weights": "weights_30.pt",
+    "pod5": null,
+    "npy": "data/D1/sample.npz",
+    "out": "out/SOCALL-006/gpu_rep3.fastq",
+    "device": "cuda",
+    "chunk": 4800,
+    "overlap": 0,
+    "batch": 64,
+    "norm": "medmad",
+    "decoder": "greedy",
+    "beam_size": 5,
+    "decode_mode": "gpu",
+    "max_reads": 0,
+    "warmup": 1,
+    "min_seconds": 60.0,
+    "timing": "out/SOCALL-006/timing.csv",
+    "stats_json": "out/SOCALL-006/run-stats_gpu_rep3.json",
+    "runs_csv": "out/SOCALL-006/runs.csv"
+  },
+  "argv": "run_socall.py --weights weights_30.pt --npy data/D1/sample.npz --device cuda --chunk 4800 --overlap 0 --batch 64 --warmup 1 --min-seconds 60 --decode-mode gpu --out out/SOCALL-006/gpu_rep3.fastq --stats-json out/SOCALL-006/run-stats_gpu_rep3.json --runs-csv out/SOCALL-006/runs.csv --timing out/SOCALL-006/timing.csv",
+  "variant": "cuda_c4800_o0_b64_greedy-gpu_fp32",
+  "started_utc": "2026-11-25T23:53:10Z",
+  "reads": 59,
+  "dataset_samples": 27949927,
+  "warmup_passes": 1,
+  "timed_passes": 3,
+  "samples": 83849781,
+  "bases": 4304076,
+  "wall_seconds": 86.6725,
+  "samples_per_second": 967432.1,
+  "bases_per_second": 49659.1,
+  "per_pass": [
+    {
+      "run_index": 0,
+      "start_utc": "2026-11-25T23:53:10Z",
+      "end_utc": "2026-11-25T23:53:39Z",
+      "wall_time_s": 28.9011,
+      "input_samples": 27949927,
+      "completed_reads": 59,
+      "output_bases": 1434692
+    },
+    {
+      "run_index": 1,
+      "start_utc": "2026-11-25T23:53:39Z",
+      "end_utc": "2026-11-25T23:54:08Z",
+      "wall_time_s": 28.8965,
+      "input_samples": 27949927,
+      "completed_reads": 59,
+      "output_bases": 1434692
+    },
+    {
+      "run_index": 2,
+      "start_utc": "2026-11-25T23:54:08Z",
+      "end_utc": "2026-11-25T23:54:36Z",
+      "wall_time_s": 28.8746,
+      "input_samples": 27949927,
+      "completed_reads": 59,
+      "output_bases": 1434692
+    }
+  ],
+  "stage_seconds": {
+    "normalize": 3.3914,
+    "chunk": 0.2108,
+    "h2d": 0.3043,
+    "inference": 80.5877,
+    "decode": 0.9649,
+    "d2h": 0.2469,
+    "stitch": 0.5909,
+    "write": 0.0182
+  },
+  "setup_seconds_untimed": 5.259,
+  "peak_rss_mib": 2926.3,
+  "cuda_max_memory_allocated_mib": 110.7,
+  "weights_sha256": "7e91b61ab5b89318c02c13fd65686dff067863366d6bdf0363b16cc43081e1fa",
+  "input_file": "sample.npz",
+  "input_sha256": "6e6d1576b17a76c53406c4ec37964088bce5f30917500972b92ef65ba95a59e5",
+  "fastq_sha256": "0232a8a32f806997a6d2025203a9dcab03005bb73b8200edaad87e4b872d8325",
+  "environment": {
+    "python": "3.6.9",
+    "torch": "1.10.0",
+    "numpy": "1.13.3",
+    "machine": "Linux 4.9.337-tegra aarch64",
+    "cuda": "10.2",
+    "cudnn": 8201,
+    "device_name": "NVIDIA Tegra X2",
+    "precision": "fp32",
+    "l4t": "R32 (release), REVISION: 7.6, GCID: 38171779, BOARD: t186ref, EABI: aarch64, DATE: Tue Nov  5 07:49:02 UTC 2024",
+    "fast-ctc-decode": null
+  }
+}
