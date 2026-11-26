@@ -148,14 +148,18 @@ def on_config(config):
                                   selectors, tables, scoring, related, ROOT)
         write(f"experiments/{eid}.md", content)
         searchable = json.dumps([record, system, reports[eid]["title"], [s['title'] for _, s in related]], ensure_ascii=False).lower()
-        registry.append({"id": eid, "tool": record["tool"]["name"], "system": record["system_id"], "dataset": record["dataset_id"], "search": searchable, "command": bool(record["command"])})
+        raw = [ROOT / item["location"] for item in record["artifacts"] if item["location"].startswith("results/raw/")]
+        present = sum(path.is_file() for path in raw)
+        artifacts = ("raw artifacts in repository" if raw and present == len(raw)
+                     else "some raw artifacts missing" if present else "raw artifacts missing")
+        registry.append({"id": eid, "tool": record["tool"]["name"], "system": record["system_id"], "dataset": record["dataset_id"], "search": searchable, "command": bool(record["command"]), "artifacts": artifacts})
     controls = '<div id="registry-controls" hidden><div class="filters"><label>Search experiments<input id="query" type="search" placeholder="ID, hardware, model, research question"></label>'
     controls += ''.join(f'<label>{label}<select id="filter-{key}"><option value="">All {label.lower()}</option></select></label>' for key, label in [("tool", "Basecallers"), ("system", "Systems"), ("dataset", "Datasets")])
     controls += '</div><button id="reset-filters" type="button">Reset filters</button><p id="result-count" role="status" aria-live="polite"></p></div>'
     rows = []
     for r in registry:
         attrs = ' '.join(f'data-{key}="{html.escape(r[key], quote=True)}"' for key in ["tool", "system", "dataset", "search"])
-        rows.append(f'<tr {attrs}><td><a href="{r["id"]}/">{r["id"]}</a></td><td>{r["tool"]}</td><td>{r["system"]}</td><td>{r["dataset"]}</td><td>{"Report command available" if r["command"] else "Command missing"}; raw artifacts missing</td></tr>')
+        rows.append(f'<tr {attrs}><td><a href="{r["id"]}/">{r["id"]}</a></td><td>{r["tool"]}</td><td>{r["system"]}</td><td>{r["dataset"]}</td><td>{"Report command available" if r["command"] else "Command missing"}; {r["artifacts"]}</td></tr>')
     write("experiments/index.md", "# Experiment registry\n Browse and search our benchmarking experiments by basecaller, hardware, or experiment ID.\n\n" + controls + '<noscript><p>Search requires JavaScript. All records remain available below.</p></noscript><table id="registry"><thead><tr><th>Experiment</th><th>Basecaller</th><th>System</th><th>Dataset</th><th>Evidence completeness</th></tr></thead><tbody>' + ''.join(rows) + '</tbody></table><p id="empty-state" hidden>No experiments match. Clear a filter or try another term.</p>\n')
     write("assets/experiments.json", json.dumps(registry, indent=2, ensure_ascii=False))
     write("evidence/index.md", "# Reported evidence tables\n\nThese are secondary report transcriptions, not recovered raw measurements. [Source hashes, page references and conflicts](../docs/sources.md). [Download canonical observations](../results/summaries/report-observations.json).\n\n" + ''.join(table_markup(t) for t in tables.values()))

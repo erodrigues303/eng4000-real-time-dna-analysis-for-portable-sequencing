@@ -301,6 +301,11 @@ td {
   overflow-wrap: anywhere;
 }
 
+/* Experiment IDs such as SOCALL-006 otherwise break at the hyphen. */
+td a[href*="experiments/"] {
+  white-space: nowrap;
+}
+
 tr:last-child td {
   border-bottom: 0;
 }
@@ -493,6 +498,11 @@ button {
 }
 
 @media (max-width: 580px) {
+  /* Wide tables scroll inside .table-wrap instead of breaking words mid-letter. */
+  table:has(th:nth-child(4)) {
+    min-width: 620px;
+  }
+
   .pillars {
     grid-template-columns: 1fr;
   }
