@@ -100,7 +100,8 @@ def jetson_power_results(power, capture):
     return "### Module-input power and energy\n\n" + compact_table(["Measurement", "Recorded value"], rows)
 
 
-TX2_SESSION_IDS = {"SOCALL-006", "SOCALL-007", "SOCALL-008", "SOCALL-009", "SOCALL-010", "SOCALL-011"}
+TX2_SESSION_IDS = {"SOCALL-006", "SOCALL-007", "SOCALL-008", "SOCALL-009", "SOCALL-010", "SOCALL-011",
+                   "SOCALL-012", "SOCALL-013", "SOCALL-014", "SOCALL-015", "SOCALL-016"}
 
 
 def repeated_tx2_results(record, root):

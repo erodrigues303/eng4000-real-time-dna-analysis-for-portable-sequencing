@@ -4,7 +4,7 @@
 
 SoCall is the laboratory's convolutional CTC basecaller, supplied to the project as FP32 weights, under investigation for resource-constrained execution. Int8/fixed-point execution is the project's target, and quantization is project work. SoCall remains **one implementation to develop and optimize**, alongside the broader basecaller benchmark.
 
-> **Current state:** SoCall runs on the Jetson TX2 GPU (FP32) with reference-scored accuracy on matching-chemistry data: [SOCALL-011](../experiments/SOCALL-011.md) reproduced the laptop pipeline's D5 accuracy at 44% of the 4 kHz full-channel throughput reference. A first measured optimization (greedy-decode vectorisation, SOCALL-006 to 010) almost doubled TX2 throughput with byte-identical output. Inference now dominates, and real time is not yet reached. Private source and weights are not published here.
+> **Current state:** SoCall runs on the Jetson TX2 GPU with reference-scored accuracy on matching-chemistry data: [SOCALL-011](../experiments/SOCALL-011.md) reproduced the laptop pipeline's D5 accuracy at 44% of the 4 kHz full-channel throughput reference. Two exact optimizations are measured: greedy-decode vectorisation (SOCALL-006 to 010) almost doubled TX2 throughput, and folding BatchNorm into the convolutions (SOCALL-013, SOCALL-015) added about 4% with the same accuracy. FP16 through PyTorch passed the accuracy budget on D5 but ran slower than FP32 (SOCALL-014, SOCALL-016), so TensorRT is the next step. Real time is not yet reached. Private source and weights are not published here.
 
 ## Architecture and implementation
 
@@ -32,7 +32,7 @@ These are throughput and power results only. D1 is R10.4.1 at 5 kHz, while SoCal
 
 Stage timing in SOCALL-004 (CUDA-synchronized at each boundary) attributes 48.9% of wall time to model inference and 47.3% to greedy CTC decoding, with normalization, stitching and host-device transfers together under 4%. GPU utilisation averaged 44%. Decoding cost here belongs to the benchmark wrapper (a per-base Python loop on the ARM CPU), not to the SoCall model. Inference alone corresponds to about 1.0 M samples/s, so FP32 inference by itself is also below the real-time target. This is a first profile, not a complete bottleneck analysis: per-kernel GPU profiling, memory movement and synchronization are not yet measured.
 
-After the decoder change below, inference is 92.5% of wall time on D1 ([SOCALL-010](../experiments/SOCALL-010.md)) and 87.4% on D5 ([SOCALL-011](../experiments/SOCALL-011.md)), where FAST5 reading (4.4%) and normalization (4.0%) come next. FP32 inference alone corresponds to about 1.04 M samples/s, roughly half the 4 kHz target, so the model's arithmetic is now the bottleneck.
+After the decoder change below, inference is 92.5% of wall time on D1 ([SOCALL-010](../experiments/SOCALL-010.md)) and 87.4% on D5 ([SOCALL-011](../experiments/SOCALL-011.md)), where FAST5 reading (4.4%) and normalization (4.0%) come next. FP32 inference alone corresponds to about 1.04 M samples/s, roughly half the 4 kHz target, so the model's arithmetic is now the bottleneck. Folding and FP16 did not change this split: inference stays at 92 to 94% of wall time on D1 (SOCALL-012 to 014).
 
 ## Optimization studies
 
@@ -50,9 +50,25 @@ SOCALL-004's profile put half the wall time in greedy CTC decoding, a per-base P
 
 The float32 variants computed the quality score's log10 in single precision, which moved 2 of 1,434,692 quality characters by one Phred step; computing it in float64 made the GPU-side decoder exact at the same speed. SOCALL-010's decoder is the default for later TX2 runs. Decoding is now 1 to 2% of wall time.
 
+### BatchNorm folding and FP16 (TX2, D1 and D5)
+
+Inference was about 92% of wall time after the decoder change, so the next studies changed the network itself. Folding replaces each convolution and the BatchNorm after it with one convolution whose weights and bias already include the normalization (computed in float64 from the stored statistics, epsilon 1e-3). It is exact up to FP32 rounding and removes five layers. The FP16 variant runs the folded model in half precision and keeps the final log-softmax in FP32. On the Apple M2, FP16 changed full-D5 median identity by −0.007 points (greedy) and +0.001 points (beam 5), well inside the 0.1-point budget. Both variants were then measured on the TX2: D1 in one session, three process runs each, round-robin against an unchanged control, and all of D5 once per variant.
+
+| Record | Model | Data | Mean samples/s | vs control | Output |
+|---|---|---|---:|---:|---|
+| [SOCALL-012](../experiments/SOCALL-012.md) | FP32, unchanged (control) | D1 | 964,038 | 1.00× | Identical to SOCALL-004 |
+| [SOCALL-013](../experiments/SOCALL-013.md) | BatchNorm folded, FP32 | D1 | 997,182 | 1.034× | Same sequences on all 59 reads |
+| [SOCALL-014](../experiments/SOCALL-014.md) | Folded, FP16 (PyTorch) | D1 | 841,616 | 0.873× | Accuracy checked on D5 |
+| [SOCALL-015](../experiments/SOCALL-015.md) | BatchNorm folded, FP32 | D5 | 944,755 | 1.043× SOCALL-011 | 79.39% median identity, 97.31% mapped (same as SOCALL-011) |
+| [SOCALL-016](../experiments/SOCALL-016.md) | Folded, FP16 (PyTorch) | D5 | 807,280 | 0.891× SOCALL-011 | 79.38% median identity, 97.38% mapped |
+
+Folding is a small exact gain and becomes the base model for later variants. FP16 kept accuracy on the TX2's own GPU (0.010 points below SOCALL-011) but was 15% slower than folded FP32, while the same FP16 model is 2.6× faster than FP32 on the M2. The likely reason is that PyTorch 1.10 runs these FP16 convolutions with FP32 accumulation, which doesn't use the Pascal GPU's double-rate half2 arithmetic; this is not verified. An inference-only check in the same session gave the same ordering (1.050, 1.088 and 0.892 M samples/s for the control, folded FP32 and FP16). TensorRT 8.2 on this board reports fast FP16 and no fast int8, so a TensorRT FP16 engine built from an ONNX export of the folded model is the next study.
+
+Across backends, exact ties at FP32 resolution can round either way: 75 of 4,467 D5 reads differ between SOCALL-015 and SOCALL-011, all at steps where the two most likely labels were almost equal, with no change in accuracy.
+
 ### Next candidates
 
-With inference dominant, the next studies target the network: folding BatchNorm into the convolutions (exact), then FP16 and a TensorRT engine (accuracy budget 0.1 points of median identity on D5), then int8. Batching across reads, chunk size and overlap, and CPU/GPU overlap remain candidates. Each is revalidated against the exact or reference-accuracy check above before its speed is reported.
+TensorRT FP16 and FP32 engines from the folded model (ONNX opset 13), each checked against the folded PyTorch model and on all of D5. After that: batching across reads, chunk size and overlap, CPU/GPU overlap, and int8 for the CPU path, since GPU int8 isn't fast on this board. Each is revalidated against the exact or reference-accuracy check above before its speed is reported.
 
 ## Shared scientific foundation
 
