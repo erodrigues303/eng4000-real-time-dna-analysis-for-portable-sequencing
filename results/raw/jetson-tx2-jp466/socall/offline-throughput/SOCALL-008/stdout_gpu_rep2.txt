@@ -1,0 +1,13 @@
+data=sample.npz reads=59 dataset_samples=27,949,927 device=cuda
+setup (model load + read data, untimed) = 5.24s   warmup passes = 1
+timed passes=3 samples=83,849,781 bases=4,304,076 wall=86.82s
+throughput: 0.966 Msamples/s  (real-time target: 2.05 @4kHz, 2.56 @5kHz)
+  inference      80.575s   92.8%
+  normalize       3.464s    4.0%
+  decode          0.974s    1.1%
+  stitch          0.657s    0.8%
+  h2d             0.309s    0.4%
+  d2h             0.250s    0.3%
+  chunk           0.219s    0.3%
+  write           0.018s    0.0%
+wrote out/SOCALL-006/run-stats_gpu_rep2.json

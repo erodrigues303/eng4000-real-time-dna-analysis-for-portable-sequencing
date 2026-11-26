@@ -1,0 +1,15 @@
+FAST5: 4467 reads indexed from data/D5; sample rate(s) in first 50 reads: [4000.0] Hz
+data=D5 reads=4467 dataset_samples=1,290,238,981 device=cuda
+setup (model load + read data, untimed) = 19.36s   warmup passes = 1
+timed passes=1 samples=1,290,238,981 bases=108,859,838 wall=1423.81s
+throughput: 0.906 Msamples/s  (real-time target: 2.05 @4kHz, 2.56 @5kHz)
+  inference    1244.623s   87.4%
+  read_io        62.527s    4.4%
+  normalize      57.493s    4.0%
+  decode         27.093s    1.9%
+  stitch          9.036s    0.6%
+  h2d             5.729s    0.4%
+  d2h             4.157s    0.3%
+  chunk           3.541s    0.2%
+  write           1.495s    0.1%
+wrote out/SOCALL-007/run-stats_d5_gpu_greedy.json

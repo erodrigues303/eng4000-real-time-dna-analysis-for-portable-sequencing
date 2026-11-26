@@ -40,6 +40,7 @@ Repository audit on 2026-11-11: the checkout contained only a one-line README an
 | S | Supervisor email replies to the team's SoCall setup questions (received by 2026-11-19) | — | Email; chemistry R9.4.1 ~4 kHz, chunk ~4800 without overlap, normalization undocumented, try greedy and beam, quantize ourselves |
 | E | Ege's local verification and runs, 2026-11-19 | — | Downloads re-hashed; SOCALL-001/002 evidence under `results/raw/ege-m2/` |
 | M | Matthew's Jetson TX2 reflash and SoCall runs, 2026-11-20 | — | TX2 reflashed to JetPack 4.6.6; D1 metadata read from POD5; SOCALL-003 onward evidence under `results/raw/jetson-tx2-jp466/` |
+| T | Ege's SoCall runs on the same TX2 over SSH, 2026-11-25 | — | Greedy-decode variants on D1 and the first D5 run on the TX2 (SOCALL-006 to 011); D5 output scored on the Mac with `reference_accuracy.py` |
 
 B is referenced as November 2026 by P p.20; its own exact issue date is unknown. P is submitted November 6, 2026. Page references use physical PDF pages. Original PDFs remain with the team; repository-accessible archival location and publication permission are TBD. Request them by exact filename and checksum. The underlying weekly progress log, appendices cited by B and dated raw folders are not supplied. Report transcriptions are secondary evidence, never reconstructed raw telemetry.
 
