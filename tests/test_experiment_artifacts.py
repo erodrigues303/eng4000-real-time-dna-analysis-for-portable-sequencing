@@ -8,15 +8,6 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 RECORDS = sorted((ROOT / "configs" / "experiments").glob("*.yaml"))
-TX2 = "results/raw/jetson-tx2-jp466/socall/offline-throughput"
-# Compressed on Matthew's machine while .gitignore still excluded *.gz, so never committed.
-# strict xfail: once the files land, these start passing and the entries must be removed.
-NOT_YET_COMMITTED = {
-    f"{TX2}/SOCALL-003/tegrastats.log.gz",
-    f"{TX2}/SOCALL-004/tegrastats_rep4.log.gz",
-    f"{TX2}/SOCALL-005/tegrastats_cpu5.log.gz",
-    f"{TX2}/SOCALL-005/power_cpu5.csv.gz",
-}
 
 
 def _repo_artifacts():
@@ -25,9 +16,7 @@ def _repo_artifacts():
         for artifact in record["artifacts"]:
             location = artifact["location"]
             if location.startswith("results/raw/") and artifact.get("sha256"):
-                marks = [pytest.mark.xfail(strict=True, reason="gzip artifact not committed yet")] \
-                    if location in NOT_YET_COMMITTED else []
-                yield pytest.param(record["experiment_id"], location, artifact["sha256"], id=location, marks=marks)
+                yield pytest.param(record["experiment_id"], location, artifact["sha256"], id=location)
 
 
 @pytest.mark.parametrize("experiment_id,location,sha256", list(_repo_artifacts()))

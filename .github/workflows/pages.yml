@@ -18,8 +18,11 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: requirements-site.txt
-      - run: python -m pip install -r requirements-site.txt
+          cache-dependency-path: |
+            requirements-site.txt
+            requirements-dev.txt
+      - run: python -m pip install -r requirements-site.txt -r requirements-dev.txt
+      - run: python -m pytest -q
       - run: python harness/analysis/compare_d5_accuracy.py --check
       - run: python -m mkdocs build --strict
       - run: python website/check_site.py
