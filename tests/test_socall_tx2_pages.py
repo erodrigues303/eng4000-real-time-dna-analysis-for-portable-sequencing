@@ -64,3 +64,12 @@ def test_registry_reports_raw_artifact_completeness(site):
     # SOCALL-004's tegrastats .gz was never committed; BLITZ-003 has no raw artifacts at all.
     assert "some raw artifacts missing" in _registry_status(site, "SOCALL-004")
     assert _registry_status(site, "BLITZ-003").endswith("; raw artifacts missing</td>")
+
+
+def test_model_card_and_socall_page_describe_the_architecture(site):
+    card = (site / "models" / "socall-private" / "index.html").read_text(encoding="utf-8")
+    assert "446,893" in card or "446893" in card
+    assert "stride 3" in card and "CTC" in card
+    page = (site / "socall" / "index.html").read_text(encoding="utf-8")
+    assert "446,893 parameters" in page
+    assert "before making architecture claims" not in page

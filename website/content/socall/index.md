@@ -8,7 +8,9 @@ SoCall is the laboratory's convolutional CTC basecaller, supplied to the project
 
 ## Architecture and implementation
 
-The [canonical model record](../models/socall-private.md) separates the reported fixed-point design from unverified architecture, parameter count, precision details and training provenance. Obtain permitted implementation documentation and identify preprocessing, inference and decoding boundaries before making architecture claims.
+SoCall is a fully convolutional 1D CNN with a CTC head and 446,893 parameters: five convolution blocks (Conv1d, BatchNorm, ReLU) with kernels 9, 13, 27, 25 and 9, then a 1×1 decoder to log-probabilities over blank/A/C/G/T. The first convolution has stride 3, so the model emits one output step per 3 signal samples, and each step sees 219 input samples. That works out to about 148,600 multiply-adds per input sample; the 104→80, kernel-27 layer is roughly half of it, which makes it the first target for profiling and compression. At 4 kHz, real time for 512 channels needs about 609 GFLOP/s, against a TX2 GPU peak of about 666 GFLOP/s in FP32 and 1.33 TFLOP/s in FP16, which is why FP16 is the main optimization path.
+
+The model was supplied as FP32 weights with no preprocessing, decoder or training code. The project supplies the rest: per-read median/MAD normalization, 4,800-sample chunking, greedy and beam-search CTC decoding, and reference scoring. Training data and normalization were not documented, so these follow the supervisor's recollection and are checked against D5 accuracy. Full details are in the [model record](../models/socall-private.md); source code and weights are not published.
 
 ## Correctness and verification
 
