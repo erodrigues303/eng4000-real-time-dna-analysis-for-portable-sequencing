@@ -258,5 +258,55 @@
     "limitations": "One timed pass on one board, greedy decoding only. Power is gross module input over the whole capture with an uncalibrated INA3221 scale. FP16 through PyTorch is slower than FP32 here, so this run records accuracy rather than a speed option.",
     "output_check": "4,467 reads; scored on the Mac with reference_accuracy.py against the D5 reference and compared read by read with SOCALL-011.",
     "timing": "One timed pass over all reads after a 50-read warm-up, including FAST5 reading and pA conversion. Model loading, BatchNorm folding and read indexing were excluded."
+  },
+  "SOCALL-017": {
+    "title": "Jetson TX2 Same-Session Control for TensorRT",
+    "objective": "Rerun the unchanged FP32 model with the SOCALL-010 decoder as the control for the two TensorRT engines measured in the same session.",
+    "backend": "CUDA · NVIDIA Tegra X2",
+    "decode": "argmax on the GPU, vectorised collapse, float64 quality math",
+    "observation": "Throughput matched SOCALL-012 (964,038 samples/s) to within 0.06%, and the FASTQ was byte-identical to SOCALL-004, SOCALL-010 and SOCALL-012, so the board behaved the same after its reboot.",
+    "limitations": "D1 is out of distribution for SoCall, so no accuracy is claimed here. Power is gross module input over each process run, including setup and warm-up, with an uncalibrated INA3221 scale.",
+    "output_check": "Byte-identical FASTQ to SOCALL-004, SOCALL-010 and SOCALL-012 in all three process runs.",
+    "timing": "Timed processing passes with CUDA synchronization at stage boundaries; each process run had one untimed warm-up pass and then timed passes for at least 60 s. Model loading and NPZ loading were excluded."
+  },
+  "SOCALL-018": {
+    "title": "Jetson TX2 TensorRT FP32 Engine",
+    "objective": "Replace the PyTorch forward pass with a TensorRT FP32 engine built from an ONNX export of the BatchNorm-folded model, keeping the rest of the pipeline unchanged.",
+    "backend": "CUDA · NVIDIA Tegra X2 · TensorRT 8.2.1",
+    "decode": "argmax on the GPU, vectorised collapse, float64 quality math",
+    "observation": "The FP32 engine ran at 1.829× the same-session control (86.1% of the 4 kHz target) and used about 25% less module power, so energy per sample fell from 12.2 to 5.0 µJ. 58 of 59 sequences were identical to the control; the other read lacks a single base at position 6,770 of 23,334, which fits an FP32 near-tie flipping between runtimes (not checked step by step on D1). Inference fell from 92.5% to 86.3% of wall time and normalization rose to 7.4%.",
+    "limitations": "D1 is out of distribution for SoCall, so no accuracy is claimed here. Power is gross module input over each process run, including setup and warm-up, with an uncalibrated INA3221 scale. The engine is checked against folded FP32 PyTorch at load time (max abs log-prob difference 2.5e-5). TensorRT's own GPU memory is not in the peak CUDA allocation figure.",
+    "output_check": "Same sequences as SOCALL-017 on 58 of 59 reads; quality strings identical on 44.",
+    "timing": "Timed processing passes with CUDA synchronization at stage boundaries; each process run had one untimed warm-up pass and then timed passes for at least 60 s. Model and engine loading, the engine check and NPZ loading were excluded."
+  },
+  "SOCALL-019": {
+    "title": "Jetson TX2 TensorRT FP16 Engine",
+    "objective": "Run the BatchNorm-folded model as a TensorRT engine built with FP16 enabled, which uses the Pascal GPU's half-precision rate that PyTorch FP16 did not reach in SOCALL-014.",
+    "backend": "CUDA · NVIDIA Tegra X2 · TensorRT 8.2.1",
+    "decode": "argmax on the GPU, vectorised collapse, float64 quality math",
+    "observation": "The FP16 engine ran at 2.123× the control, 2,047,572 samples/s, which is 99.98% of the 2.048 M samples/s 4 kHz target, so D1 is processed at real time to within measurement noise (pass SD 2,400 samples/s). It was 1.161× the FP32 engine. Energy per sample was 4.6 µJ against 12.2 µJ for the control. Normalization is now the second-largest stage at 8.5% of wall time. Sequences differ from the control on every read, as expected for FP16 on long reads; accuracy is checked on D5 in SOCALL-021.",
+    "limitations": "D1 is out of distribution for SoCall, so no accuracy is claimed here. Power is gross module input over each process run, including setup and warm-up, with an uncalibrated INA3221 scale. The engine check at load time gave a max abs log-prob difference of 0.066 against folded FP32 PyTorch, the FP16 rounding level. TensorRT's own GPU memory is not in the peak CUDA allocation figure.",
+    "output_check": "Deterministic FASTQ in all three process runs; 0 of 59 sequences identical to SOCALL-017 (accuracy gate on D5).",
+    "timing": "Timed processing passes with CUDA synchronization at stage boundaries; each process run had one untimed warm-up pass and then timed passes for at least 60 s. Model and engine loading, the engine check and NPZ loading were excluded."
+  },
+  "SOCALL-020": {
+    "title": "Jetson TX2 D5 with the TensorRT FP32 Engine",
+    "objective": "Check the TensorRT FP32 engine on all 4,467 D5 reads against the cross-runtime exact rule: accuracy unchanged and sequences compared read by read with folded PyTorch (SOCALL-015).",
+    "backend": "CUDA · NVIDIA Tegra X2 · TensorRT 8.2.1",
+    "decode": "argmax on the GPU, vectorised collapse, float64 quality math",
+    "observation": "Median identity (79.39%) and mapped fraction (97.31%) equal SOCALL-011's to full precision. 4,357 of 4,467 reads are identical to folded PyTorch FP32 (SOCALL-015) and 4,354 to SOCALL-011, with 35 fewer bases out of 108.9 M. Each of the 110 reads that differ from SOCALL-015 differs in a single base. Throughput was 1.644× SOCALL-015 and 1.714× SOCALL-011 (75.8% of the 4 kHz target); with FAST5 reading (7.6%) and normalization (7.0%) in the timed pass, inference is 78.2% of wall time.",
+    "limitations": "One timed pass on one board, greedy decoding only. Power is gross module input over the whole capture with an uncalibrated INA3221 scale. The 110 reads that differ from SOCALL-015 were not checked step by step for near-ties; the log-prob check at engine load (2.5e-5) is the bound.",
+    "output_check": "4,467 reads; scored on the Mac with reference_accuracy.py against the D5 reference and compared read by read with SOCALL-015 and SOCALL-011.",
+    "timing": "One timed pass over all reads after a 50-read warm-up, including FAST5 reading and pA conversion. Model and engine loading, the engine check and read indexing were excluded."
+  },
+  "SOCALL-021": {
+    "title": "Jetson TX2 D5 with the TensorRT FP16 Engine",
+    "objective": "Check the TensorRT FP16 engine's accuracy on all 4,467 D5 reads against the project's FP16 budget (median identity at most 0.1 points and mapped fraction at most 0.2 points below SOCALL-011).",
+    "backend": "CUDA · NVIDIA Tegra X2 · TensorRT 8.2.1",
+    "decode": "argmax on the GPU, vectorised collapse, float64 quality math",
+    "observation": "Median identity was 79.38% (0.009 points below SOCALL-011) and 97.38% of reads mapped (0.07 points above), so the FP16 engine passes the budget, with almost the same deltas as PyTorch FP16 in SOCALL-016. Throughput was 2.009× SOCALL-011, 1.821 M samples/s or 88.9% of the 4 kHz target. D5 stays below real time because FAST5 reading (7.4%) and normalization (8.1%) are in the timed pass and inference is down to 76.1%.",
+    "limitations": "One timed pass on one board, greedy decoding only. Power is gross module input over the whole capture with an uncalibrated INA3221 scale. No read is byte-identical to SOCALL-011, as expected for FP16.",
+    "output_check": "4,467 reads; scored on the Mac with reference_accuracy.py against the D5 reference and compared read by read with SOCALL-011.",
+    "timing": "One timed pass over all reads after a 50-read warm-up, including FAST5 reading and pA conversion. Model and engine loading, the engine check and read indexing were excluded."
   }
 }

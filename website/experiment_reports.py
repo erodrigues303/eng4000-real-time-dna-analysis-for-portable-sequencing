@@ -104,10 +104,13 @@ def jetson_power_results(power, capture):
 MODEL_VARIANTS = {
     "socall-v1-bnfold": "BatchNorm folded into the convolutions, FP32, 446,205 parameters",
     "socall-v1-fp16": "BatchNorm folded, FP16 weights and activations, log-softmax in FP32",
+    "socall-v1-bnfold-trt-fp32": "BatchNorm folded, ONNX opset 13, TensorRT 8.2 FP32 engine (batch 1 to 64)",
+    "socall-v1-bnfold-trt-fp16": "BatchNorm folded, ONNX opset 13, TensorRT 8.2 engine with FP16 enabled (batch 1 to 64)",
 }
 
 TX2_SESSION_IDS = {"SOCALL-006", "SOCALL-007", "SOCALL-008", "SOCALL-009", "SOCALL-010", "SOCALL-011",
-                   "SOCALL-012", "SOCALL-013", "SOCALL-014", "SOCALL-015", "SOCALL-016"}
+                   "SOCALL-012", "SOCALL-013", "SOCALL-014", "SOCALL-015", "SOCALL-016",
+                   "SOCALL-017", "SOCALL-018", "SOCALL-019", "SOCALL-020", "SOCALL-021"}
 
 
 def repeated_tx2_results(record, root):
