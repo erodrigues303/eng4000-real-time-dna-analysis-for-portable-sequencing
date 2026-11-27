@@ -503,6 +503,11 @@ button {
     min-width: 620px;
   }
 
+  /* With anywhere, auto layout still shrinks a column below its longest word ("unchange d"). */
+  table:has(th:nth-child(4)) td {
+    overflow-wrap: break-word;
+  }
+
   .pillars {
     grid-template-columns: 1fr;
   }

@@ -1,0 +1,15 @@
+trt_socall: engine check ok, max abs log-prob diff 2.48e-05 vs folded FP32 PyTorch
+data=sample.npz reads=59 dataset_samples=27,949,927 device=cuda
+setup (model load + read data, untimed) = 11.04s   warmup passes = 1
+timed passes=4 samples=111,799,708 bases=5,738,764 wall=63.31s
+throughput: 1.766 Msamples/s  (real-time target: 2.05 @4kHz, 2.56 @5kHz)
+  inference      54.623s   86.3%
+  normalize       4.675s    7.4%
+  decode          1.654s    2.6%
+  stitch          0.787s    1.2%
+  h2d             0.417s    0.7%
+  d2h             0.332s    0.5%
+  chunk           0.296s    0.5%
+  write           0.022s    0.0%
+  read_io         0.010s    0.0%
+wrote out/trt-session/run-stats_fp32_rep1.json

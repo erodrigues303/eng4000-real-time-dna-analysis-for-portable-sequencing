@@ -1,0 +1,18 @@
+{
+  "reads": 4467,
+  "mapped_reads": 4350,
+  "mapped_fraction": 0.9738079247817327,
+  "median_identity": 0.793832895548642,
+  "mean_identity": 0.7851567495837153,
+  "pooled_identity": 0.7864900977904422,
+  "substitution_rate": 0.08103329512055445,
+  "insertion_rate": 0.03649347033770255,
+  "deletion_rate": 0.0959831367513008,
+  "total_bases": 108833279,
+  "aligned_base_fraction": 0.9402337128884999,
+  "identity_definition": "M / (M + S + I + D) per primary alignment",
+  "aligner": "minimap2 via mappy 2.31, preset map-ont, primary alignment only",
+  "reference_name": "Acinetobacter_pittii_16-377-0801_reference.fasta",
+  "reference_sha256": "b846951645ed1f5218da21539125c7e3110ec9c78f5956896aa2d0e554617958",
+  "fastq_sha256": "c947175430c9339a3577053d15eea9a1804094923785b92267902695530e0a0d"
+}

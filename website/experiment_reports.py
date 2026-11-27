@@ -104,10 +104,13 @@ def jetson_power_results(power, capture):
 MODEL_VARIANTS = {
     "socall-v1-bnfold": "BatchNorm folded into the convolutions, FP32, 446,205 parameters",
     "socall-v1-fp16": "BatchNorm folded, FP16 weights and activations, log-softmax in FP32",
+    "socall-v1-bnfold-trt-fp32": "BatchNorm folded, ONNX opset 13, TensorRT 8.2 FP32 engine (batch 1 to 64)",
+    "socall-v1-bnfold-trt-fp16": "BatchNorm folded, ONNX opset 13, TensorRT 8.2 engine with FP16 enabled (batch 1 to 64)",
 }
 
 TX2_SESSION_IDS = {"SOCALL-006", "SOCALL-007", "SOCALL-008", "SOCALL-009", "SOCALL-010", "SOCALL-011",
-                   "SOCALL-012", "SOCALL-013", "SOCALL-014", "SOCALL-015", "SOCALL-016"}
+                   "SOCALL-012", "SOCALL-013", "SOCALL-014", "SOCALL-015", "SOCALL-016",
+                   "SOCALL-017", "SOCALL-018", "SOCALL-019", "SOCALL-020", "SOCALL-021"}
 
 
 def repeated_tx2_results(record, root):
@@ -125,8 +128,8 @@ def repeated_tx2_results(record, root):
     summary = [
         ("Mean ± sample SD over timed passes (samples/s)" if len(rates) > 1 else "Signal throughput (samples/s)",
          f"{mean(rates):,.0f}{spread}"),
-        ("Share of the 2.048 M samples/s 4 kHz target", f"{mean(rates) / 2.048e6:.1%}"),
-        ("Peak CUDA allocation", f"{max(s['cuda_max_memory_allocated_mib'] for s in stats):g} MiB"),
+        ("Share of the 2.048 M samples/s 4 kHz target", f"{mean(rates) / 2.048e6:.2%}"),
+        ("Peak CUDA allocation (PyTorch allocator)", f"{max(s['cuda_max_memory_allocated_mib'] for s in stats):g} MiB"),
     ]
     run_rows = [(i, s["started_utc"], len(s["per_pass"]), f"{s['wall_seconds']:,.2f}", f"{s['samples_per_second']:,.0f}",
                  f"{p['avg_VDD_IN_W']:g}", f"{p['avg_gpu_util_pct']:g}%")
@@ -169,7 +172,7 @@ def socall_results(record, root):
                            for i in range(1, record["measured_run_count"] + 1)]
             summary = [
                 ("Mean ± sample SD over timed passes (samples/s)", f"{mean(rates):,.0f} ± {stdev(rates):,.0f}"),
-                ("Peak CUDA allocation", f"{max(rep['cuda_max_memory_allocated_mib'] for rep in repetitions):g} MiB"),
+                ("Peak CUDA allocation (PyTorch allocator)", f"{max(rep['cuda_max_memory_allocated_mib'] for rep in repetitions):g} MiB"),
             ]
             stages = {name: sum(rep["stage_seconds"][name] for rep in repetitions)
                       for name in repetitions[0]["stage_seconds"]}
