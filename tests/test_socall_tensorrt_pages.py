@@ -65,3 +65,17 @@ def test_model_row_names_the_engine_that_ran(site, eid, variant):
     else:
         assert "socall-v1-" not in row
 
+
+def _row(page, label):
+    return page.split(f"<td>{label}", 1)[1].split("</tr>", 1)[0]
+
+
+def test_real_time_share_is_not_rounded_up_to_100_percent(site):
+    # SOCALL-019 runs at 2,047,572 of 2,048,000 samples/s; one decimal would print 100.0%.
+    row = _row(_page(site, "SOCALL-019"), "Share of the 2.048 M samples/s 4 kHz target")
+    assert "99.98%" in row and "100.0%" not in row
+
+
+def test_cuda_allocation_label_says_it_excludes_tensorrt_memory(site):
+    row = _row(_page(site, "SOCALL-019"), "Peak CUDA allocation")
+    assert "PyTorch allocator" in row
